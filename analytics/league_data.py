@@ -1314,6 +1314,124 @@ def _normalize_to_100(values_dict, higher_is_better=True):
 
 
 # ---------------------------------------------------------------------------
+# Playoff outcome (how far the team went)
+# ---------------------------------------------------------------------------
+
+# Playoff bracket: 6 teams make playoffs, 4 eliminated from contention.
+# Round 1: #1, #2 BYE; #3 vs #6, #4 vs #5 → losers get standing 5, 6
+# Round 2: winners face #1, #2 → losers get standing 3, 4
+# Finals: winner = 1, runner-up = 2
+PLAYOFF_OUTCOMES = {
+    "champion": ("Champion", "You won the league"),
+    "lost_finals": ("Lost in Finals", "You reached the championship and fell short"),
+    "lost_round2": ("Lost in Round 2", "You made the playoffs and lost in the second round"),
+    "lost_round1": ("Lost in Round 1", "You made the playoffs and lost in the first round"),
+    "eliminated": ("Eliminated from playoff contention", "You didn't make the top 6 and missed the playoffs"),
+    "made_playoffs": ("In the playoff bracket", "You made the top 6 — playoffs are still in progress"),
+    "in_progress": ("Season in progress", "The season hasn't ended yet"),
+}
+
+
+def _standing_int_positive(val):
+    """Parse standing; 0 / empty / invalid → None (ESPN often uses 0 before finals are set)."""
+    if val is None or val == "":
+        return None
+    try:
+        i = int(val)
+        return i if i >= 1 else None
+    except (TypeError, ValueError):
+        return None
+
+
+def _regular_season_rank_for_playoffs(team, league):
+    """
+    1-based regular-season rank for playoff eligibility when final_standing isn't set yet.
+    Prefers team.standing; falls back to final_standing; then PF tiebreak among stragglers.
+    """
+    teams = getattr(league, "teams", []) or []
+    if not teams:
+        return None
+
+    def sort_key(t):
+        s = _standing_int_positive(getattr(t, "standing", None))
+        if s is not None:
+            return (0, s)
+        s2 = _standing_int_positive(getattr(t, "final_standing", None))
+        if s2 is not None:
+            return (0, s2)
+        pf = float(getattr(t, "points_for", 0) or 0)
+        return (1, -pf)
+
+    ordered = sorted(teams, key=sort_key)
+    tid = getattr(team, "team_id", None)
+    for i, t in enumerate(ordered, 1):
+        if getattr(t, "team_id", None) == tid:
+            return i
+    return None
+
+
+def playoff_outcome(team, n_teams=10, playoff_team_count=6, league=None):
+    """
+    Returns how far the team went in the league (playoffs).
+    Bracket: 6 teams make playoffs; ranks 7+ eliminated from contention.
+    Uses final_standing: 1=champion, 2=lost finals, 3-4=lost round 2, 5-6=lost round 1, 7+=eliminated.
+    When final_standing is missing or 0 (in progress / ESPN placeholder), uses regular-season rank
+    vs playoff_team_count: made_playoffs vs eliminated. Never returns standing=0 for display.
+    Returns: dict with keys: outcome (str), title (str), description (str), standing (int|None)
+    """
+    fs = getattr(team, "final_standing", None)
+    standing = _standing_int_positive(fs)
+
+    if standing is None:
+        reg = _standing_int_positive(getattr(team, "standing", None))
+        if reg is None and league is not None:
+            reg = _regular_season_rank_for_playoffs(team, league)
+        if reg is None or reg < 1:
+            return {
+                "outcome": "in_progress",
+                "title": PLAYOFF_OUTCOMES["in_progress"][0],
+                "description": PLAYOFF_OUTCOMES["in_progress"][1],
+                "standing": None,
+            }
+        if reg <= playoff_team_count:
+            title, desc = PLAYOFF_OUTCOMES["made_playoffs"][:2]
+            desc = (
+                f"You finished the regular season #{reg} and made the top {playoff_team_count}. "
+                "Playoff results will show here when the bracket is complete."
+            )
+            return {
+                "outcome": "made_playoffs",
+                "title": title,
+                "description": desc,
+                "standing": reg,
+            }
+        title, desc = PLAYOFF_OUTCOMES["eliminated"][:2]
+        desc = (
+            f"You didn't make the top {playoff_team_count} and missed the playoffs "
+            f"(regular season #{reg})."
+        )
+        return {"outcome": "eliminated", "title": title, "description": desc, "standing": reg}
+
+    if standing == 1:
+        oc = "champion"
+    elif standing == 2:
+        oc = "lost_finals"
+    elif standing in (3, 4):
+        oc = "lost_round2"
+    elif standing in (5, 6):
+        oc = "lost_round1"
+    else:
+        oc = "eliminated"
+    title, desc = PLAYOFF_OUTCOMES[oc][:2]
+    if oc == "eliminated":
+        desc = (
+            f"You didn't make the top {playoff_team_count} and missed the playoffs "
+            f"(regular season #{standing})."
+        )
+    return {"outcome": oc, "title": title, "description": desc, "standing": standing}
+
+
+# ---------------------------------------------------------------------------
 # MOTY / MVA helpers (standings before playoffs, roster efficiency, transaction impact)
 # ---------------------------------------------------------------------------
 
@@ -1581,7 +1699,7 @@ FIRST_PLACE_TITLES = {
     "REB": ("The Worm", "#1 en REB"),
     "AST": ("The Point God", "#1 en AST"),
     "3PM": ("The Splash Father", "#1 en 3PM"),
-    "STL": ("The Pickpocket", "#1 en STL"),
+    "STL": ("The Grand Theft Alvarado", "#1 en STL"),
     "BLK": ("The Rim Guardian", "#1 en BLK"),
     "TO": ("The Caretaker", "#1 en TO (menos turnovers)"),
 }
@@ -1591,6 +1709,8 @@ MOTY_WEIGHT_STATS = 0.25
 MOTY_WEIGHT_STANDINGS = 0.15
 MOTY_WEIGHT_LEAGUE_WINNER = 0.25
 MOTY_WEIGHT_MVA = 0.35
+# Stats: top 3 per category (3-2-1 podium)
+STATS_RANK_POINTS = {1: 3, 2: 2, 3: 1}
 # MVA sub-weights (within the 35% MVA share)
 MVA_WEIGHT_ROSTER_EFF = 0.5
 MVA_WEIGHT_TRANSACTION = 0.5
@@ -1605,12 +1725,34 @@ TITLE_DESCRIPTIONS = {
     "The Worm": "El equipo con más rebotes.",
     "The Point God": "El equipo con más asistencias.",
     "The Splash Father": "El equipo con más triples anotados (3PM).",
-    "The Pickpocket": "El equipo con más robos (STL).",
+    "The Grand Theft Alvarado": "El equipo con más robos (STL).",
     "The Rim Guardian": "El equipo con más bloqueos (BLK).",
     "The Caretaker": "El equipo con menos pérdidas de balón (TO).",
     "MOTY (Manager Of The Year)": "25% Stats, 15% Standings before playoffs, 25% League champion, 35% MVA (Roster efficiency + Transaction impact).",
     "The Closer": "Premio al equipo que más partidos cerrados (diferencia ≤100 pts) ganó.",
     "The Choke": "Premio al equipo que más partidos cerrados perdió.",
+    "The Kingslayer": "Premio al equipo que derrotó al Unstoppable y terminó con su racha de victorias.",
+}
+
+# Mapeo título -> ruta de imagen en public/badges/ (para rewind)
+BADGE_IMAGES = {
+    "The Scoring King": "/badges/the-scoring-king-badge.png",
+    "The Sharpshooter": "/badges/the-sharpshooter-badge.png",
+    "The Cold Blooded": "/badges/the-coldblooded-badge.png",
+    "The Worm": "/badges/the-worm-badge.png",
+    "The Point God": "/badges/the-poing-god-badge.png",
+    "The Splash Father": "/badges/the-splash-father-badge.png",
+    "The Grand Theft Alvarado": "/badges/grand-theft-alvarado.png",
+    "The Rim Guardian": "/badges/the-rim-guardian-badge.png",
+    "The Caretaker": "/badges/the-caretaker-badge.png",
+    "The Closer": "/badges/the-closer-badge.png",
+    "The Choke": "/badges/the-choke.png",
+    "The Kingslayer": "/badges/kingslayer.png",
+    "Unstoppable": "/badges/the-unstoppable-badge.png",
+    "Free Fall": "/badges/free-fall.png",
+    "Ceiling Check": "/badges/ceiling-check.png",
+    "Public Enemy No. 1": "/badges/public-enemy-no1.png",
+    "Manager Of The Year": "/badges/manager-of-the-year.png",
 }
 
 # Descripciones de cada sección (header) del reporte
@@ -1680,11 +1822,15 @@ def compute_moty_winner(league, weeks, team_ranks, num_starters=None):
     if not teams:
         return None, 0.0, {}
 
-    # Stats: count of top-1 categories per team, normalized 0-100
+    # Stats: top 3 per category, weighted (3-2-1), normalized 0-100
     stats_raw = {}
     for tid, ranks in team_ranks.items():
-        n_first = sum(1 for cat in FIRST_PLACE_TITLES if ranks.get(cat) == 1)
-        stats_raw[tid] = n_first
+        total = 0
+        for cat in FIRST_PLACE_TITLES:
+            r = ranks.get(cat)
+            if r is not None and r in STATS_RANK_POINTS:
+                total += STATS_RANK_POINTS[r]
+        stats_raw[tid] = total
     stats_norm = _normalize_to_100(stats_raw, higher_is_better=True)
 
     # Standings before playoffs, normalized 0-100 (best=100)

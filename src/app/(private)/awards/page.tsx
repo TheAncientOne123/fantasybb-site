@@ -1,17 +1,14 @@
 'use client'
 
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { MainLayout } from '@/components/layout/MainLayout'
-
 export default function AwardsPage() {
-  const router = useRouter()
-  useEffect(() => {
-    router.replace('/wrapped')
-  }, [router])
   return (
-    <MainLayout>
-      <div className="p-6 text-slate-400">Redirigiendo a Wrapped…</div>
-    </MainLayout>
+    <div className="min-h-screen bg-slate-950 p-6">
+      <div className="space-y-2">
+        <h1 className="font-heading text-3xl text-slate-100">Hall of Fame</h1>
+        <p className="text-slate-400">
+          Mock up: aquí se mostrarán los premios y reconocimientos de la liga.
+        </p>
+      </div>
+    </div>
   )
 }

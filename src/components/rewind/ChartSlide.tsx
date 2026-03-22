@@ -49,11 +49,11 @@ export function ChartSlide({ slide, accent }: Props) {
           const hasMultipleSeries = chart.series.length > 1 && chart.series.every((s) => s.data.length <= 1)
           const barData = hasMultipleSeries
             ? (() => {
-                const byX: Record<string, Record<string, number>> = {}
+                const byX: Record<string, Record<string, string | number>> = {}
                 chart.series.forEach((s) => {
                   s.data.forEach((d) => {
                     if (!byX[d.x]) byX[d.x] = { x: d.x }
-                    ;(byX[d.x] as Record<string, number>)[s.name] = d.y
+                    byX[d.x][s.name] = d.y
                   })
                 })
                 return Object.values(byX).map((row) => {

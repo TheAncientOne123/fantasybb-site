@@ -12,6 +12,9 @@ import { MatchupSlide } from './MatchupSlide'
 import { RosterDiffSlide } from './RosterDiffSlide'
 import { RankSlide } from './RankSlide'
 import { TimelineSlide } from './TimelineSlide'
+import { SummarySlide } from './SummarySlide'
+import { PlayoffOutcomeSlide } from './PlayoffOutcomeSlide'
+import { DebtTableSlide } from './DebtTableSlide'
 
 const DEFAULT_ACCENT = '#f59e0b'
 
@@ -44,6 +47,12 @@ export function SlideRenderer({ slide, accent = DEFAULT_ACCENT }: Props) {
       return <RankSlide slide={slide} accent={accent} />
     case 'timeline':
       return <TimelineSlide slide={slide} accent={accent} />
+    case 'summary':
+      return <SummarySlide slide={slide} accent={accent} />
+    case 'playoffOutcome':
+      return <PlayoffOutcomeSlide slide={slide} accent={accent} />
+    case 'debtTable':
+      return <DebtTableSlide slide={slide} accent={accent} />
     default: {
       const _: never = slide
       return null

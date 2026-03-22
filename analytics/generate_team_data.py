@@ -55,10 +55,121 @@ THEME_COLORS = [
     {"background": "linear-gradient(135deg, #422006 0%, #713f12 50%, #422006 100%)", "accent": "#facc15"},
 ]
 
+# Penúltima slide del rewind (2025-26); highlightTeamId se añade por equipo al generar.
+DEBT_TABLE_SLIDE_2026 = {
+    "type": "debtTable",
+    "title": "Tabla de Deuda 2025-2026",
+    "subtitle": "Compensación económica por equipo",
+    "rows": [
+        {"teamId": "glizzy-goblers", "teamName": "Glizzy Goblers", "amount": "$100 MXN"},
+        {"teamId": "lalocomotora", "teamName": "Lalocomotora", "amount": "$550 MXN"},
+        {"teamId": "diegos-daring-team", "teamName": "Diego's Daring Team", "amount": "$100 MXN"},
+        {"teamId": "huecox-y-un-dobel", "teamName": "Huecox y un dobel", "amount": "$200 MXN"},
+        {"teamId": "metefierros", "teamName": "Metefierros", "amount": "$200 MXN"},
+        {"teamId": "lububumatcha", "teamName": "LububuMatcha", "amount": "$200 MXN"},
+        {"teamId": "beijing-ducks", "teamName": "Beijing Ducks", "amount": "$100 MXN"},
+        {"teamId": "tochetaos", "teamName": "Tochetaos", "amount": "$100 MXN"},
+        {"teamId": "fiestas-fantastic-team", "teamName": "Fiesta's Fantastic Team", "amount": "$100 MXN"},
+    ],
+    "total": "$1,650 MXN",
+    "footer": (
+        "Cena de la liga: el campeón no paga; el sobrante reduce costos para los demás miembros."
+    ),
+}
+
 
 def escape_for_ts(s: str) -> str:
     """Escape single quotes for use inside a TS string literal."""
     return s.replace("'", "\\'")
+
+
+def escape_ts_field(s: str) -> str:
+    """Escape owner / description for TS single-quoted literals."""
+    if not s:
+        return ""
+    return s.replace("\\", "\\\\").replace("'", "\\'").replace("\n", "\\n").replace("\r", "")
+
+
+def _read_ts_quoted_field(text: str, field: str) -> str:
+    """Read `field: '...'` value before regenerating a team file."""
+    m = re.search(rf"{field}:\s*'", text)
+    if not m:
+        return ""
+    i = m.end()
+    out: list[str] = []
+    while i < len(text):
+        c = text[i]
+        if c == "'":
+            break
+        if c == "\\" and i + 1 < len(text):
+            out.append(text[i + 1])
+            i += 2
+            continue
+        out.append(c)
+        i += 1
+    return "".join(out)
+
+
+def read_existing_owner_description(ts_path: Path) -> tuple[str, str]:
+    """Preserve manual franchise fields when regenerating team .ts files."""
+    if not ts_path.is_file():
+        return ("", "")
+    try:
+        content = ts_path.read_text(encoding="utf-8")
+    except OSError:
+        return ("", "")
+    return (_read_ts_quoted_field(content, "owner"), _read_ts_quoted_field(content, "description"))
+
+
+def format_9cat_value_display(cat: str, val) -> str:
+    """Human-readable season total for profileStats (matches console 9CAT style)."""
+    if val is None:
+        return "—"
+    if cat in ("FG%", "FT%"):
+        try:
+            return f"{float(val) * 100:.1f}%"
+        except (TypeError, ValueError):
+            return str(val)
+    try:
+        v = float(val)
+        if abs(v - round(v)) < 1e-9:
+            return str(int(round(v)))
+        return f"{v:.1f}"
+    except (TypeError, ValueError):
+        return str(val)
+
+
+def build_profile_stats(team, team_ranks: Dict, raw_9cat: Dict) -> Dict:
+    """Data for TeamRewindData.profileStats: full 9CAT + all roster fantasy points."""
+    tid = team.team_id
+    ranks = team_ranks.get(tid) or {}
+    raw = raw_9cat.get(tid) or {}
+    nine_cat = []
+    for cat in nv.NINECAT_KEYS:
+        rnk = ranks.get(cat)
+        val = raw.get(cat)
+        if rnk is None and val is None:
+            nine_cat.append({"category": cat, "rank": 0, "valueDisplay": "—"})
+            continue
+        nine_cat.append(
+            {
+                "category": cat,
+                "rank": int(rnk) if rnk is not None else 0,
+                "valueDisplay": format_9cat_value_display(cat, val),
+            }
+        )
+    roster_rows = []
+    for p in getattr(team, "roster", []) or []:
+        name = getattr(p, "name", None) or str(p)
+        pts = getattr(p, "total_points", None)
+        try:
+            pts_f = float(pts) if pts is not None else 0.0
+        except (TypeError, ValueError):
+            pts_f = 0.0
+        roster_rows.append({"name": name, "points": int(round(pts_f))})
+    roster_rows.sort(key=lambda x: -x["points"])
+    return {"nineCat": nine_cat, "rosterFantasyPoints": roster_rows}
+
 
 def sanitize_id(name: str) -> str:
     """Convierte nombre de equipo a ID válido para TypeScript (sin espacios, caracteres especiales)."""
@@ -169,7 +280,14 @@ def download_team_logo(logo_url: str, team_slug: str) -> Optional[str]:
         return None
 
 
-def generate_team_ts(team, team_data: dict, season: str = "2026") -> str:
+def generate_team_ts(
+    team,
+    team_data: dict,
+    season: str = "2026",
+    owner: str = "",
+    description: str = "",
+    profile_stats: Optional[Dict] = None,
+) -> str:
     """Genera el contenido TypeScript para un equipo usando los nuevos tipos de slides."""
     tid = get_team_slug(team)
     theme = THEME_COLORS[team.team_id % len(THEME_COLORS)]
@@ -267,24 +385,30 @@ def generate_team_ts(team, team_data: dict, season: str = "2026") -> str:
     if win_streak_ranking:
         if team_data.get("is_unstoppable"):
             streak_val = team_data.get("unstoppable_streak", 0)
-            slides.append({
+            unstoppable_slide = {
                 "type": "award",
                 "title": "Unstoppable",
                 "badgeName": "Longest win streak in the league",
                 "description": f"You had the longest win streak with {streak_val} consecutive wins.",
                 "footer": "Peak momentum",
-            })
+            }
+            if nv.BADGE_IMAGES.get("Unstoppable"):
+                unstoppable_slide["image"] = nv.BADGE_IMAGES["Unstoppable"]
+            slides.append(unstoppable_slide)
         elif team_data.get("is_streak_ender"):
             victim = team_data.get("streak_ender_victim_name", "?")
             streak_val = team_data.get("streak_ender_victim_streak", 0)
             week_val = team_data.get("streak_ender_week", "?")
-            slides.append({
+            ks_slide = {
                 "type": "award",
                 "title": "The Kingslayer",
                 "badgeName": "Kingslayer",
                 "description": f"You ended {victim}'s {int(streak_val)}-game win streak in week {week_val}.",
                 "footer": "Jaime Lannister would be proud of you",
-            })
+            }
+            if nv.BADGE_IMAGES.get("The Kingslayer"):
+                ks_slide["image"] = nv.BADGE_IMAGES["The Kingslayer"]
+            slides.append(ks_slide)
         else:
             rows = []
             for rank, (t_id, t_name, streak_val) in enumerate(win_streak_ranking, 1):
@@ -310,14 +434,17 @@ def generate_team_ts(team, team_data: dict, season: str = "2026") -> str:
     if lose_streak_ranking:
         if team_data.get("is_free_fall"):
             streak_val = team_data.get("free_fall_streak", 0)
-            slides.append({
+            free_fall_slide = {
                 "type": "award",
                 "title": "Free Fall",
                 "badgeName": "Longest losing streak in the league",
                 "description": f"Longest losing streak: {streak_val} consecutive losses.",
                 "footer": "Rough patch",
                 "awardTier": "standoff",
-            })
+            }
+            if nv.BADGE_IMAGES.get("Free Fall"):
+                free_fall_slide["image"] = nv.BADGE_IMAGES["Free Fall"]
+            slides.append(free_fall_slide)
         else:
             rows = []
             for rank, (t_id, t_name, streak_val) in enumerate(lose_streak_ranking, 1):
@@ -439,13 +566,16 @@ def generate_team_ts(team, team_data: dict, season: str = "2026") -> str:
             })
         if rows:
             if ceiling_rank == 1:
-                slides.append({
+                ceiling_slide = {
                     "type": "award",
                     "title": "Ceiling Check",
                     "badgeName": "Highest scoring week in the league",
                     "description": f"You had the single highest scoring week with {format_value(ceiling_ranking[0][2])} points.",
                     "footer": "Peak performance",
-                })
+                }
+                if nv.BADGE_IMAGES.get("Ceiling Check"):
+                    ceiling_slide["image"] = nv.BADGE_IMAGES["Ceiling Check"]
+                slides.append(ceiling_slide)
             slides.append({
                 "type": "rank",
                 "title": "Highest Scoring Week (per team)",
@@ -488,13 +618,19 @@ def generate_team_ts(team, team_data: dict, season: str = "2026") -> str:
         if team_data.get("is_closer") and team_data.get("closer_games"):
             closer_games = team_data.get("closer_games", [])
             events = [{"label": f"Week {g.get('week', '?')}", "title": f"Beat {g.get('opponent_name', '?')}", "detail": f"{int(g.get('my_pts', 0))}–{int(g.get('opp_pts', 0))} ({int(g.get('margin', 0))} pts)", "kind": "win"} for g in closer_games[:5]]
-            slides.append({"type": "award", "title": "The Closer", "badgeName": "Most Close Wins", "description": f"Won {len(closer_games)} close games (≤100 pts margin)", "footer": "Clutch performer"})
+            closer_slide = {"type": "award", "title": "The Closer", "badgeName": "Most Close Wins", "description": f"Won {len(closer_games)} close games (≤100 pts margin)", "footer": "Clutch performer"}
+            if nv.BADGE_IMAGES.get("The Closer"):
+                closer_slide["image"] = nv.BADGE_IMAGES["The Closer"]
+            slides.append(closer_slide)
             if events:
                 slides.append({"type": "timeline", "title": "Close Wins", "subtitle": "The Closer moments", "events": events, "footer": "Every point counted"})
         if team_data.get("is_choke") and team_data.get("choke_games"):
             choke_games = team_data.get("choke_games", [])
             events = [{"label": f"Week {g.get('week', '?')}", "title": f"Lost to {g.get('opponent_name', '?')}", "detail": f"{int(g.get('my_pts', 0))}–{int(g.get('opp_pts', 0))} ({int(g.get('margin', 0))} pts)", "kind": "loss"} for g in choke_games[:5]]
-            slides.append({"type": "award", "title": "The Choke", "badgeName": "Most Close Losses", "description": f"Lost {len(choke_games)} close games (≤100 pts margin)", "footer": "So close...", "awardTier": "no-award"})
+            choke_slide = {"type": "award", "title": "The Choke", "badgeName": "Most Close Losses", "description": f"Lost {len(choke_games)} close games (≤100 pts margin)", "footer": "So close...", "awardTier": "no-award"}
+            if nv.BADGE_IMAGES.get("The Choke"):
+                choke_slide["image"] = nv.BADGE_IMAGES["The Choke"]
+            slides.append(choke_slide)
             if events:
                 slides.append({"type": "timeline", "title": "Close Losses", "subtitle": "The Choke moments", "events": events, "footer": "Heartbreak"})
     
@@ -569,7 +705,10 @@ def generate_team_ts(team, team_data: dict, season: str = "2026") -> str:
             if len(rival_names) > 5:
                 names_str += f" +{len(rival_names) - 5} more"
             desc += f" — {names_str}"
-        slides.append({"type": "award", "title": "Public Enemy No. 1", "badgeName": "Most #1 Rivals", "description": desc, "footer": "Everyone had you on their radar"})
+        public_enemy_slide = {"type": "award", "title": "Public Enemy No. 1", "badgeName": "Most #1 Rivals", "description": desc, "footer": "Everyone had you on their radar"}
+        if nv.BADGE_IMAGES.get("Public Enemy No. 1"):
+            public_enemy_slide["image"] = nv.BADGE_IMAGES["Public Enemy No. 1"]
+        slides.append(public_enemy_slide)
     
     # Roster Evolution
     roster_evol = team_data.get("roster_evolution", {})
@@ -682,6 +821,8 @@ def generate_team_ts(team, team_data: dict, season: str = "2026") -> str:
                 "description": nv.MOTY_TITLE[1],
                 "footer": "25% Stats, 15% Standings, 25% Champion, 35% MVA",
             }
+            if nv.BADGE_IMAGES.get("Manager Of The Year"):
+                moty_slide["image"] = nv.BADGE_IMAGES["Manager Of The Year"]
             if breakdown:
                 # Add weighted contributions for transparency
                 moty_slide["motyBreakdown"] = {
@@ -701,7 +842,10 @@ def generate_team_ts(team, team_data: dict, season: str = "2026") -> str:
                 else:
                     name = str(t)
                     label = ""
-                items.append({"primary": name, "secondary": label})
+                item = {"primary": name, "secondary": label}
+                if nv.BADGE_IMAGES.get(name):
+                    item["image"] = nv.BADGE_IMAGES[name]
+                items.append(item)
             slides.append({
                 "type": "list",
                 "title": "Category Titles",
@@ -709,8 +853,147 @@ def generate_team_ts(team, team_data: dict, season: str = "2026") -> str:
                 "items": items,
                 "footer": "Your dominance",
             })
-    
-    # Final Hero
+
+    # Summary slide: titles, archetype, record, badges (rewind recap)
+    summary_titles = []
+    if team_data.get("is_unstoppable"):
+        summary_titles.append({"name": "Unstoppable", "label": "Longest win streak", "image": nv.BADGE_IMAGES.get("Unstoppable")})
+    if team_data.get("is_streak_ender"):
+        summary_titles.append({"name": "The Kingslayer", "label": "Streak ender", "image": nv.BADGE_IMAGES.get("The Kingslayer")})
+    if team_data.get("is_free_fall"):
+        summary_titles.append({"name": "Free Fall", "label": "Longest losing streak", "image": nv.BADGE_IMAGES.get("Free Fall")})
+    if team_data.get("ceiling_rank") == 1:
+        summary_titles.append({"name": "Ceiling Check", "label": "Highest scoring week", "image": nv.BADGE_IMAGES.get("Ceiling Check")})
+    if team_data.get("is_closer"):
+        summary_titles.append({"name": "The Closer", "label": "Most close wins", "image": nv.BADGE_IMAGES.get("The Closer")})
+    if team_data.get("is_choke"):
+        summary_titles.append({"name": "The Choke", "label": "Most close losses", "image": nv.BADGE_IMAGES.get("The Choke")})
+    if team_data.get("is_public_enemy_no1"):
+        summary_titles.append({"name": "Public Enemy No. 1", "label": "Most #1 rivals", "image": nv.BADGE_IMAGES.get("Public Enemy No. 1")})
+    titles_list = team_data.get("titles", [])
+    moty_title_name = nv.MOTY_TITLE[0]
+    has_moty = any((t[0] == moty_title_name if isinstance(t, tuple) else str(t) == moty_title_name) for t in titles_list)
+    if has_moty:
+        summary_titles.append({"name": "Manager Of The Year", "label": "MOTY", "image": nv.BADGE_IMAGES.get("Manager Of The Year")})
+    cat_titles_for_summary = [t for t in titles_list if (t[0] if isinstance(t, tuple) else str(t)) != moty_title_name]
+    for t in cat_titles_for_summary[:5]:
+        name = t[0] if isinstance(t, tuple) else str(t)
+        label = t[1] if isinstance(t, tuple) and len(t) > 1 else ""
+        summary_titles.append({"name": name, "label": label, "image": nv.BADGE_IMAGES.get(name)})
+
+    # Season matchups: stat line + slug del rival (logo en frontend; sin nombre en el texto)
+    slug_map = team_data.get("_team_slugs") or {}
+
+    def _opp_slug(opp_id):
+        return slug_map.get(opp_id) if opp_id else None
+
+    def _insight_row(stat_text, opp_id=None):
+        row = {"stat": stat_text}
+        sid = _opp_slug(opp_id)
+        if sid:
+            row["opponentTeamId"] = sid
+        return row
+
+    rival_d = team_data.get("rival")
+    if rival_d:
+        rival_row = _insight_row(
+            f"{rival_d.get('games', 0)} games · {format_value(rival_d.get('combined_points', 0))} pts combined",
+            rival_d.get("opponent_id"),
+        )
+    else:
+        rival_row = _insight_row("—", None)
+
+    nem = team_data.get("nemesis")
+    if nem:
+        nemesis_row = _insight_row(
+            (
+                f"Week {nem.get('week', '?')} · "
+                f"L {int(nem.get('my_points', 0))}–{int(nem.get('opp_points', 0))} "
+                f"(−{int(nem.get('margin', 0))} pts)"
+            ),
+            nem.get("opponent_id"),
+        )
+    else:
+        nemesis_row = _insight_row("—", None)
+
+    closest_m = team_data.get("closest_matchup")
+    if closest_m:
+        res_c = closest_m.get("result", "?")
+        closest_row = _insight_row(
+            (
+                f"Week {closest_m.get('week', '?')} · "
+                f"{int(closest_m.get('my_pts', 0))}–{int(closest_m.get('opp_pts', 0))} "
+                f"({res_c}, {int(closest_m.get('margin', 0))}-pt margin)"
+            ),
+            closest_m.get("opponent_id"),
+        )
+    else:
+        closest_row = _insight_row("—", None)
+
+    bw_sum = team_data.get("best_worst_week", {})
+    wk_opp_ids = team_data.get("weekly_opponent_ids", {})
+    ceil_ranking = team_data.get("_ceiling_ranking", [])
+    ceil_rank = team_data.get("ceiling_rank")
+    hsw_row = _insight_row("—", None)
+    if bw_sum.get("best_week") is not None:
+        bw_num = bw_sum.get("best_week")
+        oid = wk_opp_ids.get(bw_num)
+        hsw_row = _insight_row(
+            f"Week {bw_num} · {format_value(bw_sum.get('best_points', 0))} pts",
+            oid,
+        )
+    elif ceil_ranking:
+        my_id = team.team_id
+        for t_id, _t_name, best_pts in ceil_ranking:
+            if t_id == my_id:
+                rk = ceil_rank if ceil_rank is not None else "—"
+                hsw_row = _insight_row(
+                    f"{format_value(best_pts)} pts (your best) · league ceiling #{rk}",
+                    None,
+                )
+                break
+
+    summary_insights = {
+        "rival": rival_row,
+        "nemesis": nemesis_row,
+        "closestGame": closest_row,
+        "highestScoringWeek": hsw_row,
+    }
+
+    arch = team_data.get("archetype", {})
+    main_arch = arch.get("main", "")
+    record_val = ""
+    standing_val = None
+    if summary:
+        w, l, t = summary.get("wins", 0), summary.get("losses", 0), summary.get("ties", 0)
+        record_val = f"{w}-{l}-{t}"
+        standing_val = summary.get("standing") or summary.get("final_standing")
+
+    # Orden final: playoff → season summary → tabla de deuda (2026) → hero despedida
+    po = team_data.get("playoff_outcome") or {}
+    slides.append({
+        "type": "playoffOutcome",
+        "title": po.get("title", "Season in progress"),
+        "description": po.get("description", "The season hasn't ended yet."),
+        "outcome": po.get("outcome", "in_progress"),
+        "standing": po.get("standing"),
+        "footer": "How far you went",
+    })
+
+    slides.append({
+        "type": "summary",
+        "title": "Your Season Summary",
+        "subtitle": team.team_name,
+        "record": {"value": record_val, "standing": f"#{standing_val}" if standing_val else None} if record_val else None,
+        "archetype": {"name": main_arch, "image": nv.BADGE_IMAGES.get(main_arch)} if main_arch else None,
+        "titles": summary_titles,
+        "summaryInsights": summary_insights,
+        "footer": "Fantasy Rewind",
+    })
+
+    if season == "2026":
+        slides.append({**DEBT_TABLE_SLIDE_2026, "highlightTeamId": tid})
+
     slides.append({
         "type": "hero",
         "title": "See you next season",
@@ -752,26 +1035,32 @@ def generate_team_ts(team, team_data: dict, season: str = "2026") -> str:
         return "{\n" + ",\n".join(parts) + "\n    }"
     
     slides_str = ",\n    ".join([slide_to_ts(s) for s in slides])
-    
+
+    profile_tail = ""
+    if profile_stats and (profile_stats.get("nineCat") or profile_stats.get("rosterFantasyPoints")):
+        profile_tail = f"\n  profileStats: {value_to_ts(profile_stats, '  ')}"
+
     team_name_escaped = team.team_name.replace("'", "\\'").replace('"', '\\"')
-    
+
     return f'''/**
  * Team rewind data – {team.team_name}
  * Generated from ESPN Fantasy Basketball analytics
  */
 
-import type {{ TeamRewindData }} from '../rewind-types'
+import type {{ TeamRewindData }} from '../../../rewind-types'
 
 const data: TeamRewindData = {{
   id: '{tid}',
   displayName: '{team_name_escaped}',
+  owner: '{escape_ts_field(owner)}',
+  description: '{escape_ts_field(description)}',
   theme: {{
     background: '{theme["background"]}',
     accent: '{theme["accent"]}',
   }},
   slides: [
     {slides_str}
-  ],
+  ],{profile_tail}
 }}
 
 export default data
@@ -897,6 +1186,7 @@ def collect_team_data(league, weeks, team_by_id, team_ranks, dominance_report, a
             "opp_points": [opp_pts.get(w, 0) for w in sorted(pts.keys())],
         }
         data["weekly_opponent_names"] = opp_names
+        data["weekly_opponent_ids"] = {w: oid for w, oid in opp_ids.items() if oid}
         data["weekly_results"] = results
         
         # Juegos vs rival (para slide Rival)
@@ -966,6 +1256,9 @@ def collect_team_data(league, weeks, team_by_id, team_ranks, dominance_report, a
                 ceiling_rank = idx
                 break
         data["ceiling_rank"] = ceiling_rank
+
+        # Playoff outcome (how far the team went; ready for when season ends)
+        data["playoff_outcome"] = nv.playoff_outcome(team, n_teams=n_teams, league=league)
         
         all_data[tid] = data
     
@@ -1099,25 +1392,92 @@ def generate_all_teams(season: str = "2026"):
     teams = league.teams
     team_by_id = {t.team_id: t for t in teams}
     
-    weeks = nv.get_available_weeks(league)
-    if not weeks:
+    weeks_all = nv.get_available_weeks(league)
+    if not weeks_all:
         print("No weeks found. Check LEAGUE_ID, YEAR and ESPN credentials.")
         return
+
+    # Split entre temporada regular vs playoffs para que premios "semana" no se mezclen.
+    # En ESPN Fantasy, reg_season_count indica cuántos matchup periods son de temporada regular.
+    # Todo lo que esté después se considera playoffs.
+    reg_season_count = getattr(getattr(league, "settings", None), "reg_season_count", None)
+    if reg_season_count is None:
+        # Fallback conservador: si no existe, no hacemos split.
+        weeks_regular = weeks_all
+        weeks_playoffs = []
+    else:
+        weeks_regular = [w for w in weeks_all if int(w) <= int(reg_season_count)]
+        weeks_playoffs = [w for w in weeks_all if int(w) > int(reg_season_count)]
+
+    weeks_all = sorted(set(int(w) for w in weeks_all))
+    weeks_regular = sorted(set(int(w) for w in weeks_regular))
+    weeks_playoffs = sorted(set(int(w) for w in weeks_playoffs))
+
+    print(
+        f"Weekly periods split -> regular={weeks_regular[:5]}...{weeks_regular[-3:] if weeks_regular else []} "
+        f"(count={len(weeks_regular)}), playoffs={weeks_playoffs} (count={len(weeks_playoffs)})"
+    )
     
     # Calcular todos los datos necesarios
     print("Computing team statistics...")
     team_ranks, raw_9cat = nv.league_9cat_rankings(teams)
     dominance_report = nv.category_dominance_report(teams, team_ranks, top_n=3)
     activity_list = nv.get_activity_per_team(league)
-    consistency_ranking = nv.league_consistency_ranking(league, weeks)
+    consistency_ranking = nv.league_consistency_ranking(league, weeks_regular)
     archetypes = nv.compute_archetypes(
         league, team_ranks, dominance_report, activity_list,
         consistency_ranking=consistency_ranking,
         trade_75_pct=75, min_trades_abs=10,
     )
-    moty_team_id, moty_score, moty_breakdown = nv.compute_moty_winner(league, weeks, team_ranks)
+    # MOTY incluye componentes de playoffs (league winner) y MVA debe considerar todo el periodo del season.
+    moty_team_id, moty_score, moty_breakdown = nv.compute_moty_winner(league, weeks_all, team_ranks)
     moty_winners = {moty_team_id} if moty_team_id is not None else set()
     first_place_titles = nv.compute_first_place_titles(team_ranks, moty_winners=moty_winners)
+
+    # --- MOTY rankings (terminal debug) ---
+    print("\n--- MOTY Rankings (25% Stats, 15% Standings, 25% Champion, 35% MVA) ---")
+    moty_sorted = sorted(
+        (tid for tid in moty_breakdown),
+        key=lambda tid: (moty_breakdown[tid]["moty_score"], -tid),
+        reverse=True,
+    )
+    for rank, tid in enumerate(moty_sorted, 1):
+        b = moty_breakdown[tid]
+        name = team_by_id.get(tid)
+        name_str = (name.team_name if name else "?")[:28]
+        stats_contrib = round(nv.MOTY_WEIGHT_STATS * b["stats_norm"], 1)
+        stand_contrib = round(nv.MOTY_WEIGHT_STANDINGS * b["standings_norm"], 1)
+        champ_contrib = round(nv.MOTY_WEIGHT_LEAGUE_WINNER * b["league_winner_norm"], 1)
+        mva_contrib = round(nv.MOTY_WEIGHT_MVA * b["mva_norm"], 1)
+        total = round(b["moty_score"], 1)
+        marker = " <-- MOTY" if tid == moty_team_id else ""
+        print(f"  #{rank} {name_str:28} total={total:5.1f}  stats={stats_contrib:4.1f}  stand={stand_contrib:4.1f}  champ={champ_contrib:4.1f}  mva={mva_contrib:4.1f}{marker}")
+    print()
+
+    # --- Category progression (9CAT rankings per category) ---
+    cats_order = list(nv.FIRST_PLACE_TITLES.keys()) if team_ranks else []
+    if cats_order:
+        print("--- 9CAT Progression (rank per category, 1=best) ---")
+        for cat in cats_order:
+            # Ordenar equipos por rank en esta categoría (1, 2, 3...)
+            cat_entries = []
+            for tid, ranks in team_ranks.items():
+                r = ranks.get(cat)
+                if r is not None:
+                    val = raw_9cat.get(tid, {}).get(cat)
+                    if isinstance(val, (int, float)):
+                        val_str = f"{val:.2f}" if 0 <= val <= 1 and cat in ("FG%", "FT%") else f"{val:.1f}"
+                    else:
+                        val_str = str(val) if val is not None else "?"
+                    cat_entries.append((r, tid, val_str))
+            cat_entries.sort(key=lambda x: x[0])
+            line = f"  {cat:4}: "
+            for r, tid, val_str in cat_entries[:10]:
+                t = team_by_id.get(tid)
+                short = (t.team_name[:12] if t else "?") if t else "?"
+                line += f"#{r} {short}({val_str})  "
+            print(line)
+        print()
 
     # Standings: equipos ordenados por puesto final
     def _standing_key(t):
@@ -1131,27 +1491,27 @@ def generate_all_teams(season: str = "2026"):
     n_teams = len(teams)
     for i, t in enumerate(teams):
         _progress_bar(i, n_teams, "  Ceiling ", t.team_name[:20])
-        bw = nv.best_and_worst_week(league, t.team_id, weeks)
+        bw = nv.best_and_worst_week(league, t.team_id, weeks_regular)
         ceiling_ranking.append((t.team_id, t.team_name, bw.get("best_points", 0) or 0))
     _progress_bar(n_teams, n_teams, "  Ceiling ", "done")
     print()
     ceiling_ranking.sort(key=lambda x: x[2], reverse=True)
     
     # Unstoppable (#1 racha victorias) y Free Fall (#1 racha derrotas)
-    unstoppable_team, unstoppable_streak = nv.unstoppable_winner(league, weeks)
+    unstoppable_team, unstoppable_streak = nv.unstoppable_winner(league, weeks_regular)
     streak_ender_team, streak_ender_week, streak_ender_victim_name = nv.streak_ender_winner(
-        league, weeks, unstoppable_team, unstoppable_streak
+        league, weeks_regular, unstoppable_team, unstoppable_streak
     )
-    free_fall_team, free_fall_streak = nv.free_fall_winner(league, weeks, standings_list)
+    free_fall_team, free_fall_streak = nv.free_fall_winner(league, weeks_regular, standings_list)
     
     # Rankings de rachas (para slides Win Streaks / Lose Streaks)
-    win_streak_ranking = nv.win_streak_ranking(league, weeks)
-    lose_streak_ranking = nv.lose_streak_ranking(league, weeks, standings_list)
+    win_streak_ranking = nv.win_streak_ranking(league, weeks_regular)
+    lose_streak_ranking = nv.lose_streak_ranking(league, weeks_regular, standings_list)
     
     # Recopilar datos por equipo
     print("\nCollecting data per team...")
     all_team_data = collect_team_data(
-        league, weeks, team_by_id, team_ranks, dominance_report,
+        league, weeks_regular, team_by_id, team_ranks, dominance_report,
         activity_list, consistency_ranking, archetypes, first_place_titles, season,
         standings_list=standings_list, ceiling_ranking=ceiling_ranking,
         unstoppable_team=unstoppable_team, unstoppable_streak=unstoppable_streak,
@@ -1175,9 +1535,12 @@ def generate_all_teams(season: str = "2026"):
         tid = get_team_slug(team)
         _progress_bar(i, n_teams, "  Teams   ", tid)
         data = all_team_data[team.team_id]
-        ts_content = generate_team_ts(team, data, season)
-        
         output_file = output_dir / f"{tid}.ts"
+        prev_owner, prev_desc = read_existing_owner_description(output_file)
+        ps = build_profile_stats(team, team_ranks, raw_9cat)
+        ts_content = generate_team_ts(
+            team, data, season, owner=prev_owner, description=prev_desc, profile_stats=ps
+        )
         output_file.write_text(ts_content, encoding="utf-8")
         generated_ids.add(tid)
         team_index_entries.append({
@@ -1209,7 +1572,7 @@ def generate_all_teams(season: str = "2026"):
  * Auto-generated from ESPN Fantasy Basketball data.
  */
 
-import type {{ TeamIndexEntry }} from '../../rewind-types'
+import type {{ TeamIndexEntry }} from '../../../rewind-types'
 
 export const teamsIndex: TeamIndexEntry[] = [
   {entries_str}

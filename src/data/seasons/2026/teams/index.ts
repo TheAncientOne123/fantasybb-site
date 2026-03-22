@@ -3,7 +3,7 @@
  * Auto-generated from ESPN Fantasy Basketball data.
  */
 
-import type { TeamIndexEntry } from '../../rewind-types'
+import type { TeamIndexEntry } from '../../../rewind-types'
 
 export const teamsIndex: TeamIndexEntry[] = [
   { id: 'novigrad-21ers', displayName: 'Novigrad 21ers ' },

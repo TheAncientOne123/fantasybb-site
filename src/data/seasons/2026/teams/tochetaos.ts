@@ -3,11 +3,13 @@
  * Generated from ESPN Fantasy Basketball analytics
  */
 
-import type { TeamRewindData } from '../rewind-types'
+import type { TeamRewindData } from '../../../rewind-types'
 
 const data: TeamRewindData = {
   id: 'tochetaos',
   displayName: 'Tochetaos',
+  owner: 'Sebastian Aguilar',
+  description: 'Objetivo: Convertirnos en Bucks FC, drafteando a pura gema oculta y desarrollandolos para llegar hasta el campeonaton\nVisión: Ser los underdogs, caminando despacio sin rushear nada\nMisión: Cogerme a Peru FC',
   theme: {
     background: 'linear-gradient(135deg, #581c87 0%, #6b21a8 50%, #581c87 100%)',
     accent: '#c084fc',
@@ -23,11 +25,11 @@ const data: TeamRewindData = {
     {
       type: 'stat',
       title: 'Season Record',
-      value: '11-4-0',
+      value: '12-6-0',
       label: 'W-L-T',
       compareTo: {
         label: 'Standing',
-        value: '#1'
+        value: '#2'
       }
     },
     {
@@ -37,63 +39,63 @@ const data: TeamRewindData = {
       metricLabel: 'W-L',
       rows: [
         {
-          id: 'tochetaos',
-          name: 'Tochetaos',
-          value: '11-4',
+          id: 'beijing-ducks',
+          name: '北京首钢霹雳鸭',
+          value: '13-5',
           rank: 1
         },
         {
-          id: 'beijing-ducks',
-          name: '北京首钢霹雳鸭',
-          value: '10-5',
+          id: 'tochetaos',
+          name: 'Tochetaos',
+          value: '12-6',
           rank: 2
         },
         {
           id: 'novigrad-21ers',
           name: 'Novigrad 21ers ',
-          value: '10-5',
+          value: '11-7',
           rank: 3
         },
         {
           id: 'fiestas-fantastic-team',
           name: 'Fiesta\'s Fantastic Team',
-          value: '9-6',
+          value: '11-7',
           rank: 4
         },
         {
           id: 'diegos-daring-team',
           name: 'Diego\'s Daring Team',
-          value: '8-7',
+          value: '11-7',
           rank: 5
         },
         {
           id: 'lububumatcha',
           name: 'LububuMatcha',
-          value: '7-8',
+          value: '9-9',
           rank: 6
         },
         {
           id: 'glizzy-goblers',
           name: 'Glizzy Goblers',
-          value: '7-8',
+          value: '9-9',
           rank: 7
         },
         {
           id: 'metefierros',
           name: 'METEFIERROS',
-          value: '6-9',
+          value: '7-11',
           rank: 8
         },
         {
           id: 'huecox-y-un-dobel',
           name: 'huecox y un Dobel',
-          value: '5-10',
+          value: '5-13',
           rank: 9
         },
         {
           id: 'lalocomotora',
           name: 'LaloComotora',
-          value: '2-13',
+          value: '2-16',
           rank: 10
         }
       ],
@@ -113,7 +115,8 @@ const data: TeamRewindData = {
       title: 'Unstoppable',
       badgeName: 'Longest win streak in the league',
       description: 'You had the longest win streak with 10 consecutive wins.',
-      footer: 'Peak momentum'
+      footer: 'Peak momentum',
+      image: '/badges/the-unstoppable-badge.png'
     },
     {
       type: 'rank',
@@ -122,14 +125,14 @@ const data: TeamRewindData = {
       metricLabel: 'Losses',
       rows: [
         {
-          id: 'huecox-y-un-dobel',
-          name: 'huecox y un Dobel',
-          value: '6',
+          id: 'lalocomotora',
+          name: 'LaloComotora',
+          value: '8',
           rank: 1
         },
         {
-          id: 'lalocomotora',
-          name: 'LaloComotora',
+          id: 'huecox-y-un-dobel',
+          name: 'huecox y un Dobel',
           value: '6',
           rank: 2
         },
@@ -152,14 +155,14 @@ const data: TeamRewindData = {
           rank: 5
         },
         {
-          id: 'tochetaos',
-          name: 'Tochetaos',
+          id: 'lububumatcha',
+          name: 'LububuMatcha',
           value: '3',
           rank: 6
         },
         {
-          id: 'lububumatcha',
-          name: 'LububuMatcha',
+          id: 'tochetaos',
+          name: 'Tochetaos',
           value: '3',
           rank: 7
         },
@@ -199,7 +202,7 @@ const data: TeamRewindData = {
             data: [
               {
                 x: 'Points For',
-                y: 21370.0
+                y: 25097.0
               }
             ],
             color: '#22c55e'
@@ -209,7 +212,7 @@ const data: TeamRewindData = {
             data: [
               {
                 x: 'Points Against',
-                y: 19524.0
+                y: 23069.0
               }
             ],
             color: '#ef4444'
@@ -221,9 +224,9 @@ const data: TeamRewindData = {
     {
       type: 'stat',
       title: 'Consistency',
-      value: '#10',
-      label: 'Hit-or-Miss',
-      description: 'Std dev: 299.9',
+      value: '#3',
+      label: 'Steady Hands',
+      description: 'Std dev: 192.0',
       footer: 'Lower is more consistent'
     },
     {
@@ -239,44 +242,44 @@ const data: TeamRewindData = {
             name: 'Consistency',
             data: [
               {
-                x: 'huecox y un Dobel',
-                y: 208.41011814149044
-              },
-              {
                 x: 'Novigrad 21ers ',
-                y: 230.88169995692598
-              },
-              {
-                x: 'LaloComotora',
-                y: 232.61650306889234
+                y: 166.79413643955618
               },
               {
                 x: 'METEFIERROS',
-                y: 236.2428487674283
-              },
-              {
-                x: 'LububuMatcha',
-                y: 259.93280381667876
-              },
-              {
-                x: 'Diego\'s Daring Team',
-                y: 267.5252324548098
-              },
-              {
-                x: 'Glizzy Goblers',
-                y: 281.1682936872506
-              },
-              {
-                x: '北京首钢霹雳鸭',
-                y: 288.4835350587621
-              },
-              {
-                x: 'Fiesta\'s Fantastic T',
-                y: 289.47009101762137
+                y: 187.1515280312839
               },
               {
                 x: 'Tochetaos',
-                y: 299.9295490194322
+                y: 191.99560340902357
+              },
+              {
+                x: 'LaloComotora',
+                y: 194.1222807318707
+              },
+              {
+                x: 'huecox y un Dobel',
+                y: 200.9992091993534
+              },
+              {
+                x: 'LububuMatcha',
+                y: 202.84127620712047
+              },
+              {
+                x: 'Fiesta\'s Fantastic T',
+                y: 232.46621950269795
+              },
+              {
+                x: '北京首钢霹雳鸭',
+                y: 236.10225473586232
+              },
+              {
+                x: 'Glizzy Goblers',
+                y: 239.68150162710143
+              },
+              {
+                x: 'Diego\'s Daring Team',
+                y: 245.83531072651056
               }
             ]
           }
@@ -284,7 +287,7 @@ const data: TeamRewindData = {
       },
       highlight: {
         label: 'Tochetaos',
-        value: '#10'
+        value: '#3'
       },
       footer: 'Your position in the league'
     },
@@ -303,14 +306,7 @@ const data: TeamRewindData = {
       },
       margin: 421,
       note: 'vs Glizzy Goblers',
-      footer: 'Worst week: 467 (Week 17)'
-    },
-    {
-      type: 'award',
-      title: 'Ceiling Check',
-      badgeName: 'Highest scoring week in the league',
-      description: 'You had the single highest scoring week with 1804 points.',
-      footer: 'Peak performance'
+      footer: 'Worst week: 892 (Week 8)'
     },
     {
       type: 'rank',
@@ -319,45 +315,45 @@ const data: TeamRewindData = {
       metricLabel: 'Points',
       rows: [
         {
+          id: 'beijing-ducks',
+          name: '北京首钢霹雳鸭',
+          value: '1817',
+          rank: 1
+        },
+        {
           id: 'tochetaos',
           name: 'Tochetaos',
           value: '1804',
-          rank: 1
+          rank: 2
         },
         {
           id: 'fiestas-fantastic-team',
           name: 'Fiesta\'s Fantastic Team',
           value: '1761',
-          rank: 2
+          rank: 3
         },
         {
-          id: 'beijing-ducks',
-          name: '北京首钢霹雳鸭',
-          value: '1720',
-          rank: 3
+          id: 'glizzy-goblers',
+          name: 'Glizzy Goblers',
+          value: '1694',
+          rank: 4
         },
         {
           id: 'diegos-daring-team',
           name: 'Diego\'s Daring Team',
           value: '1672',
-          rank: 4
+          rank: 5
         },
         {
           id: 'novigrad-21ers',
           name: 'Novigrad 21ers ',
           value: '1651',
-          rank: 5
+          rank: 6
         },
         {
           id: 'lububumatcha',
           name: 'LububuMatcha',
-          value: '1577',
-          rank: 6
-        },
-        {
-          id: 'glizzy-goblers',
-          name: 'Glizzy Goblers',
-          value: '1568',
+          value: '1601',
           rank: 7
         },
         {
@@ -367,15 +363,15 @@ const data: TeamRewindData = {
           rank: 8
         },
         {
-          id: 'lalocomotora',
-          name: 'LaloComotora',
-          value: '1474',
+          id: 'huecox-y-un-dobel',
+          name: 'huecox y un Dobel',
+          value: '1509',
           rank: 9
         },
         {
-          id: 'huecox-y-un-dobel',
-          name: 'huecox y un Dobel',
-          value: '1425',
+          id: 'lalocomotora',
+          name: 'LaloComotora',
+          value: '1474',
           rank: 10
         }
       ],
@@ -385,9 +381,9 @@ const data: TeamRewindData = {
     {
       type: 'stat',
       title: 'Close Games',
-      value: '2-1',
+      value: '2-2',
       label: 'Record in games ≤100 pts',
-      description: '3 total close games',
+      description: '4 total close games',
       footer: 'Margin ≤100 points'
     },
     {
@@ -411,6 +407,12 @@ const data: TeamRewindData = {
           label: 'Week 16',
           title: 'vs METEFIERROS',
           detail: '1043–1129 (86 pts)',
+          kind: 'loss'
+        },
+        {
+          label: 'Week 17',
+          title: 'vs LububuMatcha',
+          detail: '1536–1601 (65 pts)',
           kind: 'loss'
         }
       ],
@@ -505,9 +507,9 @@ const data: TeamRewindData = {
         'Kevin Porter Jr.',
         'Josh Giddey',
         'Isaiah Collier',
-        'Kyle Kuzma',
-        'Sandro Mamukelashvili',
-        'Marcus Smart'
+        'Tristan da Silva',
+        'Bobby Portis',
+        'Jakob Poeltl'
       ],
       footer: 'You kept 7/13 from draft'
     },
@@ -518,17 +520,17 @@ const data: TeamRewindData = {
       items: [
         {
           primary: 'Scottie Barnes',
-          secondary: '2456 fantasy points',
+          secondary: '2935 fantasy points',
           meta: '#1'
         },
         {
           primary: 'Amen Thompson',
-          secondary: '2011 fantasy points',
+          secondary: '2682 fantasy points',
           meta: '#2'
         },
         {
-          primary: 'Brandon Ingram',
-          secondary: '1925 fantasy points',
+          primary: 'Ryan Rollins',
+          secondary: '2475 fantasy points',
           meta: '#3'
         }
       ],
@@ -540,24 +542,14 @@ const data: TeamRewindData = {
       subtitle: 'Top 3 rankings in 9CAT',
       items: [
         {
-          primary: 'REB',
-          secondary: 'Rank #2',
-          meta: '#2'
-        },
-        {
-          primary: 'AST',
+          primary: 'STL',
           secondary: 'Rank #3',
           meta: '#3'
         },
         {
-          primary: 'STL',
-          secondary: 'Rank #1',
-          meta: '#1'
-        },
-        {
           primary: 'BLK',
-          secondary: 'Rank #1',
-          meta: '#1'
+          secondary: 'Rank #2',
+          meta: '#2'
         },
         {
           primary: 'FG%',
@@ -570,23 +562,99 @@ const data: TeamRewindData = {
     {
       type: 'award',
       title: 'Your Archetype',
-      badgeName: 'The Big Man',
-      description: 'Dominancia en REB, BLK y FG%. El cartel de los grandes.',
+      badgeName: 'The Lockdown',
+      description: 'Dominancia en STL y BLK. Defensa total.',
       footer: 'Season identity',
       awardTier: 'award'
     },
     {
-      type: 'award',
-      title: 'Manager Of The Year',
-      badgeName: 'MOTY ',
-      description: '25% Stats, 15% Standings before playoffs, 25% League champion, 35% MVA (Roster efficiency + Transaction impact).',
-      footer: '25% Stats, 15% Standings, 25% Champion, 35% MVA',
-      motyBreakdown: {
-        stats: 12.5,
-        standings: 15.0,
-        champion: 25.0,
-        mva: 26.1
-      }
+      type: 'playoffOutcome',
+      title: 'In the playoff bracket',
+      description: 'You finished the regular season #2 and made the top 6. Playoff results will show here when the bracket is complete.',
+      outcome: 'made_playoffs',
+      standing: 2,
+      footer: 'How far you went'
+    },
+    {
+      type: 'summary',
+      title: 'Your Season Summary',
+      subtitle: 'Tochetaos',
+      record: {
+        value: '12-6-0',
+        standing: '#2'
+      },
+      archetype: {
+        name: 'The Lockdown'
+      },
+      titles: [
+        {
+          name: 'Unstoppable',
+          label: 'Longest win streak',
+          image: '/badges/the-unstoppable-badge.png'
+        }
+      ],
+      summaryInsights: {
+        rival: 'Fiesta\'s Fantastic Team · 2 games · 6030 pts combined',
+        nemesis: 'Fiesta\'s Fantastic Team · Week 3 · L 1437–1761 (−324 pts)',
+        closestGame: 'Week 6 vs Diego\'s Daring Team · 1371–1356 (W, 15-pt margin)',
+        highestScoringWeek: 'Week 11 · 1804 pts vs Glizzy Goblers'
+      },
+      footer: 'Fantasy Rewind'
+    },
+    {
+      type: 'debtTable',
+      title: 'Tabla de Deuda 2025-2026',
+      subtitle: 'Compensación económica por equipo',
+      rows: [
+        {
+          teamId: 'glizzy-goblers',
+          teamName: 'Glizzy Goblers',
+          amount: '$100 MXN'
+        },
+        {
+          teamId: 'lalocomotora',
+          teamName: 'Lalocomotora',
+          amount: '$550 MXN'
+        },
+        {
+          teamId: 'diegos-daring-team',
+          teamName: 'Diego\'s Daring Team',
+          amount: '$100 MXN'
+        },
+        {
+          teamId: 'huecox-y-un-dobel',
+          teamName: 'Huecox y un dobel',
+          amount: '$200 MXN'
+        },
+        {
+          teamId: 'metefierros',
+          teamName: 'Metefierros',
+          amount: '$200 MXN'
+        },
+        {
+          teamId: 'lububumatcha',
+          teamName: 'LububuMatcha',
+          amount: '$200 MXN'
+        },
+        {
+          teamId: 'beijing-ducks',
+          teamName: 'Beijing Ducks',
+          amount: '$100 MXN'
+        },
+        {
+          teamId: 'tochetaos',
+          teamName: 'Tochetaos',
+          amount: '$100 MXN'
+        },
+        {
+          teamId: 'fiestas-fantastic-team',
+          teamName: 'Fiesta\'s Fantastic Team',
+          amount: '$100 MXN'
+        }
+      ],
+      total: '$1,650 MXN',
+      footer: 'Cena de la liga: el campeón no paga; el sobrante reduce costos para los demás miembros.',
+      highlightTeamId: 'tochetaos'
     },
     {
       type: 'hero',
@@ -595,6 +663,113 @@ const data: TeamRewindData = {
       footer: 'Fantasy Rewind'
     }
   ],
+  profileStats: {
+    nineCat: [
+      {
+        category: 'PTS',
+        rank: 7,
+        valueDisplay: '11841'
+      },
+      {
+        category: 'REB',
+        rank: 5,
+        valueDisplay: '4470'
+      },
+      {
+        category: 'AST',
+        rank: 5,
+        valueDisplay: '3046'
+      },
+      {
+        category: 'STL',
+        rank: 3,
+        valueDisplay: '819'
+      },
+      {
+        category: 'BLK',
+        rank: 2,
+        valueDisplay: '537'
+      },
+      {
+        category: '3PM',
+        rank: 10,
+        valueDisplay: '1040'
+      },
+      {
+        category: 'FG%',
+        rank: 2,
+        valueDisplay: '49.1%'
+      },
+      {
+        category: 'FT%',
+        rank: 8,
+        valueDisplay: '78.6%'
+      },
+      {
+        category: 'TO',
+        rank: 6,
+        valueDisplay: '1535'
+      }
+    ],
+    rosterFantasyPoints: [
+      {
+        name: 'Scottie Barnes',
+        points: 2935
+      },
+      {
+        name: 'Amen Thompson',
+        points: 2682
+      },
+      {
+        name: 'Ryan Rollins',
+        points: 2475
+      },
+      {
+        name: 'Brandon Ingram',
+        points: 2405
+      },
+      {
+        name: 'Onyeka Okongwu',
+        points: 2336
+      },
+      {
+        name: 'Chet Holmgren',
+        points: 2298
+      },
+      {
+        name: 'Josh Giddey',
+        points: 2026
+      },
+      {
+        name: 'Giannis Antetokounmpo',
+        points: 1777
+      },
+      {
+        name: 'Bobby Portis',
+        points: 1710
+      },
+      {
+        name: 'Stephen Curry',
+        points: 1708
+      },
+      {
+        name: 'Isaiah Collier',
+        points: 1696
+      },
+      {
+        name: 'Kevin Porter Jr.',
+        points: 1598
+      },
+      {
+        name: 'Tristan da Silva',
+        points: 1314
+      },
+      {
+        name: 'Jakob Poeltl',
+        points: 950
+      }
+    ]
+  }
 }
 
 export default data

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { MainLayout } from '@/components/layout/MainLayout'
-import { api, type RewindSlide } from '@/lib/api'
+import { api, type RewindResponse, type RewindSlide } from '@/lib/api'
 import { getRewindImageUrl } from '@/lib/rewind-image'
 import { RewindImage } from '@/components/rewind/RewindImage'
 
@@ -47,7 +47,7 @@ export default function WrappedViewPage() {
   const params = useParams()
   const seasonId = Number(params.seasonId)
   const teamId = Number(params.teamId)
-  const [data, setData] = useState<{ season: string; team_id: string; slides: RewindSlide[]; share_card: Record<string, unknown> } | null>(null)
+  const [data, setData] = useState<RewindResponse | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 

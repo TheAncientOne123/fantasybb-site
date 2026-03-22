@@ -2,6 +2,8 @@
 
 import { motion } from 'framer-motion'
 import type { ListSlide as ListSlideType } from '@/data/rewind-types'
+import { getRewindImageUrl } from '@/lib/rewind-image'
+import { RewindImage } from './RewindImage'
 
 const RANK_STYLES = {
   1: {
@@ -18,7 +20,7 @@ const RANK_STYLES = {
   },
 } as const
 
-function getRankFromItem(item: { primary: string; secondary?: string; meta?: string }): number | null {
+function getRankFromItem(item: { primary: string; secondary?: string; meta?: string; image?: string }): number | null {
   const str = item.meta ?? item.secondary ?? ''
   const match = str.match(/#(\d+)/)
   return match ? parseInt(match[1], 10) : null
@@ -62,6 +64,16 @@ export function ListSlide({ slide, accent }: Props) {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3, delay: i * 0.05 }}
             >
+              {item.image && (
+                <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg">
+                  <RewindImage
+                    src={getRewindImageUrl(item.image)}
+                    alt=""
+                    className="h-full w-full object-cover rounded-lg"
+                    placeholderText={item.primary}
+                  />
+                </div>
+              )}
               {item.meta && (
                 <span
                   className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold ${

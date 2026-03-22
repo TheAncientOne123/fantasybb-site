@@ -37,3 +37,14 @@ export function teamExists(seasonId: string, teamId: string): boolean {
   const seasonLoaders = teamLoaders[seasonId]
   return Boolean(seasonLoaders && teamId in seasonLoaders)
 }
+
+/** All team ids that have rewind data in any season (for SSG routes like `/team/[teamId]`). */
+export function getAllRewindTeamIds(): string[] {
+  const ids = new Set<string>()
+  for (const seasonLoaders of Object.values(teamLoaders)) {
+    for (const teamId of Object.keys(seasonLoaders)) {
+      ids.add(teamId)
+    }
+  }
+  return [...ids].sort()
+}
