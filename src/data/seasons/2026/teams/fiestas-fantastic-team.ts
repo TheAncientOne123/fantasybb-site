@@ -679,8 +679,8 @@ const data: TeamRewindData = {
       items: [
         {
           primary: 'PTS',
-          secondary: 'Rank #3',
-          meta: '#3'
+          secondary: 'Rank #2',
+          meta: '#2'
         },
         {
           primary: 'REB',
@@ -748,10 +748,22 @@ const data: TeamRewindData = {
         }
       ],
       summaryInsights: {
-        rival: '北京首钢霹雳鸭 · 2 games · 6034 pts combined',
-        nemesis: 'Glizzy Goblers · Week 18 · L 1144–1458 (−314 pts)',
-        closestGame: 'Week 2 vs 北京首钢霹雳鸭 · 1513–1507 (W, 6-pt margin)',
-        highestScoringWeek: 'Week 3 · 1761 pts vs Tochetaos'
+        rival: {
+          stat: '2 games · 6034 pts combined',
+          opponentTeamId: 'beijing-ducks'
+        },
+        nemesis: {
+          stat: 'Week 18 · L 1144–1458 (−314 pts)',
+          opponentTeamId: 'glizzy-goblers'
+        },
+        closestGame: {
+          stat: 'Week 2 · 1513–1507 (W, 6-pt margin)',
+          opponentTeamId: 'beijing-ducks'
+        },
+        highestScoringWeek: {
+          stat: 'Week 3 · 1761 pts',
+          opponentTeamId: 'tochetaos'
+        }
       },
       footer: 'Fantasy Rewind'
     },
@@ -821,33 +833,33 @@ const data: TeamRewindData = {
     nineCat: [
       {
         category: 'PTS',
-        rank: 3,
-        valueDisplay: '13750'
+        rank: 2,
+        valueDisplay: '13939'
       },
       {
         category: 'REB',
         rank: 2,
-        valueDisplay: '4873'
+        valueDisplay: '4905'
       },
       {
         category: 'AST',
         rank: 7,
-        valueDisplay: '2769'
+        valueDisplay: '2828'
       },
       {
         category: 'STL',
-        rank: 5,
-        valueDisplay: '797'
+        rank: 6,
+        valueDisplay: '807'
       },
       {
         category: 'BLK',
         rank: 5,
-        valueDisplay: '473'
+        valueDisplay: '479'
       },
       {
         category: '3PM',
         rank: 8,
-        valueDisplay: '1059'
+        valueDisplay: '1082'
       },
       {
         category: 'FG%',
@@ -862,7 +874,7 @@ const data: TeamRewindData = {
       {
         category: 'TO',
         rank: 4,
-        valueDisplay: '1475'
+        valueDisplay: '1496'
       }
     ],
     rosterFantasyPoints: [
@@ -888,7 +900,7 @@ const data: TeamRewindData = {
       },
       {
         name: 'Jalen Duren',
-        points: 2293
+        points: 2292
       },
       {
         name: 'Collin Gillespie',

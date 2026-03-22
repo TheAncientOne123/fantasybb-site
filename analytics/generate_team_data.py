@@ -1333,6 +1333,17 @@ export function teamExists(seasonId: string, teamId: string): boolean {{
   const seasonLoaders = teamLoaders[seasonId]
   return Boolean(seasonLoaders && teamId in seasonLoaders)
 }}
+
+/** Team ids for static routes (e.g. `/team/[teamId]`). Union of all seasons in loaders. */
+export function getAllRewindTeamIds(): string[] {{
+  const ids = new Set<string>()
+  for (const season of Object.values(teamLoaders)) {{
+    for (const id of Object.keys(season)) {{
+      ids.add(id)
+    }}
+  }}
+  return [...ids].sort()
+}}
 '''
     rewind_file = DATA_ROOT / "getTeamRewind.ts"
     rewind_file.write_text(rewind_content, encoding="utf-8")
@@ -1382,6 +1393,216 @@ export function findBestMatch(seasonId: string, query: string): TeamIndexEntry |
     barrel_file.parent.mkdir(parents=True, exist_ok=True)
     barrel_file.write_text(barrel_content, encoding="utf-8")
     print(f"Generated: {barrel_file}")
+
+
+def _map_bracket_tid(tid, id_to_slug: Dict[int, str]):
+    if tid is None:
+        return None
+    try:
+        k = int(tid)
+    except (TypeError, ValueError):
+        return None
+    return id_to_slug.get(k) or f"team-{k}"
+
+
+def _export_playoff_bracket_ts(raw_br: dict, id_to_slug: Dict[int, str], league_champion_tid: Optional[int]) -> dict:
+    r1_out = []
+    for slot in raw_br.get("round1") or []:
+        if slot.get("type") == "bye":
+            r1_out.append(
+                {
+                    "type": "bye",
+                    "seed": int(slot["seed"]),
+                    "teamId": _map_bracket_tid(slot.get("team_id"), id_to_slug),
+                }
+            )
+        else:
+            a, b = slot["team_ids"]
+            r1_out.append(
+                {
+                    "type": "matchup",
+                    "seeds": [int(slot["seeds"][0]), int(slot["seeds"][1])],
+                    "teamIds": [_map_bracket_tid(a, id_to_slug), _map_bracket_tid(b, id_to_slug)],
+                    "scores": slot.get("scores"),
+                }
+            )
+    r2_out = []
+    for slot in raw_br.get("round2") or []:
+        ta, tb = slot["team_ids"]
+        r2_out.append(
+            {
+                "type": "matchup",
+                "slotIndex": int(slot["slotIndex"]),
+                "seedsInvolved": [int(slot["seedsInvolved"][0]), int(slot["seedsInvolved"][1])],
+                "teamIds": [_map_bracket_tid(ta, id_to_slug), _map_bracket_tid(tb, id_to_slug)],
+                "scores": slot.get("scores"),
+                "feedsFromR1": int(slot["feedsFromR1"]),
+            }
+        )
+    ch = raw_br.get("championship") or {}
+    ta, tb = (ch.get("team_ids") or [None, None])[:2]
+    champ_export = {
+        "type": "matchup",
+        "teamIds": [_map_bracket_tid(ta, id_to_slug), _map_bracket_tid(tb, id_to_slug)],
+        "scores": ch.get("scores"),
+    }
+    out = {
+        "format": "6_team_top2_bye",
+        "round1": r1_out,
+        "round2": r2_out,
+        "championship": champ_export,
+        "championTeamId": _map_bracket_tid(league_champion_tid, id_to_slug),
+    }
+    note = raw_br.get("notes")
+    if note:
+        out["notes"] = note
+    return out
+
+
+# Columnas tipo ESPN Fantasy “Season Stats” (volumen; sin % en tabla principal).
+_SEASON_STATS_VOLUME_KEYS = [
+    "FGM",
+    "FGA",
+    "FTM",
+    "FTA",
+    "3PM",
+    "REB",
+    "AST",
+    "STL",
+    "BLK",
+    "TO",
+    "PTS",
+]
+
+
+def _format_volume_cell(_key: str, val) -> str:
+    if val is None:
+        return "—"
+    try:
+        f = float(val)
+        if abs(f - round(f)) < 1e-6:
+            return str(int(round(f)))
+        return f"{f:.1f}"
+    except (TypeError, ValueError):
+        return "—"
+
+
+def _season_stats_league_row(team_id: int, raw_9cat: Dict) -> Dict[str, str]:
+    raw = raw_9cat.get(team_id) or {}
+    return {k: _format_volume_cell(k, raw.get(k)) for k in _SEASON_STATS_VOLUME_KEYS}
+
+
+def _nine_cat_rows_stats_room(team_id: int, team_ranks: Dict, raw_9cat: Dict) -> list:
+    ranks = team_ranks.get(team_id) or {}
+    raw = raw_9cat.get(team_id) or {}
+    rows = []
+    for cat in nv.NINECAT_KEYS:
+        rnk = ranks.get(cat)
+        val = raw.get(cat)
+        if rnk is None and val is None:
+            rows.append({"category": cat, "rank": 0, "valueDisplay": "—"})
+            continue
+        rows.append(
+            {
+                "category": cat,
+                "rank": int(rnk) if rnk is not None else 0,
+                "valueDisplay": format_9cat_value_display(cat, val),
+            }
+        )
+    return rows
+
+
+def _build_stats_room_payload(
+    league,
+    season: str,
+    teams,
+    weeks_regular,
+    weeks_playoffs,
+    team_ranks: Dict,
+    raw_9cat: Dict,
+) -> dict:
+    id_to_slug: Dict[int, str] = {int(t.team_id): get_team_slug(t) for t in teams}
+    ordered = nv.teams_sorted_regular_season(league)
+    standings = []
+    for rank, t in enumerate(ordered, 1):
+        standings.append(
+            {
+                "teamId": id_to_slug[int(t.team_id)],
+                "displayName": t.team_name,
+                "wins": int(t.wins),
+                "losses": int(t.losses),
+                "ties": int(getattr(t, "ties", 0) or 0),
+                "rank": rank,
+            }
+        )
+    nine_cat_league = []
+    season_stats_league = []
+    for t in ordered:
+        tid = int(t.team_id)
+        nine_cat_league.append(
+            {"teamId": id_to_slug[tid], "rows": _nine_cat_rows_stats_room(tid, team_ranks, raw_9cat)}
+        )
+        season_stats_league.append(
+            {"teamId": id_to_slug[tid], "stats": _season_stats_league_row(tid, raw_9cat)}
+        )
+    rs_raw = nv.regular_season_matchups(league, weeks_regular)
+    regular_season_matchups = []
+    for r in rs_raw:
+        try:
+            hid = int(r["home_team_id"])
+            aid = int(r["away_team_id"])
+            regular_season_matchups.append(
+                {
+                    "week": int(r["week"]),
+                    "teamAId": id_to_slug[hid],
+                    "teamBId": id_to_slug[aid],
+                    "scoreA": round(float(r["home_score"]), 2),
+                    "scoreB": round(float(r["away_score"]), 2),
+                }
+            )
+        except (KeyError, TypeError, ValueError):
+            continue
+    top6_ids = [int(t.team_id) for t in ordered[:6]]
+    raw_br = nv.build_six_team_playoff_bracket(league, weeks_playoffs, top6_ids)
+    league_champ = nv.league_champion_team_id(league)
+    playoff_bracket = _export_playoff_bracket_ts(raw_br, id_to_slug, league_champ)
+    return {
+        "seasonId": season,
+        "standings": standings,
+        "regularSeasonMatchups": regular_season_matchups,
+        "nineCatLeague": nine_cat_league,
+        "seasonStatsLeague": season_stats_league,
+        "playoffBracket": playoff_bracket,
+    }
+
+
+def _write_stats_room_ts(
+    season: str,
+    league,
+    teams,
+    weeks_regular,
+    weeks_playoffs,
+    team_ranks: Dict,
+    raw_9cat: Dict,
+) -> None:
+    from datetime import datetime, timezone
+
+    payload = _build_stats_room_payload(
+        league, season, teams, weeks_regular, weeks_playoffs, team_ranks, raw_9cat
+    )
+    payload["generatedAt"] = (
+        datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    )
+    path = DATA_ROOT / "seasons" / season / "stats-room.ts"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    body = json.dumps(payload, ensure_ascii=False, indent=2)
+    content = (
+        "import type { StatsRoomData } from '../../stats-room-types'\n\n"
+        f"const statsRoomData: StatsRoomData = {body}\n\n"
+        "export default statsRoomData\n"
+    )
+    path.write_text(content, encoding="utf-8")
+    print(f"Generated: {path}")
 
 
 def generate_all_teams(season: str = "2026"):
@@ -1618,6 +1839,10 @@ export function findBestMatch(query: string): TeamIndexEntry | null {{
     index_file = output_dir / "index.ts"
     index_file.write_text(index_content, encoding="utf-8")
     print(f"\nGenerated: {index_file}")
+
+    _write_stats_room_ts(
+        season, league, teams, weeks_regular, weeks_playoffs, team_ranks, raw_9cat
+    )
 
     # Regenerar getTeamRewind.ts y teams barrel escaneando todas las temporadas en seasons/
     _generate_rewind_loader_and_teams_barrel()

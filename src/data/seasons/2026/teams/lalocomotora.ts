@@ -488,8 +488,7 @@ const data: TeamRewindData = {
       currentCount: 14,
       kept: [
         'Trae Young',
-        'Paolo Banchero',
-        'Devin Vassell'
+        'Paolo Banchero'
       ],
       lost: [
         'Pascal Siakam',
@@ -501,6 +500,7 @@ const data: TeamRewindData = {
         'Mark Williams',
         'Malik Monk',
         'Bennedict Mathurin',
+        'Devin Vassell',
         'Jonas Valanciunas'
       ],
       added: [
@@ -514,9 +514,10 @@ const data: TeamRewindData = {
         'Neemias Queta',
         'Jerami Grant',
         'Quentin Grimes',
-        'P.J. Washington'
+        'P.J. Washington',
+        'Toumani Camara'
       ],
-      footer: 'You kept 3/13 from draft'
+      footer: 'You kept 2/13 from draft'
     },
     {
       type: 'list',
@@ -612,10 +613,22 @@ const data: TeamRewindData = {
         }
       ],
       summaryInsights: {
-        rival: '北京首钢霹雳鸭 · 2 games · 5521 pts combined',
-        nemesis: '北京首钢霹雳鸭 · Week 3 · L 1002–1608 (−606 pts)',
-        closestGame: 'Week 11 vs LububuMatcha · 1474–1456 (W, 18-pt margin)',
-        highestScoringWeek: 'Week 11 · 1474 pts vs LububuMatcha'
+        rival: {
+          stat: '2 games · 5521 pts combined',
+          opponentTeamId: 'beijing-ducks'
+        },
+        nemesis: {
+          stat: 'Week 3 · L 1002–1608 (−606 pts)',
+          opponentTeamId: 'beijing-ducks'
+        },
+        closestGame: {
+          stat: 'Week 11 · 1474–1456 (W, 18-pt margin)',
+          opponentTeamId: 'lububumatcha'
+        },
+        highestScoringWeek: {
+          stat: 'Week 11 · 1474 pts',
+          opponentTeamId: 'lububumatcha'
+        }
       },
       footer: 'Fantasy Rewind'
     },
@@ -686,32 +699,32 @@ const data: TeamRewindData = {
       {
         category: 'PTS',
         rank: 10,
-        valueDisplay: '11238'
+        valueDisplay: '11348'
       },
       {
         category: 'REB',
         rank: 8,
-        valueDisplay: '3724'
+        valueDisplay: '3750'
       },
       {
         category: 'AST',
         rank: 10,
-        valueDisplay: '2390'
+        valueDisplay: '2412'
       },
       {
         category: 'STL',
         rank: 9,
-        valueDisplay: '668'
+        valueDisplay: '674'
       },
       {
         category: 'BLK',
-        rank: 9,
-        valueDisplay: '361'
+        rank: 10,
+        valueDisplay: '362'
       },
       {
         category: '3PM',
         rank: 9,
-        valueDisplay: '1050'
+        valueDisplay: '1057'
       },
       {
         category: 'FG%',
@@ -721,12 +734,12 @@ const data: TeamRewindData = {
       {
         category: 'FT%',
         rank: 6,
-        valueDisplay: '79.3%'
+        valueDisplay: '79.2%'
       },
       {
         category: 'TO',
         rank: 1,
-        valueDisplay: '1229'
+        valueDisplay: '1239'
       }
     ],
     rosterFantasyPoints: [
@@ -759,6 +772,10 @@ const data: TeamRewindData = {
         points: 1894
       },
       {
+        name: 'Toumani Camara',
+        points: 1816
+      },
+      {
         name: 'Quentin Grimes',
         points: 1680
       },
@@ -773,10 +790,6 @@ const data: TeamRewindData = {
       {
         name: 'P.J. Washington',
         points: 1511
-      },
-      {
-        name: 'Devin Vassell',
-        points: 1495
       },
       {
         name: 'Ajay Mitchell',

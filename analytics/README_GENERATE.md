@@ -34,14 +34,14 @@ python analytics/generate_team_data.py --season 2026
    - Rival y némesis
    - Rachas de victorias/derrotas
    - Partidos cerrados
-3. **Genera archivos TypeScript** en `src/data/teams/`:
-   - Un archivo `.ts` por equipo con su `TeamRewindData`
-   - Actualiza `src/data/teams/index.ts` con todos los equipos
-   - Actualiza `src/data/getTeamRewind.ts` con los loaders dinámicos
+3. **Genera archivos TypeScript** en `src/data/seasons/{season}/`:
+   - Un archivo `.ts` por equipo con su `TeamRewindData` (carpeta `teams/`)
+   - **`stats-room.ts`** — datos agregados para la página **Stats Room** (`/stats`): standings RS, matchups de temporada regular, tabla **Season stats** (totales FGM/FGA/FTM/FTA/3PM/REB/AST/STL/BLK/TO/PTS), bloque 9CAT con rangos por categoría, y bracket playoff (6 equipos, top 2 bye), con scores de playoffs cuando el scoreboard de ESPN los tenga
+   - Actualiza `src/data/teams/index.ts` (barrel por temporada) y `src/data/getTeamRewind.ts` con los loaders dinámicos
 
 ## Estructura generada (orden estándar de slides)
 
-Cada archivo `src/data/teams/[team-id].ts` contiene:
+Cada archivo `src/data/seasons/{season}/teams/[team-id].ts` contiene:
 - `id`: ID del equipo (slug ASCII)
 - `displayName`: Nombre completo del equipo
 - `theme`: Colores de fondo y acento

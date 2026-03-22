@@ -685,10 +685,22 @@ const data: TeamRewindData = {
         }
       ],
       summaryInsights: {
-        rival: 'Novigrad 21ers  · 2 games · 5671 pts combined',
-        nemesis: 'Tochetaos · Week 2 · L 937–1399 (−462 pts)',
-        closestGame: 'Week 3 vs Diego\'s Daring Team · 1064–1062 (W, 2-pt margin)',
-        highestScoringWeek: 'Week 17 · 1694 pts vs LaloComotora'
+        rival: {
+          stat: '2 games · 5671 pts combined',
+          opponentTeamId: 'novigrad-21ers'
+        },
+        nemesis: {
+          stat: 'Week 2 · L 937–1399 (−462 pts)',
+          opponentTeamId: 'tochetaos'
+        },
+        closestGame: {
+          stat: 'Week 3 · 1064–1062 (W, 2-pt margin)',
+          opponentTeamId: 'diegos-daring-team'
+        },
+        highestScoringWeek: {
+          stat: 'Week 17 · 1694 pts',
+          opponentTeamId: 'lalocomotora'
+        }
       },
       footer: 'Fantasy Rewind'
     },
@@ -758,33 +770,33 @@ const data: TeamRewindData = {
     nineCat: [
       {
         category: 'PTS',
-        rank: 5,
-        valueDisplay: '13203'
+        rank: 4,
+        valueDisplay: '13375'
       },
       {
         category: 'REB',
         rank: 4,
-        valueDisplay: '4480'
+        valueDisplay: '4527'
       },
       {
         category: 'AST',
         rank: 6,
-        valueDisplay: '2885'
+        valueDisplay: '2936'
       },
       {
         category: 'STL',
-        rank: 6,
-        valueDisplay: '797'
+        rank: 4,
+        valueDisplay: '816'
       },
       {
         category: 'BLK',
         rank: 4,
-        valueDisplay: '515'
+        valueDisplay: '518'
       },
       {
         category: '3PM',
         rank: 1,
-        valueDisplay: '1563'
+        valueDisplay: '1579'
       },
       {
         category: 'FG%',
@@ -798,8 +810,8 @@ const data: TeamRewindData = {
       },
       {
         category: 'TO',
-        rank: 5,
-        valueDisplay: '1517'
+        rank: 6,
+        valueDisplay: '1535'
       }
     ],
     rosterFantasyPoints: [
@@ -853,7 +865,7 @@ const data: TeamRewindData = {
       },
       {
         name: 'Tobias Harris',
-        points: 1380
+        points: 1381
       },
       {
         name: 'Coby White',

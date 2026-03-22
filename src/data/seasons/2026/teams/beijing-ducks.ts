@@ -639,8 +639,8 @@ const data: TeamRewindData = {
       items: [
         {
           primary: 'PTS',
-          secondary: 'Rank #2',
-          meta: '#2'
+          secondary: 'Rank #3',
+          meta: '#3'
         },
         {
           primary: 'AST',
@@ -676,7 +676,7 @@ const data: TeamRewindData = {
       footer: '25% Stats, 15% Standings, 25% Champion, 35% MVA',
       image: '/badges/manager-of-the-year.png',
       motyBreakdown: {
-        stats: 18.8,
+        stats: 16.7,
         standings: 15.0,
         champion: 25.0,
         mva: 23.3
@@ -719,10 +719,22 @@ const data: TeamRewindData = {
         }
       ],
       summaryInsights: {
-        rival: 'LububuMatcha · 2 games · 6083 pts combined',
-        nemesis: 'METEFIERROS · Week 15 · L 1387–1542 (−155 pts)',
-        closestGame: 'Week 2 vs Fiesta\'s Fantastic Team · 1507–1513 (L, 6-pt margin)',
-        highestScoringWeek: 'Week 17 · 1817 pts vs huecox y un Dobel'
+        rival: {
+          stat: '2 games · 6083 pts combined',
+          opponentTeamId: 'lububumatcha'
+        },
+        nemesis: {
+          stat: 'Week 15 · L 1387–1542 (−155 pts)',
+          opponentTeamId: 'metefierros'
+        },
+        closestGame: {
+          stat: 'Week 2 · 1507–1513 (L, 6-pt margin)',
+          opponentTeamId: 'fiestas-fantastic-team'
+        },
+        highestScoringWeek: {
+          stat: 'Week 17 · 1817 pts',
+          opponentTeamId: 'huecox-y-un-dobel'
+        }
       },
       footer: 'Fantasy Rewind'
     },
@@ -792,7 +804,7 @@ const data: TeamRewindData = {
     nineCat: [
       {
         category: 'PTS',
-        rank: 2,
+        rank: 3,
         valueDisplay: '13825'
       },
       {

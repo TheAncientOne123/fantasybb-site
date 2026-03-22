@@ -616,10 +616,22 @@ const data: TeamRewindData = {
         }
       ],
       summaryInsights: {
-        rival: 'Tochetaos · 2 games · 5686 pts combined',
-        nemesis: '北京首钢霹雳鸭 · Week 5 · L 1026–1557 (−531 pts)',
-        closestGame: 'Week 3 vs Glizzy Goblers · 1062–1064 (L, 2-pt margin)',
-        highestScoringWeek: 'Week 11 · 1672 pts vs Novigrad 21ers '
+        rival: {
+          stat: '2 games · 5686 pts combined',
+          opponentTeamId: 'tochetaos'
+        },
+        nemesis: {
+          stat: 'Week 5 · L 1026–1557 (−531 pts)',
+          opponentTeamId: 'beijing-ducks'
+        },
+        closestGame: {
+          stat: 'Week 3 · 1062–1064 (L, 2-pt margin)',
+          opponentTeamId: 'glizzy-goblers'
+        },
+        highestScoringWeek: {
+          stat: 'Week 11 · 1672 pts',
+          opponentTeamId: 'novigrad-21ers'
+        }
       },
       footer: 'Fantasy Rewind'
     },
@@ -689,23 +701,23 @@ const data: TeamRewindData = {
     nineCat: [
       {
         category: 'PTS',
-        rank: 4,
-        valueDisplay: '13321'
+        rank: 5,
+        valueDisplay: '13343'
       },
       {
         category: 'REB',
         rank: 6,
-        valueDisplay: '4158'
+        valueDisplay: '4172'
       },
       {
         category: 'AST',
         rank: 4,
-        valueDisplay: '3175'
+        valueDisplay: '3179'
       },
       {
         category: 'STL',
         rank: 1,
-        valueDisplay: '834'
+        valueDisplay: '835'
       },
       {
         category: 'BLK',
@@ -714,8 +726,8 @@ const data: TeamRewindData = {
       },
       {
         category: '3PM',
-        rank: 5,
-        valueDisplay: '1269'
+        rank: 6,
+        valueDisplay: '1270'
       },
       {
         category: 'FG%',
@@ -730,7 +742,7 @@ const data: TeamRewindData = {
       {
         category: 'TO',
         rank: 9,
-        valueDisplay: '1681'
+        valueDisplay: '1685'
       }
     ],
     rosterFantasyPoints: [

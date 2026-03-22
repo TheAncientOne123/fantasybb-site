@@ -637,8 +637,8 @@ const data: TeamRewindData = {
         },
         {
           primary: 'TO',
-          secondary: 'Rank #3',
-          meta: '#3'
+          secondary: 'Rank #2',
+          meta: '#2'
         }
       ],
       footer: 'Your strongest categories'
@@ -691,10 +691,22 @@ const data: TeamRewindData = {
         }
       ],
       summaryInsights: {
-        rival: 'Novigrad 21ers  · 2 games · 5515 pts combined',
-        nemesis: 'LububuMatcha · Week 19 · L 885–1374 (−489 pts)',
-        closestGame: 'Week 3 vs Novigrad 21ers  · 1322–1294 (W, 28-pt margin)',
-        highestScoringWeek: 'Week 15 · 1542 pts vs 北京首钢霹雳鸭'
+        rival: {
+          stat: '2 games · 5515 pts combined',
+          opponentTeamId: 'novigrad-21ers'
+        },
+        nemesis: {
+          stat: 'Week 19 · L 885–1374 (−489 pts)',
+          opponentTeamId: 'lububumatcha'
+        },
+        closestGame: {
+          stat: 'Week 3 · 1322–1294 (W, 28-pt margin)',
+          opponentTeamId: 'novigrad-21ers'
+        },
+        highestScoringWeek: {
+          stat: 'Week 15 · 1542 pts',
+          opponentTeamId: 'beijing-ducks'
+        }
       },
       footer: 'Fantasy Rewind'
     },
@@ -765,32 +777,32 @@ const data: TeamRewindData = {
       {
         category: 'PTS',
         rank: 8,
-        valueDisplay: '11702'
+        valueDisplay: '11779'
       },
       {
         category: 'REB',
         rank: 9,
-        valueDisplay: '3720'
+        valueDisplay: '3746'
       },
       {
         category: 'AST',
         rank: 9,
-        valueDisplay: '2616'
+        valueDisplay: '2639'
       },
       {
         category: 'STL',
         rank: 10,
-        valueDisplay: '661'
+        valueDisplay: '667'
       },
       {
         category: 'BLK',
         rank: 3,
-        valueDisplay: '525'
+        valueDisplay: '530'
       },
       {
         category: '3PM',
         rank: 7,
-        valueDisplay: '1214'
+        valueDisplay: '1217'
       },
       {
         category: 'FG%',
@@ -800,12 +812,12 @@ const data: TeamRewindData = {
       {
         category: 'FT%',
         rank: 2,
-        valueDisplay: '82.2%'
+        valueDisplay: '82.1%'
       },
       {
         category: 'TO',
-        rank: 3,
-        valueDisplay: '1266'
+        rank: 2,
+        valueDisplay: '1274'
       }
     ],
     rosterFantasyPoints: [

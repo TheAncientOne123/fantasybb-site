@@ -9,7 +9,7 @@ const data: TeamRewindData = {
   id: 'tochetaos',
   displayName: 'Tochetaos',
   owner: 'Sebastian Aguilar',
-  description: 'Objetivo: Convertirnos en Bucks FC, drafteando a pura gema oculta y desarrollandolos para llegar hasta el campeonaton\nVisión: Ser los underdogs, caminando despacio sin rushear nada\nMisión: Cogerme a Peru FC',
+  description: 'Objetivo: Convertirnos en Bucks FC, drafteando a pura gema oculta y desarrollandolos para llegar hasta el campeonatonnVisión: Ser los underdogs, caminando despacio sin rushear nadanMisión: Cogerme a Peru FC',
   theme: {
     background: 'linear-gradient(135deg, #581c87 0%, #6b21a8 50%, #581c87 100%)',
     accent: '#c084fc',
@@ -594,10 +594,22 @@ const data: TeamRewindData = {
         }
       ],
       summaryInsights: {
-        rival: 'Fiesta\'s Fantastic Team · 2 games · 6030 pts combined',
-        nemesis: 'Fiesta\'s Fantastic Team · Week 3 · L 1437–1761 (−324 pts)',
-        closestGame: 'Week 6 vs Diego\'s Daring Team · 1371–1356 (W, 15-pt margin)',
-        highestScoringWeek: 'Week 11 · 1804 pts vs Glizzy Goblers'
+        rival: {
+          stat: '2 games · 6030 pts combined',
+          opponentTeamId: 'fiestas-fantastic-team'
+        },
+        nemesis: {
+          stat: 'Week 3 · L 1437–1761 (−324 pts)',
+          opponentTeamId: 'fiestas-fantastic-team'
+        },
+        closestGame: {
+          stat: 'Week 6 · 1371–1356 (W, 15-pt margin)',
+          opponentTeamId: 'diegos-daring-team'
+        },
+        highestScoringWeek: {
+          stat: 'Week 11 · 1804 pts',
+          opponentTeamId: 'glizzy-goblers'
+        }
       },
       footer: 'Fantasy Rewind'
     },
@@ -707,7 +719,7 @@ const data: TeamRewindData = {
       },
       {
         category: 'TO',
-        rank: 6,
+        rank: 5,
         valueDisplay: '1535'
       }
     ],

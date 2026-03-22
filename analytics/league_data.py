@@ -1432,6 +1432,256 @@ def playoff_outcome(team, n_teams=10, playoff_team_count=6, league=None):
 
 
 # ---------------------------------------------------------------------------
+# Stats Room (standings RS, matchups RS, 6-team playoff bracket from scoreboard)
+# ---------------------------------------------------------------------------
+
+
+def teams_sorted_regular_season(league):
+    """
+    Teams ordered by regular-season standing (1 = best), same tie-break idea as standings_before_playoffs.
+    """
+    teams = getattr(league, "teams", []) or []
+    if not teams:
+        return []
+
+    def rank_key(t):
+        s = getattr(t, "standing", None)
+        if s is None:
+            s = getattr(t, "final_standing", None)
+        return (s is None or s == 0) and 99 or int(s)
+
+    return sorted(teams, key=rank_key)
+
+
+def regular_season_matchups(league, weeks_regular):
+    """
+    H2H rows for each regular-season matchup period. Preserves home/away for scores.
+    Returns list of dicts: week, home_team_id, away_team_id, home_score, away_score (floats).
+    """
+    out = []
+    for w in weeks_regular:
+        try:
+            sb = _scoreboard_with_retry(league, w)
+        except Exception:
+            continue
+        if not sb:
+            continue
+        for m in sb:
+            ha = getattr(m.home_team, "team_id", None)
+            aa = getattr(m.away_team, "team_id", None)
+            if ha is None or aa is None:
+                continue
+            hs = getattr(m, "home_final_score", None) or getattr(m, "home_team_live_score", None)
+            avs = getattr(m, "away_final_score", None) or getattr(m, "away_team_live_score", None)
+            if hs is None or avs is None:
+                continue
+            try:
+                out.append(
+                    {
+                        "week": int(w),
+                        "home_team_id": int(ha),
+                        "away_team_id": int(aa),
+                        "home_score": float(hs),
+                        "away_score": float(avs),
+                    }
+                )
+            except (TypeError, ValueError):
+                continue
+    return out
+
+
+def _playoff_matchups_flat(league, weeks_playoffs):
+    """Chronological list of (week, home_id, away_id, home_score, away_score)."""
+    flat = []
+    for w in weeks_playoffs:
+        try:
+            sb = _scoreboard_with_retry(league, w)
+        except Exception:
+            continue
+        for m in sb or []:
+            ha = getattr(m.home_team, "team_id", None)
+            aa = getattr(m.away_team, "team_id", None)
+            hs = getattr(m, "home_final_score", None) or getattr(m, "home_team_live_score", None)
+            avs = getattr(m, "away_final_score", None) or getattr(m, "away_team_live_score", None)
+            if ha is None or aa is None or hs is None or avs is None:
+                continue
+            try:
+                flat.append((int(w), int(ha), int(aa), float(hs), float(avs)))
+            except (TypeError, ValueError):
+                continue
+    flat.sort(key=lambda x: x[0])
+    return flat
+
+
+def _find_first_pair_score(flat, tid_a, tid_b):
+    """
+    First playoff week where tid_a plays tid_b.
+    Returns (week, score_a, score_b) or (None, None, None).
+    """
+    for w, h, a, hs, avs in flat:
+        if {h, a} != {tid_a, tid_b}:
+            continue
+        if h == tid_a:
+            return w, hs, avs
+        return w, avs, hs
+    return None, None, None
+
+
+def _find_pair_after_week(flat, min_week, tid_a, tid_b):
+    """Like _find_first_pair_score but only weeks >= min_week."""
+    for w, h, a, hs, avs in flat:
+        if w < min_week:
+            continue
+        if {h, a} != {tid_a, tid_b}:
+            continue
+        if h == tid_a:
+            return w, hs, avs
+        return w, avs, hs
+    return None, None, None
+
+
+def _winner_from_scores(score_hi, score_lo, tid_hi_seed, tid_lo_seed):
+    if score_hi is None or score_lo is None:
+        return None
+    if score_hi > score_lo:
+        return tid_hi_seed
+    if score_lo > score_hi:
+        return tid_lo_seed
+    return None
+
+
+def build_six_team_playoff_bracket(league, weeks_playoffs, seed_team_ids):
+    """
+    Fixed ESPN-style 6-team bracket: #1/#2 bye; R1 #5 vs #4, #6 vs #3; R2 vs #1/#2; finals.
+    seed_team_ids: ESPN team_ids in RS seed order [seed1, ..., seed6]. If fewer than 6, structure is partial.
+
+    Returns dict (int team ids; caller maps to slugs):
+      round1, round2, championship, champion_team_id, notes
+    """
+    s = list(seed_team_ids)[:6]
+    if len(s) < 6:
+        return {
+            "round1": [],
+            "round2": [],
+            "championship": {"type": "matchup", "teamIds": [None, None], "scores": None},
+            "champion_team_id": None,
+            "notes": "Need at least 6 teams for playoff bracket.",
+        }
+
+    id1, id2, id3, id4, id5, id6 = s
+    flat = _playoff_matchups_flat(league, weeks_playoffs)
+
+    w54, sc5, sc4 = _find_first_pair_score(flat, id5, id4)
+    w63, sc6, sc3 = _find_first_pair_score(flat, id6, id3)
+
+    win54 = _winner_from_scores(sc5, sc4, id5, id4)
+    win63 = _winner_from_scores(sc6, sc3, id6, id3)
+
+    r1_scores_54 = [round(sc5, 2), round(sc4, 2)] if sc5 is not None and sc4 is not None else None
+    r1_scores_63 = [round(sc6, 2), round(sc3, 2)] if sc6 is not None and sc3 is not None else None
+
+    r1_weeks = [x for x in (w54, w63) if x is not None]
+    min_r2 = max(r1_weeks) + 1 if r1_weeks else (flat[0][0] if flat else 10**9)
+
+    wr2a, s2a_hi, s2a_lo = (None, None, None)
+    wr2b, s2b_hi, s2b_lo = (None, None, None)
+    if win54 is not None:
+        wr2a, s2a_hi, s2a_lo = _find_pair_after_week(flat, min_r2, id1, win54)
+    if win63 is not None:
+        wr2b, s2b_hi, s2b_lo = _find_pair_after_week(flat, min_r2, id2, win63)
+
+    win_r2_a = _winner_from_scores(s2a_hi, s2a_lo, id1, win54) if win54 is not None else None
+    win_r2_b = _winner_from_scores(s2b_hi, s2b_lo, id2, win63) if win63 is not None else None
+
+    r2_scores_a = (
+        [round(s2a_hi, 2), round(s2a_lo, 2)]
+        if s2a_hi is not None and s2a_lo is not None
+        else None
+    )
+    r2_scores_b = (
+        [round(s2b_hi, 2), round(s2b_lo, 2)]
+        if s2b_hi is not None and s2b_lo is not None
+        else None
+    )
+
+    r2_weeks = [x for x in (wr2a, wr2b) if x is not None]
+    min_final = max(r2_weeks) + 1 if r2_weeks else min_r2
+
+    wf, sf_a, sf_b = (None, None, None)
+    if win_r2_a is not None and win_r2_b is not None:
+        wf, sf_a, sf_b = _find_pair_after_week(flat, min_final, win_r2_a, win_r2_b)
+
+    final_scores = [round(sf_a, 2), round(sf_b, 2)] if sf_a is not None and sf_b is not None else None
+    champ = _winner_from_scores(sf_a, sf_b, win_r2_a, win_r2_b) if win_r2_a and win_r2_b else None
+
+    round1 = [
+        {"type": "bye", "seed": 1, "team_id": id1},
+        {
+            "type": "matchup",
+            "seeds": [5, 4],
+            "team_ids": [id5, id4],
+            "scores": r1_scores_54,
+        },
+        {
+            "type": "matchup",
+            "seeds": [6, 3],
+            "team_ids": [id6, id3],
+            "scores": r1_scores_63,
+        },
+        {"type": "bye", "seed": 2, "team_id": id2},
+    ]
+
+    round2 = [
+        {
+            "type": "matchup",
+            "slotIndex": 0,
+            "seedsInvolved": [1, 5],
+            "team_ids": [id1, win54],
+            "scores": r2_scores_a,
+            "feedsFromR1": 0,
+        },
+        {
+            "type": "matchup",
+            "slotIndex": 1,
+            "seedsInvolved": [2, 6],
+            "team_ids": [id2, win63],
+            "scores": r2_scores_b,
+            "feedsFromR1": 1,
+        },
+    ]
+
+    championship = {
+        "type": "matchup",
+        "team_ids": [win_r2_a, win_r2_b],
+        "scores": final_scores,
+    }
+
+    notes = None
+    if not flat:
+        notes = "No playoff scoreboard periods or scores yet."
+
+    return {
+        "round1": round1,
+        "round2": round2,
+        "championship": championship,
+        "champion_team_id": champ,
+        "notes": notes,
+    }
+
+
+def league_champion_team_id(league):
+    """ESPN team_id of champion if final_standing == 1, else None."""
+    for t in getattr(league, "teams", []) or []:
+        fs = getattr(t, "final_standing", None)
+        try:
+            if fs is not None and int(fs) == 1:
+                return int(getattr(t, "team_id"))
+        except (TypeError, ValueError):
+            continue
+    return None
+
+
+# ---------------------------------------------------------------------------
 # MOTY / MVA helpers (standings before playoffs, roster efficiency, transaction impact)
 # ---------------------------------------------------------------------------
 

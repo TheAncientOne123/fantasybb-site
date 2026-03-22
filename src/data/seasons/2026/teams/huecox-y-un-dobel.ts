@@ -623,8 +623,8 @@ const data: TeamRewindData = {
         },
         {
           primary: 'TO',
-          secondary: 'Rank #2',
-          meta: '#2'
+          secondary: 'Rank #3',
+          meta: '#3'
         }
       ],
       footer: 'Your strongest categories'
@@ -660,10 +660,22 @@ const data: TeamRewindData = {
 
       ],
       summaryInsights: {
-        rival: 'Glizzy Goblers · 2 games · 5536 pts combined',
-        nemesis: 'Diego\'s Daring Team · Week 10 · L 865–1374 (−509 pts)',
-        closestGame: 'Week 16 vs Fiesta\'s Fantastic Team · 1080–1066 (W, 14-pt margin)',
-        highestScoringWeek: 'Week 17 · 1509 pts vs 北京首钢霹雳鸭'
+        rival: {
+          stat: '2 games · 5536 pts combined',
+          opponentTeamId: 'glizzy-goblers'
+        },
+        nemesis: {
+          stat: 'Week 10 · L 865–1374 (−509 pts)',
+          opponentTeamId: 'diegos-daring-team'
+        },
+        closestGame: {
+          stat: 'Week 16 · 1080–1066 (W, 14-pt margin)',
+          opponentTeamId: 'fiestas-fantastic-team'
+        },
+        highestScoringWeek: {
+          stat: 'Week 17 · 1509 pts',
+          opponentTeamId: 'beijing-ducks'
+        }
       },
       footer: 'Fantasy Rewind'
     },
@@ -734,37 +746,37 @@ const data: TeamRewindData = {
       {
         category: 'PTS',
         rank: 9,
-        valueDisplay: '11588'
+        valueDisplay: '11678'
       },
       {
         category: 'REB',
         rank: 10,
-        valueDisplay: '3316'
+        valueDisplay: '3335'
       },
       {
         category: 'AST',
         rank: 8,
-        valueDisplay: '2636'
+        valueDisplay: '2661'
       },
       {
         category: 'STL',
         rank: 7,
-        valueDisplay: '712'
+        valueDisplay: '720'
       },
       {
         category: 'BLK',
-        rank: 10,
-        valueDisplay: '359'
+        rank: 9,
+        valueDisplay: '363'
       },
       {
         category: '3PM',
-        rank: 6,
-        valueDisplay: '1259'
+        rank: 5,
+        valueDisplay: '1274'
       },
       {
         category: 'FG%',
-        rank: 4,
-        valueDisplay: '47.8%'
+        rank: 5,
+        valueDisplay: '47.7%'
       },
       {
         category: 'FT%',
@@ -773,8 +785,8 @@ const data: TeamRewindData = {
       },
       {
         category: 'TO',
-        rank: 2,
-        valueDisplay: '1254'
+        rank: 3,
+        valueDisplay: '1274'
       }
     ],
     rosterFantasyPoints: [

@@ -3,10 +3,12 @@
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import QuickAccess from '@/components/landing/QuickAccess'
+import GiphyBackdrop from '@/components/ui/GiphyBackdrop'
 
 export default function RewindEntryPage() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-slate-950">
+      <GiphyBackdrop query="NBA basketball" limit={80} />
       <header className="sticky top-0 z-20 border-b border-white/10 bg-slate-950/90 px-6 py-4 backdrop-blur-md">
         <Link
           href="/"
@@ -16,7 +18,9 @@ export default function RewindEntryPage() {
           Volver a la liga
         </Link>
       </header>
-      <QuickAccess />
+      <div className="relative z-10">
+        <QuickAccess />
+      </div>
     </div>
   )
 }

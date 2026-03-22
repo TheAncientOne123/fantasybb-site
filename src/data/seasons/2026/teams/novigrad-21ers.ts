@@ -754,10 +754,22 @@ const data: TeamRewindData = {
         }
       ],
       summaryInsights: {
-        rival: 'Glizzy Goblers · 2 games · 5671 pts combined',
-        nemesis: 'Diego\'s Daring Team · Week 11 · L 1339–1672 (−333 pts)',
-        closestGame: 'Week 3 vs METEFIERROS · 1294–1322 (L, 28-pt margin)',
-        highestScoringWeek: 'Week 4 · 1651 pts vs LububuMatcha'
+        rival: {
+          stat: '2 games · 5671 pts combined',
+          opponentTeamId: 'glizzy-goblers'
+        },
+        nemesis: {
+          stat: 'Week 11 · L 1339–1672 (−333 pts)',
+          opponentTeamId: 'diegos-daring-team'
+        },
+        closestGame: {
+          stat: 'Week 3 · 1294–1322 (L, 28-pt margin)',
+          opponentTeamId: 'metefierros'
+        },
+        highestScoringWeek: {
+          stat: 'Week 4 · 1651 pts',
+          opponentTeamId: 'lububumatcha'
+        }
       },
       footer: 'Fantasy Rewind'
     },
@@ -828,47 +840,47 @@ const data: TeamRewindData = {
       {
         category: 'PTS',
         rank: 1,
-        valueDisplay: '13915'
+        valueDisplay: '14104'
       },
       {
         category: 'REB',
         rank: 1,
-        valueDisplay: '4882'
+        valueDisplay: '4966'
       },
       {
         category: 'AST',
         rank: 1,
-        valueDisplay: '3557'
+        valueDisplay: '3603'
       },
       {
         category: 'STL',
         rank: 2,
-        valueDisplay: '819'
+        valueDisplay: '828'
       },
       {
         category: 'BLK',
         rank: 6,
-        valueDisplay: '464'
+        valueDisplay: '472'
       },
       {
         category: '3PM',
         rank: 4,
-        valueDisplay: '1342'
+        valueDisplay: '1358'
       },
       {
         category: 'FG%',
-        rank: 5,
-        valueDisplay: '47.8%'
+        rank: 4,
+        valueDisplay: '47.9%'
       },
       {
         category: 'FT%',
         rank: 9,
-        valueDisplay: '77.7%'
+        valueDisplay: '77.5%'
       },
       {
         category: 'TO',
         rank: 10,
-        valueDisplay: '1724'
+        valueDisplay: '1744'
       }
     ],
     rosterFantasyPoints: [

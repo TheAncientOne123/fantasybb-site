@@ -693,10 +693,22 @@ const data: TeamRewindData = {
         }
       ],
       summaryInsights: {
-        rival: '北京首钢霹雳鸭 · 2 games · 6083 pts combined',
-        nemesis: 'Novigrad 21ers  · Week 13 · L 1023–1312 (−289 pts)',
-        closestGame: 'Week 14 vs Glizzy Goblers · 1257–1252 (W, 5-pt margin)',
-        highestScoringWeek: 'Week 17 · 1601 pts vs Tochetaos'
+        rival: {
+          stat: '2 games · 6083 pts combined',
+          opponentTeamId: 'beijing-ducks'
+        },
+        nemesis: {
+          stat: 'Week 13 · L 1023–1312 (−289 pts)',
+          opponentTeamId: 'novigrad-21ers'
+        },
+        closestGame: {
+          stat: 'Week 14 · 1257–1252 (W, 5-pt margin)',
+          opponentTeamId: 'glizzy-goblers'
+        },
+        highestScoringWeek: {
+          stat: 'Week 17 · 1601 pts',
+          opponentTeamId: 'tochetaos'
+        }
       },
       footer: 'Fantasy Rewind'
     },
@@ -767,47 +779,47 @@ const data: TeamRewindData = {
       {
         category: 'PTS',
         rank: 6,
-        valueDisplay: '12993'
+        valueDisplay: '13121'
       },
       {
         category: 'REB',
         rank: 3,
-        valueDisplay: '4600'
+        valueDisplay: '4631'
       },
       {
         category: 'AST',
         rank: 3,
-        valueDisplay: '3182'
+        valueDisplay: '3213'
       },
       {
         category: 'STL',
-        rank: 4,
-        valueDisplay: '800'
+        rank: 5,
+        valueDisplay: '809'
       },
       {
         category: 'BLK',
         rank: 1,
-        valueDisplay: '565'
+        valueDisplay: '566'
       },
       {
         category: '3PM',
         rank: 3,
-        valueDisplay: '1399'
+        valueDisplay: '1411'
       },
       {
         category: 'FG%',
         rank: 7,
-        valueDisplay: '47.6%'
+        valueDisplay: '47.5%'
       },
       {
         category: 'FT%',
         rank: 7,
-        valueDisplay: '78.9%'
+        valueDisplay: '79.0%'
       },
       {
         category: 'TO',
         rank: 8,
-        valueDisplay: '1590'
+        valueDisplay: '1602'
       }
     ],
     rosterFantasyPoints: [
