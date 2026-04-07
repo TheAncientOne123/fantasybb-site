@@ -64,7 +64,7 @@ function OpponentLogo({ teamId }: { teamId?: string }) {
 }
 
 export function SummarySlide({ slide, accent }: Props) {
-  const { title, subtitle, record, archetype, titles, badges, summaryInsights, footer } = slide
+  const { title, subtitle, record, archetype, howFarYouWent, titles, badges, summaryInsights, footer } = slide
 
   const insights = summaryInsights
 
@@ -118,6 +118,15 @@ export function SummarySlide({ slide, accent }: Props) {
                 )}
                 <p className="font-medium text-white/95">{archetype.name}</p>
               </div>
+            </div>
+          )}
+          {howFarYouWent && (
+            <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3">
+              <p className="text-xs uppercase tracking-widest text-white/50">How Far You Went</p>
+              <p className="mt-1 font-semibold text-white/95">{howFarYouWent.title}</p>
+              {howFarYouWent.description ? (
+                <p className="mt-1 text-sm leading-snug text-white/65">{howFarYouWent.description}</p>
+              ) : null}
             </div>
           )}
           {titles.length > 0 && (

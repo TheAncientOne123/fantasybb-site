@@ -45,10 +45,51 @@
   .animate-slide-down {
     animation: slideDown 0.3s ease-out;
   }
+
+  /* Winners of Larry — trofeo sin caja; hover brilla y flota */
+  .hof-larry-trophy-wrap {
+    @apply inline-flex items-center justify-center align-middle;
+  }
+
+  .hof-larry-trophy-img {
+    transition: filter 0.35s ease, transform 0.35s ease;
+  }
+
+  .hof-larry-trophy-wrap:hover .hof-larry-trophy-img,
+  .hof-larry-trophy-wrap:focus-visible .hof-larry-trophy-img {
+    animation: hofLarryTrophyGlorious 2.2s ease-in-out infinite;
+  }
+
+  .hof-larry-trophy-wrap:focus-visible {
+    @apply rounded-md outline-none ring-2 ring-amber-400/50 ring-offset-2 ring-offset-slate-950;
+  }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+/* Keyframes fuera de @layer (referenciados por clases en @layer components) */
+@keyframes hofLarryTrophyGlorious {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.45)) brightness(1.02);
+  }
+  20% {
+    transform: translateY(-10px) rotate(-4deg);
+    filter: drop-shadow(0 0 18px rgba(251, 191, 36, 0.65)) drop-shadow(0 0 32px rgba(245, 158, 11, 0.35))
+      brightness(1.12);
+  }
+  45% {
+    transform: translateY(-14px) rotate(3deg);
+    filter: drop-shadow(0 0 26px rgba(252, 211, 77, 0.85)) drop-shadow(0 0 40px rgba(251, 191, 36, 0.45))
+      brightness(1.22);
+  }
+  70% {
+    transform: translateY(-6px) rotate(-2deg);
+    filter: drop-shadow(0 0 16px rgba(251, 191, 36, 0.55)) brightness(1.1);
   }
 }

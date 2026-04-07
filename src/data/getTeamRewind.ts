@@ -38,7 +38,7 @@ export function teamExists(seasonId: string, teamId: string): boolean {
   return Boolean(seasonLoaders && teamId in seasonLoaders)
 }
 
-/** Team ids for static routes (e.g. `/team/[teamId]`). Uses union of all seasons in loaders. */
+/** Team ids for static routes (e.g. `/team/[teamId]`). Union of all seasons in loaders. */
 export function getAllRewindTeamIds(): string[] {
   const ids = new Set<string>()
   for (const season of Object.values(teamLoaders)) {

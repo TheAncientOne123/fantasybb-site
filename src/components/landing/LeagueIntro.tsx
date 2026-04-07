@@ -86,7 +86,7 @@ export default function LeagueIntro() {
               una comunidad de amigos unidos por el amor al juego.
             </p>
             <p className="text-amber-400 font-medium">
-              "Look at Curry man, so inspirational" - flight
+              &ldquo;Look at Curry man, so inspirational&rdquo; — flight
             </p>
             {gif && (
               <div className="flex justify-center pt-2">

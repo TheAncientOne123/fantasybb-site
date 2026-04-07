@@ -96,6 +96,35 @@ export const SEASON_STATS_VOLUME_KEYS = [
   'PTS',
 ] as const
 
+/** Consolation / Winner's consolation — una fila por duelo (misma semana = misma “ronda” visual). */
+export type ConsolationMatchup = {
+  id?: string
+  teamIds: [string | null, string | null]
+  scores: [number | null, number | null] | null
+  /** Seeds de temporada regular (1 = mejor). */
+  seeds?: [number, number]
+  advanceNote?: string
+}
+
+export type ConsolationRound = {
+  /** Ej. "Periodo 21" o rango de fechas si lo añades a mano. */
+  label?: string
+  matchups: ConsolationMatchup[]
+}
+
+export type ConsolationLadder = {
+  title: string
+  rounds: ConsolationRound[]
+  notes?: string
+}
+
+export type NextDraftOrderRow = {
+  pick: number
+  teamId: string | null
+  label: string
+  locked?: boolean
+}
+
 export type StatsRoomData = {
   seasonId: string
   generatedAt?: string
@@ -105,4 +134,11 @@ export type StatsRoomData = {
   /** Si existe (generador actualizado), alimenta la tabla ancha tipo ESPN. */
   seasonStatsLeague?: SeasonStatsLeagueRow[]
   playoffBracket: PlayoffBracket
+  /** Brackets de consolación (7–10) y winner's consolation; opcional hasta regenerar datos. */
+  consolationBrackets?: {
+    bottomFour: ConsolationLadder
+    winnersConsolation: ConsolationLadder
+  }
+  /** Orden de draft próxima temporada (pick 1 = mejor posición). */
+  nextDraftOrder?: NextDraftOrderRow[]
 }

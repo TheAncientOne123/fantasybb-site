@@ -13,6 +13,7 @@ hasta que no haya datos (no depende de una API de "total de semanas").
 """
 
 import os
+import re
 import time
 from collections import defaultdict
 from statistics import mean, median, pstdev
@@ -1198,6 +1199,163 @@ def team_mvps(team, n=3):
 # Evolución del roster (drafted vs actual)
 # ---------------------------------------------------------------------------
 
+# Slots comunes ESPN Fantasy NBA (IDs pueden variar ligeramente por liga).
+ESPN_FANTASY_SLOT_ID_TO_LABEL = {
+    0: "PG",
+    1: "SG",
+    2: "SF",
+    3: "PF",
+    4: "C",
+    5: "G",
+    6: "F",
+    7: "UTIL",
+    8: "BE",
+    9: "IR",
+    10: "F",
+    11: "UTIL",
+    12: "PG",
+    13: "SG",
+}
+
+# Ranuras de alineación ESPN que no son posición de cancha (UTIL, bench, IR).
+ESPN_FANTASY_NON_COURT_SLOT_IDS = frozenset({7, 8, 9, 11})
+ROSTER_POSITION_LABEL_BLOCKLIST = frozenset({"UTIL", "UT", "BE", "IR"})
+# Compuestos como en espn_api POSITION_MAP (ids 7–10; no confundir con ESPN_FANTASY_SLOT_ID_TO_LABEL).
+ESPN_API_COMPOUND_SLOT_ID_TO_LABEL = {
+    7: "SG/SF",
+    8: "G/F",
+    9: "PF/C",
+    10: "F/C",
+}
+ELIGIBLE_COMPOUND_LABELS = frozenset({"SG/SF", "G/F", "PF/C", "F/C"})
+# Solo posiciones de cancha en UI (sin G/F genéricos ni compuestos con "/").
+COURT_POSITIONS_ORDER = ("PG", "SG", "SF", "PF", "C")
+ALLOWED_COURT_POSITIONS = frozenset(COURT_POSITIONS_ORDER)
+
+
+def normalize_court_positions(labels):
+    """
+    Expande tokens con / o , y deja solo PG/SG/SF/PF/C en orden fijo.
+    """
+    if not labels:
+        return ["—"]
+    seen = set()
+    for lab in labels:
+        if lab is None:
+            continue
+        s = str(lab).strip()
+        if not s or s == "—":
+            continue
+        for part in re.split(r"[/,]+", s):
+            p = part.strip().upper()
+            if p in ALLOWED_COURT_POSITIONS:
+                seen.add(p)
+    ordered = [x for x in COURT_POSITIONS_ORDER if x in seen]
+    return ordered if ordered else ["—"]
+
+
+def format_pro_team_abbrev(pro):
+    """
+    Abreviatura NBA tal como PRO_TEAM_MAP de espn_api (LAC, PHL, PHO, …).
+    Siempre devuelve string: 'FA' si agente libre / desconocido / vacío.
+    """
+    if pro is None:
+        return "FA"
+    s = str(pro).strip().upper()
+    if not s or s in ("—", "NONE", "NULL"):
+        return "FA"
+    if s in ("FA", "FA*") or s.startswith("FA"):
+        return "FA"
+    m = re.match(r"^([A-Z]{2,3})$", s)
+    if m:
+        return m.group(1)
+    return "FA"
+
+
+def nba_headshot_url(player_id):
+    """URL oficial NBA CDN; asume player_id alineado con NBA Stats PERSON_ID."""
+    try:
+        pid = int(player_id)
+    except (TypeError, ValueError):
+        return ""
+    if pid <= 0:
+        return ""
+    return f"https://cdn.nba.com/headshots/nba/latest/260x190/{pid}.png"
+
+
+def espn_headshot_url(player_id):
+    """Headshot ESPN; alineado con playerId de Fantasy NBA."""
+    try:
+        pid = int(player_id)
+    except (TypeError, ValueError):
+        return ""
+    if pid <= 0:
+        return ""
+    return f"https://a.espncdn.com/i/headshots/nba/players/full/{pid}.png"
+
+
+def position_raw_to_labels(raw):
+    """Normaliza posición o id de slot a etiquetas cortas."""
+    if raw is None or raw == "" or raw == "—":
+        return []
+    if isinstance(raw, str):
+        s = raw.strip()
+        if not s or s in ("0", "None", "null"):
+            return []
+        if s.isdigit():
+            return [ESPN_FANTASY_SLOT_ID_TO_LABEL.get(int(s), s)]
+        if "," in s:
+            return [x.strip() for x in s.split(",") if x.strip()]
+        return [s]
+    try:
+        i = int(raw)
+        return [ESPN_FANTASY_SLOT_ID_TO_LABEL.get(i, str(i))]
+    except (TypeError, ValueError):
+        return [str(raw)]
+
+
+def roster_player_position_labels(player):
+    """
+    Posiciones alineadas con espn_api: `position` + defaultPositionId, más solo
+    compuestos elegibles (SG/SF, G/F, PF/C, F/C), sin inflar con todos los slots.
+    """
+    labels = []
+    seen = set()
+
+    def _append_labels(labs):
+        for lab in labs:
+            if not lab:
+                continue
+            u = str(lab).strip().upper()
+            if u in ROSTER_POSITION_LABEL_BLOCKLIST:
+                continue
+            if lab not in seen:
+                seen.add(lab)
+                labels.append(lab)
+
+    for raw in (
+        getattr(player, "position", None),
+        getattr(player, "defaultPositionId", None),
+        getattr(player, "default_position_id", None),
+    ):
+        _append_labels(position_raw_to_labels(raw))
+    slots = getattr(player, "eligibleSlots", None) or getattr(player, "eligible_slots", None) or []
+    for sid in slots:
+        if isinstance(sid, str):
+            lab = sid.strip()
+            if lab.upper() in {x.upper() for x in ELIGIBLE_COMPOUND_LABELS}:
+                _append_labels([lab])
+            continue
+        try:
+            i = int(sid)
+        except (TypeError, ValueError):
+            continue
+        compound = ESPN_API_COMPOUND_SLOT_ID_TO_LABEL.get(i)
+        if compound:
+            _append_labels([compound])
+    return normalize_court_positions(labels)
+
+
 def get_drafted_roster_by_team(league):
     """league.draft son BasePick con .team (Team), .playerId, .playerName (o similar)."""
     by_team = defaultdict(list)
@@ -1247,7 +1405,13 @@ def roster_evolution(league, team):
         pid = p.get("playerId")
         name = p.get("name") or str(pid or "")
         pos, pro = player_info.get(pid, ("—", "—"))
-        drafted_enriched.append({"name": name, "position": pos, "pro_team": pro})
+        try:
+            ipid = int(pid) if pid is not None else None
+        except (TypeError, ValueError):
+            ipid = None
+        drafted_enriched.append(
+            {"playerId": ipid, "name": name, "position": pos, "pro_team": pro}
+        )
 
     current = getattr(team, "roster", []) or []
     current_enriched = []
@@ -1255,7 +1419,14 @@ def roster_evolution(league, team):
         name = getattr(p, "name", None) or str(getattr(p, "playerId", ""))
         pos = getattr(p, "position", None) or getattr(p, "defaultPositionId", "") or "—"
         pro = getattr(p, "proTeam", None) or getattr(p, "pro_team", "") or "—"
-        current_enriched.append({"name": name, "position": pos, "pro_team": pro})
+        rp = getattr(p, "playerId", None) or getattr(p, "player_id", None)
+        try:
+            ipid = int(rp) if rp is not None else None
+        except (TypeError, ValueError):
+            ipid = None
+        current_enriched.append(
+            {"playerId": ipid, "name": name, "position": pos, "pro_team": pro}
+        )
 
     return {"drafted": drafted_enriched, "current": current_enriched}
 
@@ -1490,6 +1661,11 @@ def regular_season_matchups(league, weeks_regular):
     return out
 
 
+def playoff_matchups_flat(league, weeks_playoffs):
+    """Public alias: chronological (week, home_id, away_id, home_score, away_score)."""
+    return _playoff_matchups_flat(league, weeks_playoffs)
+
+
 def _playoff_matchups_flat(league, weeks_playoffs):
     """Chronological list of (week, home_id, away_id, home_score, away_score)."""
     flat = []
@@ -1669,6 +1845,286 @@ def build_six_team_playoff_bracket(league, weeks_playoffs, seed_team_ids):
     }
 
 
+def _loser_from_scores_pair(ta, tb, sa, sb):
+    """Return ESPN team_id of loser, or None if tie / missing."""
+    if ta is None or tb is None or sa is None or sb is None:
+        return None
+    try:
+        sa, sb = float(sa), float(sb)
+    except (TypeError, ValueError):
+        return None
+    if sa > sb:
+        return int(tb)
+    if sb > sa:
+        return int(ta)
+    return None
+
+
+def winners_consolation_team_ids(raw_br):
+    """
+    Four teams: losers of main-bracket R1 (5v4, 6v3) + losers of R2 semis.
+    Returns list of int team_ids (deduped, order R1 losers then R2 losers).
+    """
+    losers = []
+    for slot in raw_br.get("round1") or []:
+        if slot.get("type") != "matchup":
+            continue
+        pair = slot.get("team_ids") or [None, None]
+        ta, tb = pair[0], pair[1] if len(pair) > 1 else None
+        sc = slot.get("scores")
+        if not sc or len(sc) < 2:
+            continue
+        lo = _loser_from_scores_pair(ta, tb, sc[0], sc[1])
+        if lo is not None:
+            losers.append(lo)
+    for slot in raw_br.get("round2") or []:
+        if slot.get("type") != "matchup":
+            continue
+        pair = slot.get("team_ids") or [None, None]
+        ta, tb = pair[0], pair[1] if len(pair) > 1 else None
+        sc = slot.get("scores")
+        if not sc or len(sc) < 2 or ta is None or tb is None:
+            continue
+        lo = _loser_from_scores_pair(ta, tb, sc[0], sc[1])
+        if lo is not None:
+            losers.append(lo)
+    seen = set()
+    out = []
+    for x in losers:
+        if x not in seen:
+            seen.add(x)
+            out.append(x)
+    return out
+
+
+def bottom_four_team_ids(ordered_teams):
+    """RS seeds 7–10 as ESPN team_ids (ints). ordered_teams: list from teams_sorted_regular_season."""
+    if len(ordered_teams) < 10:
+        return []
+    return [int(t.team_id) for t in ordered_teams[6:10]]
+
+
+def _filter_flat_for_team_set(flat, tid_set):
+    """flat rows (week, home, away, hs, avs) where both teams in tid_set."""
+    if not tid_set:
+        return []
+    out = []
+    for row in flat or []:
+        w, h, a, hs, avs = row
+        try:
+            h, a = int(h), int(a)
+        except (TypeError, ValueError):
+            continue
+        if h in tid_set and a in tid_set:
+            out.append(row)
+    return out
+
+
+# Alineado con el frontend: WCL draft/récord solo cuenta semanas de playoff >= este número
+# (evita mezclar cruces del bracket principal en semanas tempranas).
+WCL_DRAFT_STATS_MIN_PLAYOFF_WEEK = 21
+
+
+def _filter_flat_min_playoff_week(flat, min_week):
+    """Keep flat rows whose playoff week (first column) is >= min_week."""
+    out = []
+    for row in flat or []:
+        try:
+            w = int(row[0])
+        except (TypeError, ValueError, IndexError):
+            continue
+        if w >= min_week:
+            out.append(row)
+    return out
+
+
+def _rs_rank_by_team_id(ordered_teams):
+    """1-based RS rank -> team_id int."""
+    return {int(t.team_id): i + 1 for i, t in enumerate(ordered_teams)}
+
+
+def _rank_teams_more_wins_first_for_draft(tid_list, filtered_flat, rs_rank_by_tid):
+    """
+    Within mini-bracket games: more wins -> earlier in list (better lottery weight for seed #1 in that bucket).
+    Tiebreak: fewer losses in those games, then higher total PF, then better RS seed (lower rank number).
+    """
+    tid_set = set(tid_list)
+    wins = {t: 0 for t in tid_set}
+    losses = {t: 0 for t in tid_set}
+    pf = {t: 0.0 for t in tid_set}
+    for _w, h, a, hs, avs in filtered_flat:
+        try:
+            h, a = int(h), int(a)
+            hs, avs = float(hs), float(avs)
+        except (TypeError, ValueError):
+            continue
+        if h not in tid_set or a not in tid_set:
+            continue
+        pf[h] += hs
+        pf[a] += avs
+        if hs > avs:
+            wins[h] += 1
+            losses[a] += 1
+        elif avs > hs:
+            wins[a] += 1
+            losses[h] += 1
+
+    def key(t):
+        rs = rs_rank_by_tid.get(t, 99)
+        return (-wins[t], losses[t], -pf[t], rs)
+
+    return sorted(tid_set, key=key)
+
+
+def _rounds_from_filtered_flat(filtered_flat, rs_rank_by_tid):
+    """Group matchups by playoff week for UI columns."""
+    from collections import defaultdict
+
+    by_week = defaultdict(list)
+    for w, h, a, hs, avs in filtered_flat:
+        try:
+            w = int(w)
+            h, a = int(h), int(a)
+            hs, avs = float(hs), float(avs)
+        except (TypeError, ValueError):
+            continue
+        by_week[w].append((h, a, hs, avs))
+    rounds = []
+    for week in sorted(by_week.keys()):
+        matchups = []
+        for idx, (h, a, hs, avs) in enumerate(by_week[week]):
+            sh = rs_rank_by_tid.get(h)
+            sa = rs_rank_by_tid.get(a)
+            seeds = None
+            if sh is not None and sa is not None:
+                seeds = [sh, sa]
+            matchups.append(
+                {
+                    "id": f"P{week}-{idx + 1}",
+                    "team_ids": [h, a],
+                    "scores": [round(hs, 2), round(avs, 2)],
+                    "seeds": seeds,
+                }
+            )
+        rounds.append({"week": week, "label": f"Periodo {week}", "matchups": matchups})
+    return rounds
+
+
+def build_consolation_ladders(league, weeks_playoffs, ordered_teams, raw_br):
+    """
+    Build bottom-four (RS 7–10) and winner's consolation ladders from playoff scoreboard.
+    Returns dict with int team_ids (caller maps to slugs).
+    """
+    flat = _playoff_matchups_flat(league, weeks_playoffs)
+    rs_rank = _rs_rank_by_team_id(ordered_teams)
+    b4 = bottom_four_team_ids(ordered_teams)
+    b_set = set(b4)
+    b_flat = _filter_flat_for_team_set(flat, b_set)
+    b_rounds = _rounds_from_filtered_flat(b_flat, rs_rank)
+
+    wc_ids = winners_consolation_team_ids(raw_br)
+    w_set = set(wc_ids)
+    w_flat = _filter_flat_for_team_set(flat, w_set)
+    w_rounds = _rounds_from_filtered_flat(w_flat, rs_rank)
+
+    notes_b = []
+    if len(b4) < 4:
+        notes_b.append("Menos de 10 equipos: bracket 7–10 incompleto.")
+    if not b_flat and b4:
+        notes_b.append("Sin partidos de consolación 7–10 en scoreboard de playoffs aún.")
+
+    notes_w = []
+    if len(wc_ids) < 4 and raw_br.get("round2"):
+        notes_w.append("Faltan resultados del bracket principal para cerrar los 4 equipos del winner's consolation.")
+    if not w_flat and wc_ids:
+        notes_w.append("Sin partidos del winner's consolation en scoreboard aún.")
+
+    return {
+        "bottom_four_ids": b4,
+        "winners_consolation_ids": wc_ids,
+        "bottom_four": {
+            "title": "Consolation ladder (seeds 7–10)",
+            "rounds": b_rounds,
+            "notes": " ".join(notes_b) if notes_b else None,
+        },
+        "winners_consolation": {
+            "title": "Winner's consolation ladder",
+            "rounds": w_rounds,
+            "notes": " ".join(notes_w) if notes_w else None,
+        },
+    }
+
+
+def compute_next_draft_order(raw_br, flat, bottom_four_ids, wc_ids, rs_rank_by_tid, league_champ_tid):
+    """
+    Picks 1–4: consolación 7–10 (más victorias en el mini-bracket = mejor peso en lotería del seed #1 del bloque).
+    Picks 5–8: winner's consolation (misma lógica; solo partidos con semana de playoff >=
+        WCL_DRAFT_STATS_MIN_PLAYOFF_WEEK, igual que la UI).
+    Pick 9: final loser; pick 10: champion (scores o league_champ_tid).
+    Each row: pick, team_id (int|None), label (str).
+    """
+    rows = []
+    b_set = set(bottom_four_ids or [])
+    b_flat = _filter_flat_for_team_set(flat, b_set)
+    b_order = _rank_teams_more_wins_first_for_draft(list(b_set), b_flat, rs_rank_by_tid) if b_set else []
+    for i in range(4):
+        tid = b_order[i] if i < len(b_order) else None
+        rows.append(
+            {
+                "pick": i + 1,
+                "team_id": tid,
+                "label": "Consolation ladder (seeds 7–10)",
+            }
+        )
+
+    w_set = set(wc_ids or [])
+    w_flat = _filter_flat_for_team_set(flat, w_set)
+    w_flat_draft = _filter_flat_min_playoff_week(w_flat, WCL_DRAFT_STATS_MIN_PLAYOFF_WEEK)
+    w_order = (
+        _rank_teams_more_wins_first_for_draft(list(w_set), w_flat_draft, rs_rank_by_tid) if w_set else []
+    )
+    for i in range(4):
+        tid = w_order[i] if i < len(w_order) else None
+        rows.append(
+            {
+                "pick": i + 5,
+                "team_id": tid,
+                "label": "Winner's consolation ladder",
+            }
+        )
+
+    ch = raw_br.get("championship") or {}
+    ta, tb = (ch.get("team_ids") or [None, None])[:2]
+    sc = ch.get("scores") or [None, None]
+    if len(sc) < 2:
+        sc = [None, None]
+    runner = _loser_from_scores_pair(ta, tb, sc[0], sc[1]) if ta is not None and tb is not None else None
+    champ = None
+    if ta is not None and tb is not None and sc[0] is not None and sc[1] is not None:
+        try:
+            fsa, fsb = float(sc[0]), float(sc[1])
+            if fsa > fsb:
+                champ = int(ta)
+            elif fsb > fsa:
+                champ = int(tb)
+        except (TypeError, ValueError):
+            pass
+    if champ is None and raw_br.get("champion_team_id") is not None:
+        try:
+            champ = int(raw_br["champion_team_id"])
+        except (TypeError, ValueError):
+            champ = None
+    if champ is None and league_champ_tid is not None:
+        try:
+            champ = int(league_champ_tid)
+        except (TypeError, ValueError):
+            pass
+
+    rows.append({"pick": 9, "team_id": runner, "label": "Subcampeón (perdedor de la final)"})
+    rows.append({"pick": 10, "team_id": champ, "label": "Campeón"})
+    return rows
+
+
 def league_champion_team_id(league):
     """ESPN team_id of champion if final_standing == 1, else None."""
     for t in getattr(league, "teams", []) or []:
@@ -1739,47 +2195,112 @@ def roster_efficiency_differentials(league, weeks, num_starters=10):
 def _build_player_points_by_week(league, weeks):
     """
     Build player points by week from box scores.
-    Returns: dict (team_id, player_id) -> dict week -> points
+    Returns:
+        player_points: dict (team_id, player_id) -> dict week -> points
+        pid_to_name: dict player_id -> display name (último visto en box scores)
     """
-    from datetime import datetime
-    
-    player_points = {}  # (team_id, player_id) -> {week: points}
-    
+    player_points = {}
+    pid_to_name = {}
+
+    def _record_player(player, tid, week, pts):
+        pid = getattr(player, "playerId", None) or getattr(player, "player_id", None)
+        if pid is None:
+            return
+        try:
+            ipid = int(pid)
+        except (TypeError, ValueError):
+            return
+        pname = (
+            getattr(player, "name", None)
+            or getattr(player, "fullName", None)
+            or getattr(player, "full_name", None)
+        )
+        if pname:
+            pid_to_name[ipid] = str(pname).strip()
+        key = (tid, ipid)
+        if key not in player_points:
+            player_points[key] = {}
+        player_points[key][week] = float(pts or 0)
+
     for week in weeks:
         try:
             box_scores = league.box_scores(matchup_period=week)
         except Exception as e:
             print(f"[box_scores unavailable] week={week}: {e}")
             continue
-        
+
         for box in box_scores:
-            # Home team lineup
             home_tid = getattr(box.home_team, "team_id", None) if hasattr(box.home_team, "team_id") else box.home_team
             if home_tid and hasattr(box, "home_lineup"):
                 for player in box.home_lineup:
-                    pid = getattr(player, "playerId", None) or getattr(player, "player_id", None)
-                    if pid is None:
-                        continue
                     pts = getattr(player, "points", 0) or 0
-                    key = (home_tid, pid)
-                    if key not in player_points:
-                        player_points[key] = {}
-                    player_points[key][week] = float(pts)
-            
-            # Away team lineup
+                    _record_player(player, home_tid, week, pts)
+
             away_tid = getattr(box.away_team, "team_id", None) if hasattr(box.away_team, "team_id") else box.away_team
             if away_tid and hasattr(box, "away_lineup"):
                 for player in box.away_lineup:
-                    pid = getattr(player, "playerId", None) or getattr(player, "player_id", None)
-                    if pid is None:
-                        continue
                     pts = getattr(player, "points", 0) or 0
-                    key = (away_tid, pid)
-                    if key not in player_points:
-                        player_points[key] = {}
-                    player_points[key][week] = float(pts)
-    
-    return player_points
+                    _record_player(player, away_tid, week, pts)
+
+    return player_points, pid_to_name
+
+
+def _key_piece_week_counts(player_points, weeks, top_n=10):
+    """
+    Por (team_id, player_id): semanas con pts > 0 y entre los top_n anotadores del equipo esa semana.
+    """
+    counts = defaultdict(int)
+    for week in weeks:
+        team_ids = set()
+        for (tid, _pid), wk_map in player_points.items():
+            if week in wk_map:
+                team_ids.add(tid)
+        for tid in team_ids:
+            scored = []
+            for (t, pid), wk_map in player_points.items():
+                if t != tid or week not in wk_map:
+                    continue
+                pts = wk_map[week]
+                if pts > 0:
+                    scored.append((pid, pts))
+            scored.sort(key=lambda x: -x[1])
+            for pid, _pts in scored[:top_n]:
+                counts[(tid, pid)] += 1
+    return counts
+
+
+def player_lineup_weeks_by_team(league, team_id, weeks):
+    """
+    Jugadores que aparecieron en el box score del equipo por semana (alineación H2H).
+    Lista de dicts: playerId, name, positions, headshotUrl, lineupWeeks, keyPieceWeeks — orden por más semanas.
+    """
+    player_points, pid_to_name = _build_player_points_by_week(league, weeks)
+    key_counts = _key_piece_week_counts(player_points, weeks)
+    info = _player_info_map_from_rosters(league)
+    rows = []
+    for (tid, pid), wk_pts in player_points.items():
+        if tid != team_id:
+            continue
+        try:
+            ipid = int(pid)
+        except (TypeError, ValueError):
+            continue
+        name = pid_to_name.get(ipid, str(ipid))
+        pos_raw, pro_raw = info.get(pid, ("—", "—"))
+        labels = normalize_court_positions(position_raw_to_labels(pos_raw))
+        pro_abbr = format_pro_team_abbrev(pro_raw)
+        row = {
+            "playerId": ipid,
+            "name": name,
+            "positions": labels,
+            "headshotUrl": espn_headshot_url(ipid),
+            "lineupWeeks": len(wk_pts),
+            "keyPieceWeeks": int(key_counts.get((team_id, ipid), 0)),
+            "proTeamAbbrev": pro_abbr,
+        }
+        rows.append(row)
+    rows.sort(key=lambda r: (-r["lineupWeeks"], r["name"].lower()))
+    return rows
 
 
 def _build_activity_timeline(league, weeks):
@@ -1881,7 +2402,7 @@ def transaction_impact_by_team(league, weeks=None):
     
     # Try new implementation: stints + box scores
     try:
-        player_points = _build_player_points_by_week(league, weeks)
+        player_points, _pid_names = _build_player_points_by_week(league, weeks)
         stints_by_team = _build_activity_timeline(league, weeks)
         
         if not player_points or not stints_by_team:
@@ -1953,15 +2474,27 @@ FIRST_PLACE_TITLES = {
     "BLK": ("The Rim Guardian", "#1 en BLK"),
     "TO": ("The Caretaker", "#1 en TO (menos turnovers)"),
 }
-MOTY_TITLE = ("MOTY (Manager Of The Year)", "25% Stats, 15% Standings before playoffs, 25% League champion, 35% MVA (Roster efficiency + Transaction impact).")
-# MOTY weights (new formula)
-MOTY_WEIGHT_STATS = 0.25
-MOTY_WEIGHT_STANDINGS = 0.15
-MOTY_WEIGHT_LEAGUE_WINNER = 0.25
-MOTY_WEIGHT_MVA = 0.35
-# Stats: top 3 per category (3-2-1 podium)
+# MOTY: total score max 100; no incluye campeón de playoffs (Larry = anillo).
+# Cada pilar = MOTY_MAX_POINTS_* × norm (norm 0–100 dentro de la liga).
+MOTY_MAX_POINTS_STATS = 0.40
+MOTY_MAX_POINTS_STANDINGS = 0.21
+MOTY_MAX_POINTS_MVA = 0.39
+# Back-compat aliases (sin pilar campeón en la fórmula)
+MOTY_WEIGHT_STATS = MOTY_MAX_POINTS_STATS
+MOTY_WEIGHT_STANDINGS = MOTY_MAX_POINTS_STANDINGS
+MOTY_WEIGHT_LEAGUE_WINNER = 0.0
+MOTY_WEIGHT_MVA = MOTY_MAX_POINTS_MVA
+
+_MOTY_FORMULA_BLURB = (
+    "40 pts Stats (9CAT podio, normalizado en la liga), 21 pts Standings (RS antes de playoffs), "
+    "39 pts MVA — Managerial Value Added: eficiencia de alineación + impacto de transacciones (waivers/trades), "
+    "normalizado en la liga. El campeón de playoffs no suma a MOTY (premio separado: Larry). "
+    "Cada pilar 0–100 interno; aporte = fracción × norm; total máximo 100."
+)
+MOTY_TITLE = ("MOTY (Manager Of The Year)", _MOTY_FORMULA_BLURB)
+# Stats: top 3 per category with podium weighting (3/2/1).
 STATS_RANK_POINTS = {1: 3, 2: 2, 3: 1}
-# MVA sub-weights (within the 35% MVA share)
+# MVA sub-weights (inside the MVA pillar before scaling to MOTY_MAX_POINTS_MVA)
 MVA_WEIGHT_ROSTER_EFF = 0.5
 MVA_WEIGHT_TRANSACTION = 0.5
 # Default number of active (starter) slots per week if not from league settings
@@ -1978,7 +2511,7 @@ TITLE_DESCRIPTIONS = {
     "The Grand Theft Alvarado": "El equipo con más robos (STL).",
     "The Rim Guardian": "El equipo con más bloqueos (BLK).",
     "The Caretaker": "El equipo con menos pérdidas de balón (TO).",
-    "MOTY (Manager Of The Year)": "25% Stats, 15% Standings before playoffs, 25% League champion, 35% MVA (Roster efficiency + Transaction impact).",
+    "MOTY (Manager Of The Year)": _MOTY_FORMULA_BLURB,
     "The Closer": "Premio al equipo que más partidos cerrados (diferencia ≤100 pts) ganó.",
     "The Choke": "Premio al equipo que más partidos cerrados perdió.",
     "The Kingslayer": "Premio al equipo que derrotó al Unstoppable y terminó con su racha de victorias.",
@@ -2022,7 +2555,7 @@ SECTION_DESCRIPTIONS = {
     "dominio_9cat": "Dominancia 9CAT H2H: en qué categorías cada equipo está en top 3 y su puesto (#1, #2, #3).",
     "mvps": "Los 3 jugadores con más puntos de fantasy de la temporada por equipo.",
     "roster_evolution": "Jugadores del draft vs roster actual: nombre, posición y equipo profesional (NBA) de cada uno.",
-    "first_place_titles": "Títulos por ser #1 en una categoría (o #2 si el #1 es MOTY). MOTY no compite por títulos de categoría.",
+    "first_place_titles": "Títulos por ser #1 en una categoría. El ganador de MOTY conserva también sus títulos de categoría.",
 }
 
 
@@ -2062,10 +2595,11 @@ ARCHETYPE_TIER = {
 
 def compute_moty_winner(league, weeks, team_ranks, num_starters=None):
     """
-    MOTY = weighted score: 25% stats (top 1s), 15% standings before playoffs,
-    25% league winner, 35% MVA (roster efficiency + transaction impact).
+    MOTY = sum of pillar points (max 100): 40 stats, 21 standings, 39 MVA.
+    Playoff champion is excluded so MOTY rewards season-long management; Larry = league winner.
+    Each pillar uses a 0–100 norm within the league; contribution = MOTY_MAX_POINTS_* × norm.
     Returns: (moty_team_id, moty_score, breakdown_by_team).
-    breakdown_by_team: dict team_id -> {stats_norm, standings_norm, league_winner_norm, mva_norm, moty_score}.
+    breakdown_by_team: dict team_id -> {stats_norm, standings_norm, mva_norm, moty_score, stats_points_raw}.
     """
     num_starters = num_starters if num_starters is not None else DEFAULT_NUM_STARTERS
     teams = getattr(league, "teams", []) or []
@@ -2086,14 +2620,7 @@ def compute_moty_winner(league, weeks, team_ranks, num_starters=None):
     # Standings before playoffs, normalized 0-100 (best=100)
     _, standings_norm = standings_before_playoffs(league)
 
-    # League winner: 100 if final_standing == 1 else 0
-    league_winner_norm = {}
-    for t in teams:
-        tid = t.team_id
-        final_standing = getattr(t, "final_standing", None) or getattr(t, "standing", None)
-        league_winner_norm[tid] = 100.0 if (final_standing is not None and int(final_standing) == 1) else 0.0
-
-    # MVA: 0-100 composite
+    # MVA: 0-100 composite (Managerial Value Added)
     mva_scores = compute_mva_scores(
         league, weeks, num_starters=num_starters,
         roster_weight=MVA_WEIGHT_ROSTER_EFF, transaction_weight=MVA_WEIGHT_TRANSACTION,
@@ -2105,18 +2632,16 @@ def compute_moty_winner(league, weeks, team_ranks, num_starters=None):
         tid = t.team_id
         s = stats_norm.get(tid, 0)
         st = standings_norm.get(tid, 0)
-        lw = league_winner_norm.get(tid, 0)
         mva = mva_scores.get(tid, 0)
         moty_score = (
-            MOTY_WEIGHT_STATS * s
-            + MOTY_WEIGHT_STANDINGS * st
-            + MOTY_WEIGHT_LEAGUE_WINNER * lw
-            + MOTY_WEIGHT_MVA * mva
+            MOTY_MAX_POINTS_STATS * s
+            + MOTY_MAX_POINTS_STANDINGS * st
+            + MOTY_MAX_POINTS_MVA * mva
         )
         breakdown_by_team[tid] = {
+            "stats_points_raw": stats_raw.get(tid, 0),
             "stats_norm": s,
             "standings_norm": st,
-            "league_winner_norm": lw,
             "mva_norm": mva,
             "moty_score": moty_score,
         }
@@ -2131,7 +2656,7 @@ def compute_moty_winner(league, weeks, team_ranks, num_starters=None):
 
 def compute_first_place_titles(team_ranks, moty_winners=None):
     """
-    Por equipo: lista de títulos por ser #1 en una categoría (o #2 si el #1 es MOTY).
+    Por equipo: lista de títulos por ser #1 en una categoría.
     moty_winners: set of team_id that won MOTY (from compute_moty_winner). If None, no MOTY is assigned.
     Devuelve dict team_id -> [ (title_name, label), ... ]
     """
@@ -2147,23 +2672,16 @@ def compute_first_place_titles(team_ranks, moty_winners=None):
                 return tid
         return None
 
-    # MOTY: solo el título MOTY (no los de categoría que lideran)
+    # MOTY: agrega título MOTY, y el equipo sigue conservando sus títulos de categoría.
     for tid in moty_winners:
         result[tid].append(MOTY_TITLE)
 
-    # Por cada categoría: el título va al #1, salvo si el #1 es MOTY → va al #2 (se muestra como #1)
+    # Por cada categoría: el título siempre va al #1.
     for cat in FIRST_PLACE_TITLES:
         tid1 = get_team_at_rank(cat, 1)
-        tid2 = get_team_at_rank(cat, 2)
-        title_name, _ = FIRST_PLACE_TITLES[cat]
         if tid1 is None:
             continue
-        if tid1 in moty_winners:
-            # El #1 es MOTY: el título pasa al #2; se muestra como #1 (cedido por MOTY)
-            if tid2 is not None:
-                result[tid2].append(FIRST_PLACE_TITLES[cat])
-        else:
-            result[tid1].append(FIRST_PLACE_TITLES[cat])
+        result[tid1].append(FIRST_PLACE_TITLES[cat])
 
     return result
 

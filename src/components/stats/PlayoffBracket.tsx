@@ -29,6 +29,17 @@ function rsPlace(teamId: string | null | undefined, byId: Map<string, StatsStand
   return `${ordinalRank(row.rank)}`
 }
 
+function bracketWinnerIndex(
+  a: number | null | undefined,
+  b: number | null | undefined
+): 0 | 1 | null {
+  if (a == null || b == null || !Number.isFinite(a) || !Number.isFinite(b)) return null
+  if (a === 0 && b === 0) return null
+  if (a > b) return 0
+  if (b > a) return 1
+  return null
+}
+
 type RowProps = {
   seed?: number
   teamId: string | null | undefined
@@ -36,9 +47,10 @@ type RowProps = {
   standingsById: Map<string, StatsStandingRow>
   dimmed: boolean
   isBye?: boolean
+  isWinner?: boolean
 }
 
-function BracketRow({ seed, teamId, score, standingsById, dimmed, isBye }: RowProps) {
+function BracketRow({ seed, teamId, score, standingsById, dimmed, isBye, isWinner }: RowProps) {
   const row = teamId ? standingsById.get(teamId) : undefined
   const name = row?.displayName ?? (isBye ? 'BYE' : 'TBD')
   const logo = teamId ? getTeamLogoPath(teamId) : undefined
@@ -59,7 +71,10 @@ function BracketRow({ seed, teamId, score, standingsById, dimmed, isBye }: RowPr
   return (
     <div
       className={clsx(
-        'flex items-center gap-2 rounded-lg border border-white/10 bg-slate-900/80 px-2 py-1.5 text-sm',
+        'flex items-center gap-2 rounded-lg border px-2 py-1.5 text-sm',
+        isWinner && !isBye
+          ? 'border-emerald-500/40 bg-emerald-500/15'
+          : 'border-white/10 bg-slate-900/80',
         dimmed && 'opacity-35'
       )}
     >
@@ -137,42 +152,52 @@ export default function PlayoffBracket({ bracket, standingsById, highlightTeamId
                 />
               </div>
             )}
-            {m54?.type === 'matchup' && (
-              <div className="space-y-1 rounded-xl border border-white/10 bg-white/[0.03] p-2">
-                <BracketRow
-                  seed={m54.seeds[0]}
-                  teamId={m54.teamIds[0]}
-                  score={m54.scores?.[0] ?? null}
-                  standingsById={standingsById}
-                  dimmed={dim(m54.teamIds[0])}
-                />
-                <BracketRow
-                  seed={m54.seeds[1]}
-                  teamId={m54.teamIds[1]}
-                  score={m54.scores?.[1] ?? null}
-                  standingsById={standingsById}
-                  dimmed={dim(m54.teamIds[1])}
-                />
-              </div>
-            )}
-            {m63?.type === 'matchup' && (
-              <div className="space-y-1 rounded-xl border border-white/10 bg-white/[0.03] p-2">
-                <BracketRow
-                  seed={m63.seeds[0]}
-                  teamId={m63.teamIds[0]}
-                  score={m63.scores?.[0] ?? null}
-                  standingsById={standingsById}
-                  dimmed={dim(m63.teamIds[0])}
-                />
-                <BracketRow
-                  seed={m63.seeds[1]}
-                  teamId={m63.teamIds[1]}
-                  score={m63.scores?.[1] ?? null}
-                  standingsById={standingsById}
-                  dimmed={dim(m63.teamIds[1])}
-                />
-              </div>
-            )}
+            {m54?.type === 'matchup' && (() => {
+              const w = bracketWinnerIndex(m54.scores?.[0], m54.scores?.[1])
+              return (
+                <div className="space-y-1 rounded-xl border border-white/10 bg-white/[0.03] p-2">
+                  <BracketRow
+                    seed={m54.seeds[0]}
+                    teamId={m54.teamIds[0]}
+                    score={m54.scores?.[0] ?? null}
+                    standingsById={standingsById}
+                    dimmed={dim(m54.teamIds[0])}
+                    isWinner={w === 0}
+                  />
+                  <BracketRow
+                    seed={m54.seeds[1]}
+                    teamId={m54.teamIds[1]}
+                    score={m54.scores?.[1] ?? null}
+                    standingsById={standingsById}
+                    dimmed={dim(m54.teamIds[1])}
+                    isWinner={w === 1}
+                  />
+                </div>
+              )
+            })()}
+            {m63?.type === 'matchup' && (() => {
+              const w = bracketWinnerIndex(m63.scores?.[0], m63.scores?.[1])
+              return (
+                <div className="space-y-1 rounded-xl border border-white/10 bg-white/[0.03] p-2">
+                  <BracketRow
+                    seed={m63.seeds[0]}
+                    teamId={m63.teamIds[0]}
+                    score={m63.scores?.[0] ?? null}
+                    standingsById={standingsById}
+                    dimmed={dim(m63.teamIds[0])}
+                    isWinner={w === 0}
+                  />
+                  <BracketRow
+                    seed={m63.seeds[1]}
+                    teamId={m63.teamIds[1]}
+                    score={m63.scores?.[1] ?? null}
+                    standingsById={standingsById}
+                    dimmed={dim(m63.teamIds[1])}
+                    isWinner={w === 1}
+                  />
+                </div>
+              )
+            })()}
             {bye2?.type === 'bye' && (
               <div className="space-y-1">
                 <BracketRow
@@ -194,50 +219,60 @@ export default function PlayoffBracket({ bracket, standingsById, highlightTeamId
             {labels?.[1] ?? 'Semifinals'}
           </h3>
           <div className="flex flex-col gap-8">
-            {r2a && (
-              <div className="space-y-1 rounded-xl border border-amber-500/20 bg-amber-500/5 p-2">
-                <BracketRow
-                  seed={r2a.seedsInvolved[0]}
-                  teamId={r2a.teamIds[0]}
-                  score={r2a.scores?.[0] ?? null}
-                  standingsById={standingsById}
-                  dimmed={dim(r2a.teamIds[0])}
-                />
-                <BracketRow
-                  seed={
-                    r2a.teamIds[1]
-                      ? standingsById.get(r2a.teamIds[1])?.rank ?? r2a.seedsInvolved[1]
-                      : r2a.seedsInvolved[1]
-                  }
-                  teamId={r2a.teamIds[1]}
-                  score={r2a.scores?.[1] ?? null}
-                  standingsById={standingsById}
-                  dimmed={dim(r2a.teamIds[1])}
-                />
-              </div>
-            )}
-            {r2b && (
-              <div className="space-y-1 rounded-xl border border-amber-500/20 bg-amber-500/5 p-2">
-                <BracketRow
-                  seed={r2b.seedsInvolved[0]}
-                  teamId={r2b.teamIds[0]}
-                  score={r2b.scores?.[0] ?? null}
-                  standingsById={standingsById}
-                  dimmed={dim(r2b.teamIds[0])}
-                />
-                <BracketRow
-                  seed={
-                    r2b.teamIds[1]
-                      ? standingsById.get(r2b.teamIds[1])?.rank ?? r2b.seedsInvolved[1]
-                      : r2b.seedsInvolved[1]
-                  }
-                  teamId={r2b.teamIds[1]}
-                  score={r2b.scores?.[1] ?? null}
-                  standingsById={standingsById}
-                  dimmed={dim(r2b.teamIds[1])}
-                />
-              </div>
-            )}
+            {r2a && (() => {
+              const w = bracketWinnerIndex(r2a.scores?.[0], r2a.scores?.[1])
+              return (
+                <div className="space-y-1 rounded-xl border border-amber-500/20 bg-amber-500/5 p-2">
+                  <BracketRow
+                    seed={r2a.seedsInvolved[0]}
+                    teamId={r2a.teamIds[0]}
+                    score={r2a.scores?.[0] ?? null}
+                    standingsById={standingsById}
+                    dimmed={dim(r2a.teamIds[0])}
+                    isWinner={w === 0}
+                  />
+                  <BracketRow
+                    seed={
+                      r2a.teamIds[1]
+                        ? standingsById.get(r2a.teamIds[1])?.rank ?? r2a.seedsInvolved[1]
+                        : r2a.seedsInvolved[1]
+                    }
+                    teamId={r2a.teamIds[1]}
+                    score={r2a.scores?.[1] ?? null}
+                    standingsById={standingsById}
+                    dimmed={dim(r2a.teamIds[1])}
+                    isWinner={w === 1}
+                  />
+                </div>
+              )
+            })()}
+            {r2b && (() => {
+              const w = bracketWinnerIndex(r2b.scores?.[0], r2b.scores?.[1])
+              return (
+                <div className="space-y-1 rounded-xl border border-amber-500/20 bg-amber-500/5 p-2">
+                  <BracketRow
+                    seed={r2b.seedsInvolved[0]}
+                    teamId={r2b.teamIds[0]}
+                    score={r2b.scores?.[0] ?? null}
+                    standingsById={standingsById}
+                    dimmed={dim(r2b.teamIds[0])}
+                    isWinner={w === 0}
+                  />
+                  <BracketRow
+                    seed={
+                      r2b.teamIds[1]
+                        ? standingsById.get(r2b.teamIds[1])?.rank ?? r2b.seedsInvolved[1]
+                        : r2b.seedsInvolved[1]
+                    }
+                    teamId={r2b.teamIds[1]}
+                    score={r2b.scores?.[1] ?? null}
+                    standingsById={standingsById}
+                    dimmed={dim(r2b.teamIds[1])}
+                    isWinner={w === 1}
+                  />
+                </div>
+              )
+            })()}
           </div>
         </div>
 
@@ -247,18 +282,27 @@ export default function PlayoffBracket({ bracket, standingsById, highlightTeamId
             {labels?.[2] ?? 'Championship'}
           </h3>
           <div className="space-y-1 rounded-xl border border-white/15 bg-white/[0.05] p-3">
-            <BracketRow
-              teamId={fin.teamIds[0]}
-              score={fin.scores?.[0] ?? null}
-              standingsById={standingsById}
-              dimmed={dim(fin.teamIds[0])}
-            />
-            <BracketRow
-              teamId={fin.teamIds[1]}
-              score={fin.scores?.[1] ?? null}
-              standingsById={standingsById}
-              dimmed={dim(fin.teamIds[1])}
-            />
+            {(() => {
+              const w = bracketWinnerIndex(fin.scores?.[0], fin.scores?.[1])
+              return (
+                <>
+                  <BracketRow
+                    teamId={fin.teamIds[0]}
+                    score={fin.scores?.[0] ?? null}
+                    standingsById={standingsById}
+                    dimmed={dim(fin.teamIds[0])}
+                    isWinner={w === 0}
+                  />
+                  <BracketRow
+                    teamId={fin.teamIds[1]}
+                    score={fin.scores?.[1] ?? null}
+                    standingsById={standingsById}
+                    dimmed={dim(fin.teamIds[1])}
+                    isWinner={w === 1}
+                  />
+                </>
+              )
+            })()}
           </div>
         </div>
       </div>

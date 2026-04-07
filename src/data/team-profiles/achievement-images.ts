@@ -14,6 +14,7 @@ export const ACHIEVEMENT_IMAGE_FALLBACK: Record<string, string> = {
   'The Closer': '/badges/the-closer-badge.png',
   'The Choke': '/badges/the-choke.png',
   'The Kingslayer': '/badges/kingslayer.png',
+  'Campeón de liga': '/badges/larry.png',
   Unstoppable: '/badges/the-unstoppable-badge.png',
   'Free Fall': '/badges/free-fall.png',
   'Ceiling Check': '/badges/ceiling-check.png',

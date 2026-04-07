@@ -78,25 +78,21 @@ export function AwardSlide({ slide, accent }: Props) {
       {slide.motyBreakdown && (
         <div className="mt-6 max-w-md space-y-2 text-sm text-white/70">
           <div className="flex justify-between gap-4">
-            <span>Stats (25%)</span>
+            <span>Stats (hasta 40 pts)</span>
             <span className="font-medium" style={{ color: accent }}>{slide.motyBreakdown.stats.toFixed(1)}</span>
           </div>
           <div className="flex justify-between gap-4">
-            <span>Standings (15%)</span>
+            <span>Standings (hasta 21 pts)</span>
             <span className="font-medium" style={{ color: accent }}>{slide.motyBreakdown.standings.toFixed(1)}</span>
           </div>
           <div className="flex justify-between gap-4">
-            <span>Champion (25%)</span>
-            <span className="font-medium" style={{ color: accent }}>{slide.motyBreakdown.champion.toFixed(1)}</span>
-          </div>
-          <div className="flex justify-between gap-4">
-            <span>MVA (35%)</span>
+            <span>MVA (hasta 39 pts)</span>
             <span className="font-medium" style={{ color: accent }}>{slide.motyBreakdown.mva.toFixed(1)}</span>
           </div>
           <div className="mt-3 border-t border-white/20 pt-2 flex justify-between gap-4 font-semibold">
             <span>Total Score</span>
             <span style={{ color: accent }}>
-              {(slide.motyBreakdown.stats + slide.motyBreakdown.standings + slide.motyBreakdown.champion + slide.motyBreakdown.mva).toFixed(1)}
+              {(slide.motyBreakdown.stats + slide.motyBreakdown.standings + slide.motyBreakdown.mva).toFixed(1)}
             </span>
           </div>
         </div>

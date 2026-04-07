@@ -8,7 +8,8 @@ import { ChevronRight } from 'lucide-react'
 import type { Season } from '@/data/seasons'
 import type { StatsRoomData } from '@/data/stats-room-types'
 import { getTeamLogoPath } from '@/data/team-profiles/team-logos'
-import PlayoffBracket from './PlayoffBracket'
+import PlayoffsDraftHub from './PlayoffsDraftHub'
+import type { ConsolationLadder } from '@/data/stats-room-types'
 import SeasonStatsTable from './SeasonStatsTable'
 import RegularSeasonMatchupCard, { getWeekLowestScoreTeamIds } from './RegularSeasonMatchupCard'
 
@@ -77,12 +78,13 @@ export default function StatsRoomView({ data, seasons }: Props) {
 
   return (
     <div className="min-h-screen bg-slate-950 pb-16 pt-8 text-slate-100">
-      <div className="mx-auto max-w-6xl space-y-10 px-4 sm:px-6">
+      <div className="mx-auto max-w-7xl space-y-10 px-4 sm:px-6">
         <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h1 className="font-heading text-3xl font-bold text-white sm:text-4xl">Stats Room</h1>
             <p className="mt-1 max-w-xl text-sm text-slate-400">
-              Tabla regular, 9CAT, matchups de temporada regular y bracket playoff (6 equipos, top 2 bye).
+              Tabla regular, 9CAT, matchups de temporada regular, bracket playoff (6 equipos, top 2 bye),
+              consolación 7–10 / winner&apos;s consolation y orden de draft próxima temporada (tras regenerar datos).
             </p>
             {data.generatedAt && (
               <p className="mt-2 text-xs text-slate-600">Datos generados: {data.generatedAt}</p>
@@ -188,14 +190,39 @@ export default function StatsRoomView({ data, seasons }: Props) {
           </div>
         </section>
 
-        {/* Playoffs */}
         <section className="space-y-3" id="playoffs">
-          <h2 className="font-heading text-xl font-semibold text-white">Playoff bracket</h2>
+          <h2 className="font-heading text-xl font-semibold text-white">Playoffs y orden de draft</h2>
+          <p className="max-w-3xl text-sm text-slate-400">
+            Bracket principal (top 6), winner&apos;s consolation, consolación seeds 7–10; a la derecha, el orden de
+            draft de la siguiente temporada.
+          </p>
           <div className="rounded-2xl border border-white/10 bg-slate-900/40 p-4 sm:p-6">
-            <PlayoffBracket
-              bracket={data.playoffBracket}
+            <PlayoffsDraftHub
+              playoffBracket={data.playoffBracket}
+              winnersConsolation={
+                data.consolationBrackets?.winnersConsolation ??
+                ({
+                  title: "Winner's consolation ladder",
+                  rounds: [],
+                  notes:
+                    'Sin datos de consolación. Ejecuta python analytics/generate_team_data.py para cargar partidos desde ESPN.',
+                } satisfies ConsolationLadder)
+              }
+              bottomFour={
+                data.consolationBrackets?.bottomFour ??
+                ({
+                  title: 'Consolation ladder (seeds 7–10)',
+                  rounds: [],
+                  notes:
+                    'Sin datos de consolación. Ejecuta python analytics/generate_team_data.py para cargar partidos desde ESPN.',
+                } satisfies ConsolationLadder)
+              }
+              nextDraftOrder={data.nextDraftOrder}
               standingsById={standingsById}
               highlightTeamId={teamFilter}
+              hasFullDraftData={Boolean(
+                data.consolationBrackets && data.nextDraftOrder && data.nextDraftOrder.length === 10
+              )}
             />
           </div>
         </section>

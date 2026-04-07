@@ -34,6 +34,57 @@ function parseFantasyPoints(secondary?: string): string | undefined {
   return m[1].replace(/,/g, '')
 }
 
+function normalizeTeamAbbrev(raw?: string): string | undefined {
+  const t = raw?.trim().toUpperCase()
+  if (!t || t === 'FA') return undefined
+  return t
+}
+
+function sortLongevityForCore(a: ProfileRosterPlayer, b: ProfileRosterPlayer): number {
+  const aLineup = a.lineupWeeks ?? 0
+  const bLineup = b.lineupWeeks ?? 0
+  if (bLineup !== aLineup) return bLineup - aLineup
+  const aKey = a.keyPieceWeeks ?? 0
+  const bKey = b.keyPieceWeeks ?? 0
+  if (bKey !== aKey) return bKey - aKey
+  return a.name.localeCompare(b.name)
+}
+
+function splitCoreAndWaivers(
+  roster: ProfileRosterPlayer[]
+): { coreTeamRoster: ProfileRosterPlayer[]; waiverRoster: ProfileRosterPlayer[] } {
+  // Regla confirmada: Core Team = hasta 14 jugadores con keyPieceWeeks > 5.
+  const coreCandidates = roster.filter((p) => (p.keyPieceWeeks ?? 0) > 5).sort(sortLongevityForCore)
+  const coreTeamRoster = coreCandidates.slice(0, 14)
+  const inCore = new Set<string>(coreTeamRoster.map((p) => `${p.playerId ?? ''}::${p.name}`))
+  const waiverRoster = roster.filter((p) => !inCore.has(`${p.playerId ?? ''}::${p.name}`))
+  return { coreTeamRoster, waiverRoster }
+}
+
+function buildNbaTeamComposition(roster: ProfileRosterPlayer[]): Array<{ teamAbbrev: string; count: number; pct: number }> {
+  // Solo para la barra de composición: considerar jugadores con 10+ semanas en alineación.
+  const eligibleRoster = roster.filter((p) => (p.lineupWeeks ?? 0) >= 10)
+  const uniquePlayerKeys = new Set<string>()
+  const teamCounts = new Map<string, number>()
+  for (const p of eligibleRoster) {
+    const teamAbbrev = normalizeTeamAbbrev(p.proTeamAbbrev)
+    if (!teamAbbrev) continue
+    const playerKey = `${p.playerId ?? ''}::${p.name}`
+    if (uniquePlayerKeys.has(playerKey)) continue
+    uniquePlayerKeys.add(playerKey)
+    teamCounts.set(teamAbbrev, (teamCounts.get(teamAbbrev) ?? 0) + 1)
+  }
+  const total = Array.from(teamCounts.values()).reduce((acc, n) => acc + n, 0)
+  if (total <= 0) return []
+  return Array.from(teamCounts.entries())
+    .map(([teamAbbrev, count]) => ({
+      teamAbbrev,
+      count,
+      pct: (count / total) * 100,
+    }))
+    .sort((a, b) => (b.pct !== a.pct ? b.pct - a.pct : a.teamAbbrev.localeCompare(b.teamAbbrev)))
+}
+
 function playoffFields(outcome: string, standing?: number) {
   switch (outcome) {
     case 'champion':
@@ -199,7 +250,25 @@ export function rewindDataToProfileSeason(
 
   const ps = data.profileStats
   let finalRoster: ProfileRosterPlayer[] = []
-  if (ps?.rosterFantasyPoints?.length) {
+  let draftedRoster: ProfileRosterPlayer[] | undefined
+  let longevityRoster: ProfileRosterPlayer[] | undefined
+  let coreTeamRoster: ProfileRosterPlayer[] | undefined
+  let waiverRoster: ProfileRosterPlayer[] | undefined
+  let nbaTeamComposition: Array<{ teamAbbrev: string; count: number; pct: number }> | undefined
+
+  if (ps?.rosterFinal?.length) {
+    finalRoster = ps.rosterFinal.map((r) => ({
+      playerId: r.playerId,
+      name: r.name,
+      positions: r.positions,
+      headshotUrl: r.headshotUrl,
+      proTeamAbbrev: r.proTeamAbbrev,
+      teamLogoUrl: r.teamLogoUrl,
+      proTeamFromNbaCatalog: r.proTeamFromNbaCatalog,
+      proTeamName: r.proTeamName,
+      fantasyPoints: r.fantasyPoints != null ? String(r.fantasyPoints) : undefined,
+    }))
+  } else if (ps?.rosterFantasyPoints?.length) {
     finalRoster = ps.rosterFantasyPoints.map((r) => ({
       name: r.name,
       fantasyPoints: String(r.points),
@@ -210,6 +279,42 @@ export function rewindDataToProfileSeason(
         name,
         fantasyPoints: mvpPts[name],
       })
+    }
+  }
+
+  if (ps?.rosterDrafted?.length) {
+    draftedRoster = ps.rosterDrafted.map((r) => ({
+      playerId: r.playerId,
+      name: r.name,
+      positions: r.positions,
+      headshotUrl: r.headshotUrl,
+      proTeamAbbrev: r.proTeamAbbrev,
+      teamLogoUrl: r.teamLogoUrl,
+      proTeamFromNbaCatalog: r.proTeamFromNbaCatalog,
+      proTeamName: r.proTeamName,
+    }))
+  }
+
+  let longevityKeyWeeksTeamAvg: number | undefined
+  if (ps?.rosterByLineupWeeks?.length) {
+    longevityRoster = ps.rosterByLineupWeeks.map((r) => ({
+      playerId: r.playerId,
+      name: r.name,
+      positions: r.positions,
+      headshotUrl: r.headshotUrl,
+      proTeamAbbrev: r.proTeamAbbrev,
+      teamLogoUrl: r.teamLogoUrl,
+      proTeamFromNbaCatalog: r.proTeamFromNbaCatalog,
+      proTeamName: r.proTeamName,
+      lineupWeeks: r.lineupWeeks,
+      keyPieceWeeks: r.keyPieceWeeks,
+    }))
+    const split = splitCoreAndWaivers(longevityRoster)
+    coreTeamRoster = split.coreTeamRoster
+    waiverRoster = split.waiverRoster
+    nbaTeamComposition = buildNbaTeamComposition(longevityRoster)
+    if (ps.lineupKeyWeeksTeamAvg != null) {
+      longevityKeyWeeksTeamAvg = ps.lineupKeyWeeksTeamAvg
     }
   }
 
@@ -241,6 +346,12 @@ export function rewindDataToProfileSeason(
     playoffDepthLabel: pMeta.playoffDepthLabel,
     achievements,
     finalRoster,
+    draftedRoster,
+    longevityRoster,
+    coreTeamRoster,
+    waiverRoster,
+    nbaTeamComposition,
+    longevityKeyWeeksTeamAvg,
     categoryRanks9cat,
     nineCatFull: nineCatFull?.length ? nineCatFull : undefined,
     longestStreaks: extractLongestStreaks(slides),

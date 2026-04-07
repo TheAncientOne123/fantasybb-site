@@ -35,7 +35,6 @@ export type AwardSlide = {
   motyBreakdown?: {
     stats: number
     standings: number
-    champion: number
     mva: number
   }
 }
@@ -145,6 +144,16 @@ export type SummarySlide = {
   subtitle?: string
   record?: { value: string; standing?: string }
   archetype?: { name: string; image?: string }
+  /** Duplicate recap of playoff depth, shown inside Summary. */
+  howFarYouWent?: { title: string; description?: string }
+  /** MOTY score snapshot for Hall of Fame ranking tables. */
+  motyScoreSnapshot?: {
+    score: number
+    statsPointsRaw?: number
+    stats: number
+    standings: number
+    mva: number
+  }
   titles: Array<{ name: string; label?: string; image?: string }>
   /** @deprecated Prefer summaryInsights; kept for older generated .ts */
   badges?: string[]
@@ -215,6 +224,30 @@ export type TeamProfileStatsRosterRow = {
   points: number
 }
 
+/** Tarjeta de jugador para perfil de equipo (generador + UI). */
+export type ProfileRosterCard = {
+  playerId: number
+  name: string
+  positions: string[]
+  headshotUrl: string
+  /** Abreviatura equipo NBA (logo / tinte). */
+  proTeamAbbrev?: string
+  /** Logo de franquicia desde catálogo nba-players (sin fallback ESPN si proTeamFromNbaCatalog). */
+  teamLogoUrl?: string
+  /** True si headshot/equipo/posición vienen solo del JSON nba-players. */
+  proTeamFromNbaCatalog?: boolean
+  /** Nombre de franquicia legible si existe en el JSON (teamName); opcional. */
+  proTeamName?: string
+  /** Totales fantasy de temporada cuando aplica */
+  fantasyPoints?: number
+}
+
+export type ProfileRosterLongevityRow = ProfileRosterCard & {
+  lineupWeeks: number
+  /** Semanas entre top 10 anotadores del equipo (solo si pts > 0). */
+  keyPieceWeeks?: number
+}
+
 export type TeamRewindData = {
   id: string
   displayName: string
@@ -231,6 +264,11 @@ export type TeamRewindData = {
   profileStats?: {
     nineCat: TeamProfileStatsNineCatRow[]
     rosterFantasyPoints: TeamProfileStatsRosterRow[]
+    rosterFinal?: ProfileRosterCard[]
+    rosterDrafted?: ProfileRosterCard[]
+    rosterByLineupWeeks?: ProfileRosterLongevityRow[]
+    /** Promedio de keyPieceWeeks entre jugadores listados en rosterByLineupWeeks. */
+    lineupKeyWeeksTeamAvg?: number
   }
 }
 

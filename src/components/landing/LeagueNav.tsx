@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Trophy, Clock, Award, BarChart3 } from 'lucide-react'
+import { Trophy, Clock, Award } from 'lucide-react'
 
 const navItems = [
   {
@@ -10,12 +10,6 @@ const navItems = [
     href: '/rewind',
     icon: Clock,
     description: 'Revive tu temporada'
-  },
-  {
-    name: 'Timeline',
-    href: '/timeline',
-    icon: BarChart3,
-    description: 'Historial de la liga'
   },
   {
     name: 'Hall of Fame',
@@ -44,7 +38,7 @@ export default function LeagueNav() {
         >
           Explora la Liga
         </motion.h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {navItems.map((item, index) => (
             <motion.div
               key={item.name}

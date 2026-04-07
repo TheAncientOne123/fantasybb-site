@@ -22,6 +22,10 @@ export const metadata: Metadata = {
   title: 'Fantasy NBA League | lookatcurrymansoinspirational.com',
   description: 'Premium analytics and narrative experience for Fantasy NBA leagues',
   keywords: ['fantasy', 'nba', 'basketball', 'analytics', 'league'],
+  icons: {
+    icon: [{ url: '/favicon/favicon.ico', sizes: 'any' }],
+    shortcut: '/favicon/favicon.ico',
+  },
 }
 
 export default function RootLayout({

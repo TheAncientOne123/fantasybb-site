@@ -39,39 +39,39 @@ const data: TeamRewindData = {
       metricLabel: 'W-L',
       rows: [
         {
-          id: 'beijing-ducks',
-          name: '北京首钢霹雳鸭',
-          value: '13-5',
-          rank: 1
-        },
-        {
-          id: 'tochetaos',
-          name: 'Tochetaos',
-          value: '12-6',
-          rank: 2
-        },
-        {
           id: 'novigrad-21ers',
           name: 'Novigrad 21ers ',
           value: '11-7',
-          rank: 3
+          rank: 1
+        },
+        {
+          id: 'beijing-ducks',
+          name: '北京首钢霹雳鸭',
+          value: '13-5',
+          rank: 2
         },
         {
           id: 'fiestas-fantastic-team',
           name: 'Fiesta\'s Fantastic Team',
           value: '11-7',
-          rank: 4
+          rank: 3
         },
         {
-          id: 'diegos-daring-team',
-          name: 'Diego\'s Daring Team',
-          value: '11-7',
-          rank: 5
+          id: 'tochetaos',
+          name: 'Tochetaos',
+          value: '12-6',
+          rank: 4
         },
         {
           id: 'lububumatcha',
           name: 'LububuMatcha',
           value: '9-9',
+          rank: 5
+        },
+        {
+          id: 'diegos-daring-team',
+          name: 'Diego\'s Daring Team',
+          value: '11-7',
           rank: 6
         },
         {
@@ -570,59 +570,29 @@ const data: TeamRewindData = {
       type: 'rosterDiff',
       title: 'Roster Evolution',
       draftedCount: 13,
-      currentCount: 14,
+      currentCount: 0,
       kept: [
+
+      ],
+      lost: [
         'Luka Doncic',
         'LeBron James',
         'Evan Mobley',
-        'Michael Porter Jr.',
-        'Tobias Harris'
-      ],
-      lost: [
         'Zion Williamson',
         'Jarrett Allen',
+        'Michael Porter Jr.',
         'Walker Kessler',
         'Kevin Porter Jr.',
         'Naz Reid',
+        'Tobias Harris',
         'Russell Westbrook',
         'Obi Toppin',
         'Chris Paul'
       ],
       added: [
-        'Nickeil Alexander-Walker',
-        'Naji Marshall',
-        'Donovan Clingan',
-        'Saddiq Bey',
-        'Reed Sheppard',
-        'Coby White',
-        'Cam Spencer',
-        'Julian Champagnie',
-        'Peyton Watson'
+
       ],
-      footer: 'You kept 5/13 from draft'
-    },
-    {
-      type: 'list',
-      title: 'Season MVPs',
-      subtitle: 'Top 3 performers',
-      items: [
-        {
-          primary: 'Luka Doncic',
-          secondary: '3499 fantasy points',
-          meta: '#1'
-        },
-        {
-          primary: 'Nickeil Alexander-Walker',
-          secondary: '2390 fantasy points',
-          meta: '#2'
-        },
-        {
-          primary: 'Donovan Clingan',
-          secondary: '2329 fantasy points',
-          meta: '#3'
-        }
-      ],
-      footer: 'Your fantasy stars'
+      footer: 'You kept 0/13 from draft'
     },
     {
       type: 'list',
@@ -676,6 +646,17 @@ const data: TeamRewindData = {
       },
       archetype: {
         name: 'The Role Player'
+      },
+      howFarYouWent: {
+        title: 'Eliminated from playoff contention',
+        description: 'You didn\'t make the top 6 and missed the playoffs (regular season #7).'
+      },
+      motyScoreSnapshot: {
+        score: 35.7,
+        statsPointsRaw: 3.0,
+        stats: 7.3,
+        standings: 7.0,
+        mva: 21.4
       },
       titles: [
         {
@@ -770,108 +751,940 @@ const data: TeamRewindData = {
     nineCat: [
       {
         category: 'PTS',
-        rank: 4,
-        valueDisplay: '13375'
+        rank: 5,
+        valueDisplay: '14673'
       },
       {
         category: 'REB',
         rank: 4,
-        valueDisplay: '4527'
+        valueDisplay: '4945'
       },
       {
         category: 'AST',
         rank: 6,
-        valueDisplay: '2936'
+        valueDisplay: '3246'
       },
       {
         category: 'STL',
-        rank: 4,
-        valueDisplay: '816'
+        rank: 5,
+        valueDisplay: '889'
       },
       {
         category: 'BLK',
         rank: 4,
-        valueDisplay: '518'
+        valueDisplay: '566'
       },
       {
         category: '3PM',
         rank: 1,
-        valueDisplay: '1579'
+        valueDisplay: '1733'
       },
       {
         category: 'FG%',
         rank: 8,
-        valueDisplay: '47.4%'
+        valueDisplay: '47.5%'
       },
       {
         category: 'FT%',
         rank: 10,
-        valueDisplay: '77.4%'
+        valueDisplay: '77.7%'
       },
       {
         category: 'TO',
-        rank: 6,
-        valueDisplay: '1535'
+        rank: 5,
+        valueDisplay: '1675'
       }
     ],
     rosterFantasyPoints: [
+
+    ],
+    rosterDrafted: [
       {
+        playerId: 3945274,
         name: 'Luka Doncic',
-        points: 3499
+        proTeamFromNbaCatalog: true,
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1629029.png',
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612747/primary/L/logo.svg',
+        proTeamAbbrev: 'LAL',
+        positions: [
+          'Forward-Guard'
+        ]
       },
       {
-        name: 'Nickeil Alexander-Walker',
-        points: 2390
-      },
-      {
-        name: 'Donovan Clingan',
-        points: 2329
-      },
-      {
-        name: 'Evan Mobley',
-        points: 2321
-      },
-      {
+        playerId: 1966,
         name: 'LeBron James',
-        points: 2106
+        proTeamFromNbaCatalog: true,
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/2544.png',
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612747/primary/L/logo.svg',
+        proTeamAbbrev: 'LAL',
+        positions: [
+          'Forward'
+        ]
       },
       {
-        name: 'Reed Sheppard',
-        points: 2052
+        playerId: 4432158,
+        name: 'Evan Mobley',
+        proTeamFromNbaCatalog: true,
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1630596.png',
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612739/primary/L/logo.svg',
+        proTeamAbbrev: 'CLE',
+        positions: [
+          'Center'
+        ]
       },
       {
+        playerId: 4395628,
+        name: 'Zion Williamson',
+        proTeamFromNbaCatalog: true,
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1629627.png',
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612740/primary/L/logo.svg',
+        proTeamAbbrev: 'NOP',
+        positions: [
+          'Forward'
+        ]
+      },
+      {
+        playerId: 4066328,
+        name: 'Jarrett Allen',
+        proTeamFromNbaCatalog: true,
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1628386.png',
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612739/primary/L/logo.svg',
+        proTeamAbbrev: 'CLE',
+        positions: [
+          'Center'
+        ]
+      },
+      {
+        playerId: 4278104,
         name: 'Michael Porter Jr.',
-        points: 2044
+        proTeamFromNbaCatalog: true,
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1629008.png',
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612751/primary/L/logo.svg',
+        proTeamAbbrev: 'BKN',
+        positions: [
+          'Forward'
+        ]
       },
       {
-        name: 'Saddiq Bey',
-        points: 1990
+        playerId: 4433136,
+        name: 'Walker Kessler',
+        proTeamFromNbaCatalog: true,
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1631117.png',
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612762/primary/L/logo.svg',
+        proTeamAbbrev: 'UTA',
+        positions: [
+          'Center'
+        ]
       },
       {
-        name: 'Naji Marshall',
-        points: 1918
+        playerId: 4397140,
+        name: 'Kevin Porter Jr.',
+        proTeamFromNbaCatalog: true,
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1629645.png',
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612749/primary/L/logo.svg',
+        proTeamAbbrev: 'MIL',
+        positions: [
+          'Guard-Forward'
+        ]
       },
       {
-        name: 'Cam Spencer',
-        points: 1805
+        playerId: 4396971,
+        name: 'Naz Reid',
+        proTeamFromNbaCatalog: true,
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1629675.png',
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612750/primary/L/logo.svg',
+        proTeamAbbrev: 'MIN',
+        positions: [
+          'Center-Forward'
+        ]
       },
       {
-        name: 'Julian Champagnie',
-        points: 1716
-      },
-      {
-        name: 'Peyton Watson',
-        points: 1446
-      },
-      {
+        playerId: 6440,
         name: 'Tobias Harris',
-        points: 1381
+        proTeamFromNbaCatalog: true,
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/202699.png',
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612765/primary/L/logo.svg',
+        proTeamAbbrev: 'DET',
+        positions: [
+          'Forward'
+        ]
       },
       {
-        name: 'Coby White',
-        points: 1090
+        playerId: 3468,
+        name: 'Russell Westbrook',
+        proTeamFromNbaCatalog: true,
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/201566.png',
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612758/primary/L/logo.svg',
+        proTeamAbbrev: 'SAC',
+        positions: [
+          'Guard'
+        ]
+      },
+      {
+        playerId: 4278355,
+        name: 'Obi Toppin',
+        proTeamFromNbaCatalog: true,
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1630167.png',
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612754/primary/L/logo.svg',
+        proTeamAbbrev: 'IND',
+        positions: [
+          'Forward'
+        ]
+      },
+      {
+        playerId: 2779,
+        name: 'Chris Paul',
+        positions: [
+          '—'
+        ],
+        headshotUrl: 'https://a.espncdn.com/i/headshots/nba/players/full/2779.png',
+        proTeamAbbrev: 'FA'
       }
-    ]
+    ],
+    rosterByLineupWeeks: [
+      {
+        playerId: 3945274,
+        name: 'Luka Doncic',
+        positions: [
+          'Forward-Guard'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1629029.png',
+        lineupWeeks: 21,
+        keyPieceWeeks: 20,
+        proTeamAbbrev: 'LAL',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612747/primary/L/logo.svg'
+      },
+      {
+        playerId: 4432158,
+        name: 'Evan Mobley',
+        positions: [
+          'Center'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1630596.png',
+        lineupWeeks: 19,
+        keyPieceWeeks: 16,
+        proTeamAbbrev: 'CLE',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612739/primary/L/logo.svg'
+      },
+      {
+        playerId: 4278104,
+        name: 'Michael Porter Jr.',
+        positions: [
+          'Forward'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1629008.png',
+        lineupWeeks: 19,
+        keyPieceWeeks: 17,
+        proTeamAbbrev: 'BKN',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612751/primary/L/logo.svg'
+      },
+      {
+        playerId: 4278039,
+        name: 'Nickeil Alexander-Walker',
+        positions: [
+          'Guard'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1629638.png',
+        lineupWeeks: 19,
+        keyPieceWeeks: 17,
+        proTeamAbbrev: 'ATL',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612737/primary/L/logo.svg'
+      },
+      {
+        playerId: 4711272,
+        name: 'Reed Sheppard',
+        positions: [
+          'Guard'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1642263.png',
+        lineupWeeks: 19,
+        keyPieceWeeks: 14,
+        proTeamAbbrev: 'HOU',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612745/primary/L/logo.svg'
+      },
+      {
+        playerId: 5105565,
+        name: 'Donovan Clingan',
+        positions: [
+          'Center'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1642270.png',
+        lineupWeeks: 18,
+        keyPieceWeeks: 14,
+        proTeamAbbrev: 'POR',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612757/primary/L/logo.svg'
+      },
+      {
+        playerId: 1966,
+        name: 'LeBron James',
+        positions: [
+          'Forward'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/2544.png',
+        lineupWeeks: 18,
+        keyPieceWeeks: 18,
+        proTeamAbbrev: 'LAL',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612747/primary/L/logo.svg'
+      },
+      {
+        playerId: 4278594,
+        name: 'Naji Marshall',
+        positions: [
+          'Forward'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1630230.png',
+        lineupWeeks: 15,
+        keyPieceWeeks: 11,
+        proTeamAbbrev: 'DAL',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612742/primary/L/logo.svg'
+      },
+      {
+        playerId: 4397136,
+        name: 'Saddiq Bey',
+        positions: [
+          'Guard-Forward'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1630180.png',
+        lineupWeeks: 13,
+        keyPieceWeeks: 11,
+        proTeamAbbrev: 'NOP',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612740/primary/L/logo.svg'
+      },
+      {
+        playerId: 4277961,
+        name: 'Jaren Jackson Jr.',
+        positions: [
+          'Forward-Center'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1628991.png',
+        lineupWeeks: 12,
+        keyPieceWeeks: 8,
+        proTeamAbbrev: 'UTA',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612762/primary/L/logo.svg'
+      },
+      {
+        playerId: 4433083,
+        name: 'Cam Spencer',
+        positions: [
+          'Guard'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1642285.png',
+        lineupWeeks: 9,
+        keyPieceWeeks: 6,
+        proTeamAbbrev: 'MEM',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612763/primary/L/logo.svg'
+      },
+      {
+        playerId: 4431736,
+        name: 'Toumani Camara',
+        positions: [
+          'Forward'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1641739.png',
+        lineupWeeks: 9,
+        keyPieceWeeks: 6,
+        proTeamAbbrev: 'POR',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612757/primary/L/logo.svg'
+      },
+      {
+        playerId: 4709138,
+        name: 'Brandin Podziemski',
+        positions: [
+          'Guard'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1641764.png',
+        lineupWeeks: 8,
+        keyPieceWeeks: 6,
+        proTeamAbbrev: 'GSW',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612744/primary/L/logo.svg'
+      },
+      {
+        playerId: 4395630,
+        name: 'Devin Vassell',
+        positions: [
+          'Guard-Forward'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1630170.png',
+        lineupWeeks: 8,
+        keyPieceWeeks: 5,
+        proTeamAbbrev: 'SAS',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612759/primary/L/logo.svg'
+      },
+      {
+        playerId: 4278053,
+        name: 'Davion Mitchell',
+        positions: [
+          'Guard'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1630558.png',
+        lineupWeeks: 7,
+        keyPieceWeeks: 1,
+        proTeamAbbrev: 'MIA',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612748/primary/L/logo.svg'
+      },
+      {
+        playerId: 4576087,
+        name: 'Peyton Watson',
+        positions: [
+          'Guard'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1631212.png',
+        lineupWeeks: 7,
+        keyPieceWeeks: 3,
+        proTeamAbbrev: 'DEN',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612743/primary/L/logo.svg'
+      },
+      {
+        playerId: 6440,
+        name: 'Tobias Harris',
+        positions: [
+          'Forward'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/202699.png',
+        lineupWeeks: 7,
+        keyPieceWeeks: 6,
+        proTeamAbbrev: 'DET',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612765/primary/L/logo.svg'
+      },
+      {
+        playerId: 2583632,
+        name: 'Royce O\'Neale',
+        positions: [
+          'Forward'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1626220.png',
+        lineupWeeks: 6,
+        keyPieceWeeks: 2,
+        proTeamAbbrev: 'PHX',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612756/primary/L/logo.svg'
+      },
+      {
+        playerId: 4066648,
+        name: 'Rui Hachimura',
+        positions: [
+          'Forward'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1629060.png',
+        lineupWeeks: 5,
+        keyPieceWeeks: 3,
+        proTeamAbbrev: 'LAL',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612747/primary/L/logo.svg'
+      },
+      {
+        playerId: 3468,
+        name: 'Russell Westbrook',
+        positions: [
+          'Guard'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/201566.png',
+        lineupWeeks: 5,
+        keyPieceWeeks: 4,
+        proTeamAbbrev: 'SAC',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612758/primary/L/logo.svg'
+      },
+      {
+        playerId: 4351851,
+        name: 'Anfernee Simons',
+        positions: [
+          'Guard'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1629014.png',
+        lineupWeeks: 4,
+        keyPieceWeeks: 0,
+        proTeamAbbrev: 'CHI',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612741/primary/L/logo.svg'
+      },
+      {
+        playerId: 4395651,
+        name: 'Coby White',
+        positions: [
+          'Guard'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1629632.png',
+        lineupWeeks: 4,
+        keyPieceWeeks: 2,
+        proTeamAbbrev: 'CHA',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612766/primary/L/logo.svg'
+      },
+      {
+        playerId: 5144091,
+        name: 'Jeremiah Fears',
+        positions: [
+          'Guard'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1642847.png',
+        lineupWeeks: 4,
+        keyPieceWeeks: 1,
+        proTeamAbbrev: 'NOP',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612740/primary/L/logo.svg'
+      },
+      {
+        playerId: 4066262,
+        name: 'Malik Monk',
+        positions: [
+          'Guard'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1628370.png',
+        lineupWeeks: 4,
+        keyPieceWeeks: 0,
+        proTeamAbbrev: 'SAC',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612758/primary/L/logo.svg'
+      },
+      {
+        playerId: 4396971,
+        name: 'Naz Reid',
+        positions: [
+          'Center-Forward'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1629675.png',
+        lineupWeeks: 4,
+        keyPieceWeeks: 4,
+        proTeamAbbrev: 'MIN',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612750/primary/L/logo.svg'
+      },
+      {
+        playerId: 4683692,
+        name: 'Cason Wallace',
+        positions: [
+          'Guard'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1641717.png',
+        lineupWeeks: 3,
+        keyPieceWeeks: 0,
+        proTeamAbbrev: 'OKC',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612760/primary/L/logo.svg'
+      },
+      {
+        playerId: 4592479,
+        name: 'Julian Champagnie',
+        positions: [
+          'Forward'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1630577.png',
+        lineupWeeks: 3,
+        keyPieceWeeks: 1,
+        proTeamAbbrev: 'SAS',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612759/primary/L/logo.svg'
+      },
+      {
+        playerId: 4711294,
+        name: 'Matas Buzelis',
+        positions: [
+          'Forward'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1641824.png',
+        lineupWeeks: 3,
+        keyPieceWeeks: 1,
+        proTeamAbbrev: 'CHI',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612741/primary/L/logo.svg'
+      },
+      {
+        playerId: 4601025,
+        name: 'Pelle Larsson',
+        positions: [
+          'Guard'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1641796.png',
+        lineupWeeks: 3,
+        keyPieceWeeks: 0,
+        proTeamAbbrev: 'MIA',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612748/primary/L/logo.svg'
+      },
+      {
+        playerId: 2991350,
+        name: 'Alex Caruso',
+        positions: [
+          'Guard'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1627936.png',
+        lineupWeeks: 2,
+        keyPieceWeeks: 1,
+        proTeamAbbrev: 'OKC',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612760/primary/L/logo.svg'
+      },
+      {
+        playerId: 5105839,
+        name: 'Brice Sensabaugh',
+        positions: [
+          'Forward'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1641729.png',
+        lineupWeeks: 2,
+        keyPieceWeeks: 1,
+        proTeamAbbrev: 'UTA',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612762/primary/L/logo.svg'
+      },
+      {
+        playerId: 4278129,
+        name: 'Deandre Ayton',
+        positions: [
+          'Center'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1629028.png',
+        lineupWeeks: 2,
+        keyPieceWeeks: 1,
+        proTeamAbbrev: 'LAL',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612747/primary/L/logo.svg'
+      },
+      {
+        playerId: 4432810,
+        name: 'Isaiah Stewart',
+        positions: [
+          'Forward-Center'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1630191.png',
+        lineupWeeks: 2,
+        keyPieceWeeks: 1,
+        proTeamAbbrev: 'DET',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612765/primary/L/logo.svg'
+      },
+      {
+        playerId: 5105623,
+        name: 'Kel\'el Ware',
+        positions: [
+          'Center'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1642276.png',
+        lineupWeeks: 2,
+        keyPieceWeeks: 0,
+        proTeamAbbrev: 'MIA',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612748/primary/L/logo.svg'
+      },
+      {
+        playerId: 4395723,
+        name: 'Keldon Johnson',
+        positions: [
+          'Forward-Guard'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1629640.png',
+        lineupWeeks: 2,
+        keyPieceWeeks: 2,
+        proTeamAbbrev: 'SAS',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612759/primary/L/logo.svg'
+      },
+      {
+        playerId: 4431823,
+        name: 'Miles McBride',
+        positions: [
+          'Guard'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1630540.png',
+        lineupWeeks: 2,
+        keyPieceWeeks: 0,
+        proTeamAbbrev: 'NYK',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612752/primary/L/logo.svg'
+      },
+      {
+        playerId: 4397014,
+        name: 'Quentin Grimes',
+        positions: [
+          'Guard'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1629656.png',
+        lineupWeeks: 2,
+        keyPieceWeeks: 2,
+        proTeamAbbrev: 'PHI',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612755/primary/L/logo.svg'
+      },
+      {
+        playerId: 4683634,
+        name: 'Bennedict Mathurin',
+        positions: [
+          'Guard-Forward'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1631097.png',
+        lineupWeeks: 1,
+        keyPieceWeeks: 0,
+        proTeamAbbrev: 'LAC',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612746/primary/L/logo.svg'
+      },
+      {
+        playerId: 3064482,
+        name: 'Bobby Portis',
+        positions: [
+          'Forward'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1626171.png',
+        lineupWeeks: 1,
+        keyPieceWeeks: 1,
+        proTeamAbbrev: 'MIL',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612749/primary/L/logo.svg'
+      },
+      {
+        playerId: 4592492,
+        name: 'Bones Hyland',
+        positions: [
+          'Guard'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1630538.png',
+        lineupWeeks: 1,
+        keyPieceWeeks: 0,
+        proTeamAbbrev: 'MIN',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612750/primary/L/logo.svg'
+      },
+      {
+        playerId: 3032979,
+        name: 'Dennis Schroder',
+        positions: [
+          'Guard'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/203471.png',
+        lineupWeeks: 1,
+        keyPieceWeeks: 0,
+        proTeamAbbrev: 'CLE',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612739/primary/L/logo.svg'
+      },
+      {
+        playerId: 6578,
+        name: 'Harrison Barnes',
+        positions: [
+          'Forward'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/203084.png',
+        lineupWeeks: 1,
+        keyPieceWeeks: 0,
+        proTeamAbbrev: 'SAS',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612759/primary/L/logo.svg'
+      },
+      {
+        playerId: 4437244,
+        name: 'Jalen Green',
+        positions: [
+          'Guard'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1630224.png',
+        lineupWeeks: 1,
+        keyPieceWeeks: 0,
+        proTeamAbbrev: 'PHX',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612756/primary/L/logo.svg'
+      },
+      {
+        playerId: 5106060,
+        name: 'Jarace Walker',
+        positions: [
+          'Forward'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1641716.png',
+        lineupWeeks: 1,
+        keyPieceWeeks: 0,
+        proTeamAbbrev: 'IND',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612754/primary/L/logo.svg'
+      },
+      {
+        playerId: 4066328,
+        name: 'Jarrett Allen',
+        positions: [
+          'Center'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1628386.png',
+        lineupWeeks: 1,
+        keyPieceWeeks: 1,
+        proTeamAbbrev: 'CLE',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612739/primary/L/logo.svg'
+      },
+      {
+        playerId: 4432823,
+        name: 'Jaylin Williams',
+        positions: [
+          'Forward'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1631119.png',
+        lineupWeeks: 1,
+        keyPieceWeeks: 0,
+        proTeamAbbrev: 'OKC',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612760/primary/L/logo.svg'
+      },
+      {
+        playerId: 3908845,
+        name: 'John Collins',
+        positions: [
+          'Forward-Center'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1628381.png',
+        lineupWeeks: 1,
+        keyPieceWeeks: 1,
+        proTeamAbbrev: 'LAC',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612746/primary/L/logo.svg'
+      },
+      {
+        playerId: 4432907,
+        name: 'Justin Champagnie',
+        positions: [
+          'Guard-Forward'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1630551.png',
+        lineupWeeks: 1,
+        keyPieceWeeks: 0,
+        proTeamAbbrev: 'WAS',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612764/primary/L/logo.svg'
+      },
+      {
+        playerId: 3102530,
+        name: 'Jusuf Nurkic',
+        positions: [
+          'Center'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/203994.png',
+        lineupWeeks: 1,
+        keyPieceWeeks: 0,
+        proTeamAbbrev: 'UTA',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612762/primary/L/logo.svg'
+      },
+      {
+        playerId: 2991139,
+        name: 'Kris Dunn',
+        positions: [
+          'Guard'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1627739.png',
+        lineupWeeks: 1,
+        keyPieceWeeks: 0,
+        proTeamAbbrev: 'LAC',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612746/primary/L/logo.svg'
+      },
+      {
+        playerId: 4702384,
+        name: 'Nique Clifford',
+        positions: [
+          'Guard'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1642363.png',
+        lineupWeeks: 1,
+        keyPieceWeeks: 0,
+        proTeamAbbrev: 'SAC',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612758/primary/L/logo.svg'
+      },
+      {
+        playerId: 4278580,
+        name: 'Sandro Mamukelashvili',
+        positions: [
+          'Forward-Center'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1630572.png',
+        lineupWeeks: 1,
+        keyPieceWeeks: 0,
+        proTeamAbbrev: 'TOR',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612761/primary/L/logo.svg'
+      },
+      {
+        playerId: 4433192,
+        name: 'Tari Eason',
+        positions: [
+          'Forward'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1631106.png',
+        lineupWeeks: 1,
+        keyPieceWeeks: 0,
+        proTeamAbbrev: 'HOU',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612745/primary/L/logo.svg'
+      },
+      {
+        playerId: 3907823,
+        name: 'Terance Mann',
+        positions: [
+          'Guard-Forward'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1629611.png',
+        lineupWeeks: 1,
+        keyPieceWeeks: 0,
+        proTeamAbbrev: 'BKN',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612751/primary/L/logo.svg'
+      },
+      {
+        playerId: 5238230,
+        name: 'Tre Johnson',
+        positions: [
+          'Guard'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1642848.png',
+        lineupWeeks: 1,
+        keyPieceWeeks: 0,
+        proTeamAbbrev: 'WAS',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612764/primary/L/logo.svg'
+      },
+      {
+        playerId: 4433136,
+        name: 'Walker Kessler',
+        positions: [
+          'Center'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1631117.png',
+        lineupWeeks: 1,
+        keyPieceWeeks: 1,
+        proTeamAbbrev: 'UTA',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612762/primary/L/logo.svg'
+      },
+      {
+        playerId: 4395628,
+        name: 'Zion Williamson',
+        positions: [
+          'Forward'
+        ],
+        headshotUrl: 'https://cdn.nba.com/headshots/nba/latest/260x190/1629627.png',
+        lineupWeeks: 1,
+        keyPieceWeeks: 1,
+        proTeamAbbrev: 'NOP',
+        proTeamFromNbaCatalog: true,
+        teamLogoUrl: 'https://cdn.nba.com/logos/nba/1610612740/primary/L/logo.svg'
+      }
+    ],
+    lineupKeyWeeksTeamAvg: 3.7
   }
 }
 

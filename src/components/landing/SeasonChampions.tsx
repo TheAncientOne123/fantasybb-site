@@ -24,13 +24,13 @@ const champions: Champion[] = [
   {
     seasonId: '2026',
     seasonLabel: '2025-26',
-    teamName: '北京首钢霹雳鸭',
-    teamId: 'beijing-ducks',
-    record: '13-5-0',
+    teamName: 'Novigrad 21ers',
+    teamId: 'novigrad-21ers',
+    record: '11-7-0',
     runnerUp: {
-      teamId: 'tochetaos',
-      teamName: 'Tochetaos',
-      record: '12-6-0',
+      teamId: 'beijing-ducks',
+      teamName: '北京首钢霹雳鸭',
+      record: '13-5-0',
     },
   },
 ]
@@ -38,13 +38,16 @@ const champions: Champion[] = [
 function TeamLogo({
   teamId,
   size,
+  fallbackSrc,
 }: {
   teamId: string
   size: 'lg' | 'sm'
+  fallbackSrc?: string
 }) {
   const src = getTeamLogoPath(teamId)
   const dim = size === 'lg' ? 'h-20 w-20 sm:h-24 sm:w-24' : 'h-10 w-10 sm:h-11 sm:w-11'
-  if (!src) {
+  const effectiveSrc = src || fallbackSrc
+  if (!effectiveSrc) {
     return (
       <div
         className={`flex shrink-0 items-center justify-center rounded-2xl border border-amber-400/30 bg-black/20 ${dim} text-lg font-bold text-amber-200/50`}
@@ -54,22 +57,28 @@ function TeamLogo({
       </div>
     )
   }
-  const remote = src.startsWith('http')
+  const remote = effectiveSrc.startsWith('http')
   return (
     <div
       className={`relative shrink-0 overflow-hidden rounded-2xl border border-amber-400/35 bg-black/25 ${dim}`}
     >
       {remote ? (
         <Image
-          src={src}
+          src={effectiveSrc}
           alt=""
           fill
           className="object-contain p-2"
           sizes={size === 'lg' ? '96px' : '44px'}
-          unoptimized={src.includes('.svg')}
+          unoptimized={effectiveSrc.includes('.svg')}
         />
       ) : (
-        <Image src={src} alt="" fill className="object-contain p-2" sizes={size === 'lg' ? '96px' : '44px'} />
+        <Image
+          src={effectiveSrc}
+          alt=""
+          fill
+          className="object-contain p-2"
+          sizes={size === 'lg' ? '96px' : '44px'}
+        />
       )}
     </div>
   )
@@ -109,7 +118,7 @@ export default function SeasonChampions() {
                     href={`/team/${champion.teamId}`}
                     className="group flex min-w-0 flex-1 items-start gap-4 sm:gap-5"
                   >
-                    <TeamLogo teamId={champion.teamId} size="lg" />
+                    <TeamLogo teamId={champion.teamId} size="lg" fallbackSrc="/badges/larry.png" />
                     <div className="min-w-0 flex-1 pt-0.5">
                       <div className="mb-3 flex flex-wrap items-center gap-3">
                         <div className="rounded-full bg-amber-500/20 p-2">

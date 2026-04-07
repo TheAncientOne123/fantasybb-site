@@ -1,10 +1,12 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowLeft, Trophy, Home } from 'lucide-react'
-import type { TeamProfile, TeamProfileSeason } from '@/data/team-profiles/types'
+import { RosterPlayerCard } from '@/components/team/RosterPlayerCard'
+import type { ProfileRosterPlayer, TeamProfile, TeamProfileSeason } from '@/data/team-profiles/types'
 import { getTeamLogoPath } from '@/data/team-profiles/team-logos'
 import { teamExists } from '@/data/getTeamRewind'
 import { getSeasonById } from '@/data/seasons'
+import { getNbaTeamPrimaryHex } from '@/lib/nbaTeamBranding'
 
 const CAT_ORDER = ['PTS', 'REB', 'AST', 'STL', 'BLK', '3PM', 'FG%', 'FT%', 'TO']
 
@@ -15,6 +17,20 @@ function stripEmojis(s: string): string {
     .replace(/\uFE0F/g, '')
     .replace(/\s{2,}/g, ' ')
     .trim()
+}
+
+function longevitySubtitle(p: ProfileRosterPlayer): string | undefined {
+  const lw = p.lineupWeeks
+  const kw = p.keyPieceWeeks
+  if (lw == null && kw == null) return undefined
+  const parts: string[] = []
+  if (lw != null) {
+    parts.push(`${lw} semana${lw === 1 ? '' : 's'} en alineación`)
+  }
+  if (kw != null) {
+    parts.push(`${kw} como pieza clave (top 10 del equipo)`)
+  }
+  return parts.join(' · ')
 }
 
 function sortRoster(season: TeamProfileSeason) {
@@ -43,6 +59,30 @@ function formatMejorSemana(raw?: string): string {
   const pts = raw.match(/(\d[\d,]*)\s*pts/i)
   if (pts) return `${pts[1].replace(/,/g, '')} pts`
   return stripEmojis(raw)
+}
+
+function splitLongevityForDisplay(longevity: ProfileRosterPlayer[] | undefined): {
+  core: ProfileRosterPlayer[]
+  waivers: ProfileRosterPlayer[]
+} {
+  const rows = longevity ?? []
+  const coreCandidates = [...rows]
+    .filter((p) => (p.keyPieceWeeks ?? 0) > 5)
+    .sort(
+      (a, b) =>
+        (b.lineupWeeks ?? 0) - (a.lineupWeeks ?? 0) ||
+        (b.keyPieceWeeks ?? 0) - (a.keyPieceWeeks ?? 0) ||
+        a.name.localeCompare(b.name)
+    )
+  const core = coreCandidates.slice(0, 14)
+  const inCore = new Set(core.map((p) => `${p.playerId ?? ''}::${p.name}`))
+  const waivers = rows.filter((p) => !inCore.has(`${p.playerId ?? ''}::${p.name}`))
+  return { core, waivers }
+}
+
+function pctLabel(n: number): string {
+  if (!Number.isFinite(n) || n <= 0) return '0%'
+  return `${Math.round(n)}%`
 }
 
 function nineCatGridRows(season: TeamProfileSeason): Array<{
@@ -171,6 +211,11 @@ function SeasonBlock({ season, teamId }: { season: TeamProfileSeason; teamId: st
   const nineGrid = nineCatGridRows(season)
   const streakParsed = season.longestStreaks ? parseWinLossStreak(season.longestStreaks) : null
   const mejorSemana = formatMejorSemana(season.highestScoringWeek)
+  const longevityRows = season.longevityRoster ?? []
+  const splitFallback = splitLongevityForDisplay(longevityRows)
+  const coreTeamRows = season.coreTeamRoster ?? splitFallback.core
+  const waiverRows = season.waiverRoster ?? splitFallback.waivers
+  const nbaComposition = season.nbaTeamComposition ?? []
 
   return (
     <article className="rounded-2xl border border-zinc-800 bg-zinc-900/35 p-5 shadow-xl shadow-black/20 sm:p-7">
@@ -291,41 +336,156 @@ function SeasonBlock({ season, teamId }: { season: TeamProfileSeason; teamId: st
         </div>
       ) : null}
 
-      {/* Roster — solo #, nombre, puntos */}
-      <div>
-        <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-zinc-500">
-          Roster final · puntos fantasy (ESPN)
-        </h4>
-        <p className="mb-3 text-xs text-zinc-600">
-          {rosterRows.length > 0 &&
-          rosterRows.every((p) => p.fantasyPoints != null && p.fantasyPoints !== '' && p.fantasyPoints !== '—')
-            ? 'Totales de temporada por jugador.'
-            : 'Puede haber jugadores sin total hasta regenerar datos (profileStats).'}
-        </p>
-        <div className="overflow-x-auto rounded-xl border border-zinc-800">
-          <table className="w-full min-w-[280px] text-left text-sm">
-            <thead>
-              <tr className="border-b border-zinc-800 bg-zinc-950/80 text-xs uppercase tracking-wide text-zinc-500">
-                <th className="px-3 py-2 font-medium">#</th>
-                <th className="px-3 py-2 font-medium">Jugador</th>
-                <th className="px-3 py-2 text-right font-medium">Pts</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rosterRows.map((p, idx) => (
-                <tr key={p.name} className="border-b border-zinc-800/80 last:border-0">
-                  <td className="px-3 py-2.5 font-mono text-sm font-semibold text-sky-400 tabular-nums">
-                    {idx + 1}
-                  </td>
-                  <td className="px-3 py-2.5 text-zinc-200">{p.name}</td>
-                  <td className="px-3 py-2.5 text-right font-mono tabular-nums text-zinc-400">
-                    {p.fantasyPoints ?? '—'}
-                  </td>
-                </tr>
+      {/* Roster: final, draft, permanencia */}
+      <div className="space-y-10">
+        <section>
+          <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">Roster final</h4>
+          <p className="mb-3 text-xs text-zinc-600">
+            {rosterRows.some((p) => p.headshotUrl)
+              ? 'Plantilla al cierre de temporada · nombre, posición y foto (ESPN).'
+              : rosterRows.length > 0 &&
+                  rosterRows.every(
+                    (p) => p.fantasyPoints != null && p.fantasyPoints !== '' && p.fantasyPoints !== '—'
+                  )
+                ? 'Totales de temporada por jugador.'
+                : 'Regenera con generate_team_data.py para headshots y posiciones (profileStats).'}
+          </p>
+          {rosterRows.some((p) => p.headshotUrl || p.positions?.length) ? (
+            <div className="grid gap-2 sm:grid-cols-2">
+              {rosterRows.map((p) => (
+                <RosterPlayerCard key={`final-${p.playerId ?? p.name}`} player={p} />
               ))}
-            </tbody>
-          </table>
-        </div>
+            </div>
+          ) : (
+            <div className="overflow-x-auto rounded-xl border border-zinc-800">
+              <table className="w-full min-w-[280px] text-left text-sm">
+                <thead>
+                  <tr className="border-b border-zinc-800 bg-zinc-950/80 text-xs uppercase tracking-wide text-zinc-500">
+                    <th className="px-3 py-2 font-medium">#</th>
+                    <th className="px-3 py-2 font-medium">Jugador</th>
+                    <th className="px-3 py-2 text-right font-medium">Pts</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rosterRows.map((p, idx) => (
+                    <tr key={p.name} className="border-b border-zinc-800/80 last:border-0">
+                      <td className="px-3 py-2.5 font-mono text-sm font-semibold text-sky-400 tabular-nums">
+                        {idx + 1}
+                      </td>
+                      <td className="px-3 py-2.5 text-zinc-200">{p.name}</td>
+                      <td className="px-3 py-2.5 text-right font-mono tabular-nums text-zinc-400">
+                        {p.fantasyPoints ?? '—'}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
+
+        {season.draftedRoster && season.draftedRoster.length > 0 ? (
+          <section>
+            <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">Roster drafted</h4>
+            <p className="mb-3 text-xs text-zinc-600">Jugadores elegidos en el draft de esta temporada.</p>
+            <div className="grid gap-2 sm:grid-cols-2">
+              {season.draftedRoster.map((p) => (
+                <RosterPlayerCard key={`draft-${p.playerId ?? p.name}`} player={p} />
+              ))}
+            </div>
+          </section>
+        ) : null}
+
+        {longevityRows.length > 0 ? (
+          <section>
+            <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+              Mayor permanencia
+            </h4>
+            <p className="mb-3 text-xs text-zinc-600">
+              Core Team: hasta 14 jugadores con más permanencia y con más de 5 semanas como pieza clave
+              (temporada regular + playoffs). El resto queda en Waivers.
+            </p>
+            {season.longevityKeyWeeksTeamAvg != null ? (
+              <p className="mb-3 text-xs text-zinc-500">
+                Promedio del equipo (pieza clave):{' '}
+                <span className="font-semibold tabular-nums text-zinc-400">
+                  {season.longevityKeyWeeksTeamAvg}
+                </span>{' '}
+                semanas por jugador en este listado.
+              </p>
+            ) : null}
+
+            <h5 className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">Core Team</h5>
+            {coreTeamRows.length > 0 ? (
+              <div className="grid gap-2 sm:grid-cols-2">
+                {coreTeamRows.map((p) => (
+                  <RosterPlayerCard
+                    key={`core-${p.playerId ?? p.name}`}
+                    player={p}
+                    subtitle={longevitySubtitle(p)}
+                  />
+                ))}
+              </div>
+            ) : (
+              <p className="rounded-lg border border-zinc-800 bg-zinc-950/40 px-3 py-2 text-xs text-zinc-500">
+                Ningún jugador supera el umbral de 5 semanas como pieza clave.
+              </p>
+            )}
+
+            {waiverRows.length > 0 ? (
+              <>
+                <h5 className="mb-2 mt-6 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
+                  Waivers
+                </h5>
+                <ul className="custom-scrollbar flex gap-2 overflow-x-auto pb-2">
+                  {waiverRows.map((p) => (
+                    <li key={`waiver-${p.playerId ?? p.name}`} className="w-[270px] shrink-0">
+                      <RosterPlayerCard player={p} subtitle={longevitySubtitle(p)} />
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : null}
+
+            {nbaComposition.length > 0 ? (
+              <div className="mt-6">
+                <h5 className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
+                  Composición por equipo NBA
+                </h5>
+                <p className="mb-2 text-xs text-zinc-600">
+                  Porcentaje de jugadores únicos por equipo NBA (solo jugadores con 10+ semanas en alineación).
+                </p>
+                <div className="h-3 overflow-hidden rounded-full border border-zinc-800 bg-zinc-900">
+                  <div className="flex h-full w-full">
+                    {nbaComposition.map((row) => (
+                      <span
+                        key={`nba-comp-seg-${row.teamAbbrev}`}
+                        title={`${row.teamAbbrev} · ${pctLabel(row.pct)}`}
+                        className="h-full"
+                        style={{
+                          width: `${row.pct}%`,
+                          backgroundColor: getNbaTeamPrimaryHex(row.teamAbbrev) ?? '#52525b',
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-xs text-zinc-400">
+                  {nbaComposition.map((row) => (
+                    <span key={`nba-comp-legend-${row.teamAbbrev}`} className="inline-flex items-center gap-1.5">
+                      <span
+                        className="h-2.5 w-2.5 rounded-full"
+                        style={{ backgroundColor: getNbaTeamPrimaryHex(row.teamAbbrev) ?? '#52525b' }}
+                      />
+                      <span className="tabular-nums">{pctLabel(row.pct)}</span>
+                      <span className="font-semibold">{row.teamAbbrev}</span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+          </section>
+        ) : null}
       </div>
 
       {teamExists(season.seasonId, teamId) ? (

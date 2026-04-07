@@ -32,6 +32,7 @@ _SCRIPT_DIR = Path(__file__).parent
 sys.path.insert(0, str(_SCRIPT_DIR))
 
 import league_data as nv
+import nba_players_catalog as nba_cat
 
 # Raíz de datos del frontend (src/data)
 DATA_ROOT = Path(__file__).parent.parent / "src" / "data"
@@ -139,8 +140,17 @@ def format_9cat_value_display(cat: str, val) -> str:
         return str(val)
 
 
-def build_profile_stats(team, team_ranks: Dict, raw_9cat: Dict) -> Dict:
-    """Data for TeamRewindData.profileStats: full 9CAT + all roster fantasy points."""
+def build_profile_stats(
+    team,
+    team_ranks: Dict,
+    raw_9cat: Dict,
+    league=None,
+    weeks=None,
+    roster_evol=None,
+    weeks_lineup_longevity=None,
+    nba_catalog=None,
+) -> Dict:
+    """Data for TeamRewindData.profileStats: 9CAT, roster points, tarjetas con headshot / drafted / permanencia."""
     tid = team.team_id
     ranks = team_ranks.get(tid) or {}
     raw = raw_9cat.get(tid) or {}
@@ -159,6 +169,7 @@ def build_profile_stats(team, team_ranks: Dict, raw_9cat: Dict) -> Dict:
             }
         )
     roster_rows = []
+    roster_final = []
     for p in getattr(team, "roster", []) or []:
         name = getattr(p, "name", None) or str(p)
         pts = getattr(p, "total_points", None)
@@ -166,9 +177,98 @@ def build_profile_stats(team, team_ranks: Dict, raw_9cat: Dict) -> Dict:
             pts_f = float(pts) if pts is not None else 0.0
         except (TypeError, ValueError):
             pts_f = 0.0
-        roster_rows.append({"name": name, "points": int(round(pts_f))})
+        pts_i = int(round(pts_f))
+        roster_rows.append({"name": name, "points": pts_i})
+        rp = getattr(p, "playerId", None) or getattr(p, "player_id", None)
+        try:
+            ipid = int(rp) if rp is not None else None
+        except (TypeError, ValueError):
+            ipid = None
+        if ipid is not None:
+            pos_labels = nv.roster_player_position_labels(p)
+            pro = getattr(p, "proTeam", None) or getattr(p, "pro_team", None)
+            cat = nba_cat.find_catalog_row(nba_catalog, player_id=ipid, name=name) if nba_catalog else None
+            if cat:
+                row_rf = {
+                    "playerId": ipid,
+                    "name": name,
+                    "fantasyPoints": pts_i,
+                }
+            else:
+                row_rf = {
+                    "playerId": ipid,
+                    "name": name,
+                    "positions": pos_labels,
+                    "headshotUrl": nv.espn_headshot_url(ipid),
+                    "fantasyPoints": pts_i,
+                    "proTeamAbbrev": nv.format_pro_team_abbrev(pro),
+                }
+            if nba_catalog:
+                nba_cat.apply_nba_catalog_to_roster_row(row_rf, cat)
+            roster_final.append(row_rf)
     roster_rows.sort(key=lambda x: -x["points"])
-    return {"nineCat": nine_cat, "rosterFantasyPoints": roster_rows}
+    roster_final.sort(key=lambda x: (-(x.get("fantasyPoints") or 0), x["name"].lower()))
+
+    out: Dict = {"nineCat": nine_cat, "rosterFantasyPoints": roster_rows}
+    if roster_final:
+        out["rosterFinal"] = roster_final
+
+    roster_evol = roster_evol or {}
+    drafted_src = roster_evol.get("drafted") or []
+    roster_drafted = []
+    for d in drafted_src:
+        ipid = d.get("playerId")
+        name = d.get("name") or ""
+        if ipid is None:
+            continue
+        try:
+            ipid = int(ipid)
+        except (TypeError, ValueError):
+            continue
+        cat = nba_cat.find_catalog_row(nba_catalog, player_id=ipid, name=name) if nba_catalog else None
+        if cat:
+            row_rd = {"playerId": ipid, "name": name}
+        else:
+            labels = nv.normalize_court_positions(nv.position_raw_to_labels(d.get("position")))
+            row_rd = {
+                "playerId": ipid,
+                "name": name,
+                "positions": labels,
+                "headshotUrl": nv.espn_headshot_url(ipid),
+                "proTeamAbbrev": nv.format_pro_team_abbrev(d.get("pro_team")),
+            }
+        if nba_catalog:
+            nba_cat.apply_nba_catalog_to_roster_row(row_rd, cat)
+        roster_drafted.append(row_rd)
+    if roster_drafted:
+        out["rosterDrafted"] = roster_drafted
+
+    w_long = weeks_lineup_longevity if weeks_lineup_longevity is not None else weeks
+    if league is not None and w_long:
+        try:
+            longevity = nv.player_lineup_weeks_by_team(league, tid, w_long)
+            if longevity:
+                if nba_catalog:
+                    for r in longevity:
+                        ip = r.get("playerId")
+                        if ip is not None:
+                            try:
+                                cat = nba_cat.find_catalog_row(
+                                    nba_catalog,
+                                    player_id=int(ip),
+                                    name=r.get("name"),
+                                )
+                                nba_cat.apply_nba_catalog_to_roster_row(r, cat)
+                            except (TypeError, ValueError):
+                                pass
+                out["rosterByLineupWeeks"] = longevity
+                kvals = [int(r.get("keyPieceWeeks") or 0) for r in longevity]
+                if kvals:
+                    out["lineupKeyWeeksTeamAvg"] = round(sum(kvals) / len(kvals), 1)
+        except Exception as e:
+            print(f"[profileStats rosterByLineupWeeks] team {tid}: {e}", file=sys.stderr)
+
+    return out
 
 
 def sanitize_id(name: str) -> str:
@@ -819,17 +919,16 @@ def generate_team_ts(
                 "title": "Manager Of The Year",
                 "badgeName": "MOTY ",
                 "description": nv.MOTY_TITLE[1],
-                "footer": "25% Stats, 15% Standings, 25% Champion, 35% MVA",
+                "footer": "40 / 21 / 39 pts (Stats / Standings / MVA); campeón no suma a MOTY",
             }
             if nv.BADGE_IMAGES.get("Manager Of The Year"):
                 moty_slide["image"] = nv.BADGE_IMAGES["Manager Of The Year"]
             if breakdown:
                 # Add weighted contributions for transparency
                 moty_slide["motyBreakdown"] = {
-                    "stats": round(nv.MOTY_WEIGHT_STATS * breakdown.get("stats_norm", 0), 1),
-                    "standings": round(nv.MOTY_WEIGHT_STANDINGS * breakdown.get("standings_norm", 0), 1),
-                    "champion": round(nv.MOTY_WEIGHT_LEAGUE_WINNER * breakdown.get("league_winner_norm", 0), 1),
-                    "mva": round(nv.MOTY_WEIGHT_MVA * breakdown.get("mva_norm", 0), 1),
+                    "stats": round(nv.MOTY_MAX_POINTS_STATS * breakdown.get("stats_norm", 0), 1),
+                    "standings": round(nv.MOTY_MAX_POINTS_STANDINGS * breakdown.get("standings_norm", 0), 1),
+                    "mva": round(nv.MOTY_MAX_POINTS_MVA * breakdown.get("mva_norm", 0), 1),
                 }
             slides.append(moty_slide)
         # Category titles (excluir MOTY para la lista; MOTY winners no tienen títulos de categoría adicionales)
@@ -986,6 +1085,21 @@ def generate_team_ts(
         "subtitle": team.team_name,
         "record": {"value": record_val, "standing": f"#{standing_val}" if standing_val else None} if record_val else None,
         "archetype": {"name": main_arch, "image": nv.BADGE_IMAGES.get(main_arch)} if main_arch else None,
+        "howFarYouWent": {
+            "title": po.get("title", "Season in progress"),
+            "description": po.get("description", "The season hasn't ended yet."),
+        },
+        "motyScoreSnapshot": (
+            {
+                "score": round(float(team_data["moty_breakdown"].get("moty_score", 0)), 1),
+                "statsPointsRaw": float(team_data["moty_breakdown"].get("stats_points_raw", 0)),
+                "stats": round(nv.MOTY_MAX_POINTS_STATS * float(team_data["moty_breakdown"].get("stats_norm", 0)), 1),
+                "standings": round(nv.MOTY_MAX_POINTS_STANDINGS * float(team_data["moty_breakdown"].get("standings_norm", 0)), 1),
+                "mva": round(nv.MOTY_MAX_POINTS_MVA * float(team_data["moty_breakdown"].get("mva_norm", 0)), 1),
+            }
+            if team_data.get("moty_breakdown")
+            else None
+        ),
         "titles": summary_titles,
         "summaryInsights": summary_insights,
         "footer": "Fantasy Rewind",
@@ -1037,7 +1151,11 @@ def generate_team_ts(
     slides_str = ",\n    ".join([slide_to_ts(s) for s in slides])
 
     profile_tail = ""
-    if profile_stats and (profile_stats.get("nineCat") or profile_stats.get("rosterFantasyPoints")):
+    if profile_stats and (
+        profile_stats.get("nineCat")
+        or profile_stats.get("rosterFantasyPoints")
+        or profile_stats.get("rosterFinal")
+    ):
         profile_tail = f"\n  profileStats: {value_to_ts(profile_stats, '  ')}"
 
     team_name_escaped = team.team_name.replace("'", "\\'").replace('"', '\\"')
@@ -1459,6 +1577,43 @@ def _export_playoff_bracket_ts(raw_br: dict, id_to_slug: Dict[int, str], league_
     return out
 
 
+def _export_consolation_ladder_ts(ladder_raw: dict, id_to_slug: Dict[int, str]) -> dict:
+    rounds_out = []
+    for rnd in ladder_raw.get("rounds") or []:
+        label = rnd.get("label")
+        matchups_out = []
+        for m in rnd.get("matchups") or []:
+            tids = m.get("team_ids") or [None, None]
+            ta = tids[0] if len(tids) > 0 else None
+            tb = tids[1] if len(tids) > 1 else None
+            matchups_out.append(
+                {
+                    "id": m.get("id"),
+                    "teamIds": [_map_bracket_tid(ta, id_to_slug), _map_bracket_tid(tb, id_to_slug)],
+                    "scores": m.get("scores"),
+                    "seeds": m.get("seeds"),
+                }
+            )
+        rounds_out.append({"label": label, "matchups": matchups_out})
+    out = {"title": ladder_raw.get("title") or "", "rounds": rounds_out}
+    if ladder_raw.get("notes"):
+        out["notes"] = ladder_raw["notes"]
+    return out
+
+
+def _export_next_draft_order_ts(rows: list, id_to_slug: Dict[int, str]) -> list:
+    out = []
+    for r in rows or []:
+        out.append(
+            {
+                "pick": int(r["pick"]),
+                "teamId": _map_bracket_tid(r.get("team_id"), id_to_slug),
+                "label": r.get("label") or "",
+            }
+        )
+    return out
+
+
 # Columnas tipo ESPN Fantasy “Season Stats” (volumen; sin % en tabla principal).
 _SEASON_STATS_VOLUME_KEYS = [
     "FGM",
@@ -1566,6 +1721,24 @@ def _build_stats_room_payload(
     raw_br = nv.build_six_team_playoff_bracket(league, weeks_playoffs, top6_ids)
     league_champ = nv.league_champion_team_id(league)
     playoff_bracket = _export_playoff_bracket_ts(raw_br, id_to_slug, league_champ)
+
+    ladders_raw = nv.build_consolation_ladders(league, weeks_playoffs, ordered, raw_br)
+    rs_rank = {int(t.team_id): i + 1 for i, t in enumerate(ordered)}
+    flat_po = nv.playoff_matchups_flat(league, weeks_playoffs)
+    draft_rows = nv.compute_next_draft_order(
+        raw_br,
+        flat_po,
+        ladders_raw["bottom_four_ids"],
+        ladders_raw["winners_consolation_ids"],
+        rs_rank,
+        league_champ,
+    )
+    consolation_brackets = {
+        "bottomFour": _export_consolation_ladder_ts(ladders_raw["bottom_four"], id_to_slug),
+        "winnersConsolation": _export_consolation_ladder_ts(ladders_raw["winners_consolation"], id_to_slug),
+    }
+    next_draft_order = _export_next_draft_order_ts(draft_rows, id_to_slug)
+
     return {
         "seasonId": season,
         "standings": standings,
@@ -1573,6 +1746,8 @@ def _build_stats_room_payload(
         "nineCatLeague": nine_cat_league,
         "seasonStatsLeague": season_stats_league,
         "playoffBracket": playoff_bracket,
+        "consolationBrackets": consolation_brackets,
+        "nextDraftOrder": next_draft_order,
     }
 
 
@@ -1650,13 +1825,13 @@ def generate_all_teams(season: str = "2026"):
         consistency_ranking=consistency_ranking,
         trade_75_pct=75, min_trades_abs=10,
     )
-    # MOTY incluye componentes de playoffs (league winner) y MVA debe considerar todo el periodo del season.
+    # MOTY = gestión en temporada (sin bonus por campeón de playoffs); MVA usa todo el periodo.
     moty_team_id, moty_score, moty_breakdown = nv.compute_moty_winner(league, weeks_all, team_ranks)
     moty_winners = {moty_team_id} if moty_team_id is not None else set()
     first_place_titles = nv.compute_first_place_titles(team_ranks, moty_winners=moty_winners)
 
     # --- MOTY rankings (terminal debug) ---
-    print("\n--- MOTY Rankings (25% Stats, 15% Standings, 25% Champion, 35% MVA) ---")
+    print("\n--- MOTY Rankings (40 Stats / 21 Standings / 39 MVA pts max; sin campeón) ---")
     moty_sorted = sorted(
         (tid for tid in moty_breakdown),
         key=lambda tid: (moty_breakdown[tid]["moty_score"], -tid),
@@ -1666,13 +1841,12 @@ def generate_all_teams(season: str = "2026"):
         b = moty_breakdown[tid]
         name = team_by_id.get(tid)
         name_str = (name.team_name if name else "?")[:28]
-        stats_contrib = round(nv.MOTY_WEIGHT_STATS * b["stats_norm"], 1)
-        stand_contrib = round(nv.MOTY_WEIGHT_STANDINGS * b["standings_norm"], 1)
-        champ_contrib = round(nv.MOTY_WEIGHT_LEAGUE_WINNER * b["league_winner_norm"], 1)
-        mva_contrib = round(nv.MOTY_WEIGHT_MVA * b["mva_norm"], 1)
+        stats_contrib = round(nv.MOTY_MAX_POINTS_STATS * b["stats_norm"], 1)
+        stand_contrib = round(nv.MOTY_MAX_POINTS_STANDINGS * b["standings_norm"], 1)
+        mva_contrib = round(nv.MOTY_MAX_POINTS_MVA * b["mva_norm"], 1)
         total = round(b["moty_score"], 1)
         marker = " <-- MOTY" if tid == moty_team_id else ""
-        print(f"  #{rank} {name_str:28} total={total:5.1f}  stats={stats_contrib:4.1f}  stand={stand_contrib:4.1f}  champ={champ_contrib:4.1f}  mva={mva_contrib:4.1f}{marker}")
+        print(f"  #{rank} {name_str:28} total={total:5.1f}  stats={stats_contrib:4.1f}  stand={stand_contrib:4.1f}  mva={mva_contrib:4.1f}{marker}")
     print()
 
     # --- Category progression (9CAT rankings per category) ---
@@ -1749,6 +1923,10 @@ def generate_all_teams(season: str = "2026"):
 
     # Generar archivos TypeScript (slug ASCII para evitar fallos con nombres en chino, etc.)
     print("\nGenerating team files...")
+    nba_pool = nba_cat.load_nba_players_index()
+    nba_pool_by_id = nba_pool.get("by_id", {}) if isinstance(nba_pool, dict) else {}
+    if nba_pool_by_id:
+        print(f"  NBA players catalog: {len(nba_pool_by_id)} entries (merge into roster profileStats)")
     team_index_entries = []
     generated_ids = set()
     n_teams = len(teams)
@@ -1758,7 +1936,17 @@ def generate_all_teams(season: str = "2026"):
         data = all_team_data[team.team_id]
         output_file = output_dir / f"{tid}.ts"
         prev_owner, prev_desc = read_existing_owner_description(output_file)
-        ps = build_profile_stats(team, team_ranks, raw_9cat)
+        weeks_lineup = sorted(set(weeks_regular) | set(weeks_playoffs))
+        ps = build_profile_stats(
+            team,
+            team_ranks,
+            raw_9cat,
+            league=league,
+            weeks=weeks_regular,
+            roster_evol=all_team_data[team.team_id].get("roster_evolution"),
+            weeks_lineup_longevity=weeks_lineup,
+            nba_catalog=nba_pool if nba_pool_by_id else None,
+        )
         ts_content = generate_team_ts(
             team, data, season, owner=prev_owner, description=prev_desc, profile_stats=ps
         )
