@@ -1673,7 +1673,7 @@ const statsRoomData: StatsRoomData = {
     },
     {
       "pick": 2,
-      "teamId": "lalocomotora",
+      "teamId": "metefierros",
       "label": "Consolation ladder (seeds 7–10)"
     },
     {
@@ -1683,27 +1683,27 @@ const statsRoomData: StatsRoomData = {
     },
     {
       "pick": 4,
-      "teamId": "metefierros",
+      "teamId": "lalocomotora",
       "label": "Consolation ladder (seeds 7–10)"
     },
     {
       "pick": 5,
-      "teamId": "lububumatcha",
+      "teamId": "diegos-daring-team",
       "label": "Winner's consolation ladder"
     },
     {
       "pick": 6,
-      "teamId": "fiestas-fantastic-team",
-      "label": "Winner's consolation ladder"
-    },
-    {
-      "pick": 7,
       "teamId": "tochetaos",
       "label": "Winner's consolation ladder"
     },
     {
+      "pick": 7,
+      "teamId": "fiestas-fantastic-team",
+      "label": "Winner's consolation ladder"
+    },
+    {
       "pick": 8,
-      "teamId": "diegos-daring-team",
+      "teamId": "lububumatcha",
       "label": "Winner's consolation ladder"
     },
     {

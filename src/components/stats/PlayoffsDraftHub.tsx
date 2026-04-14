@@ -1,17 +1,12 @@
 'use client'
 
-import { useMemo } from 'react'
 import type {
   ConsolationLadder,
   NextDraftOrderRow,
   PlayoffBracket as PlayoffBracketData,
   StatsStandingRow,
 } from '@/data/stats-room-types'
-import {
-  buildDraftBlockLadderMeta,
-  nextDraftOrderSortedByLadderWins,
-  WINNERS_CONSOLATION_STATS_MIN_PERIOD,
-} from '@/data/draftOrderFromLadders'
+import { WINNERS_CONSOLATION_STATS_MIN_PERIOD } from '@/data/draftOrderFromLadders'
 import PlayoffBracket from './PlayoffBracket'
 import { ConsolationLadderBlock } from './ConsolationLadderBlock'
 import DraftOrderSidebar from './DraftOrderSidebar'
@@ -35,28 +30,6 @@ export default function PlayoffsDraftHub({
   highlightTeamId,
   hasFullDraftData,
 }: Props) {
-  const draftRows = useMemo(() => {
-    if (!nextDraftOrder || nextDraftOrder.length !== 10) return nextDraftOrder
-    return nextDraftOrderSortedByLadderWins(
-      nextDraftOrder,
-      bottomFour,
-      winnersConsolation,
-      standingsById
-    )
-  }, [nextDraftOrder, bottomFour, winnersConsolation, standingsById])
-
-  const clLadderMeta = useMemo(() => {
-    if (!draftRows || draftRows.length !== 10) return new Map()
-    return buildDraftBlockLadderMeta(draftRows.slice(0, 4), bottomFour)
-  }, [draftRows, bottomFour])
-
-  const wclLadderMeta = useMemo(() => {
-    if (!draftRows || draftRows.length !== 10) return new Map()
-    return buildDraftBlockLadderMeta(draftRows.slice(4, 8), winnersConsolation, {
-      minMatchupPeriod: WINNERS_CONSOLATION_STATS_MIN_PERIOD,
-    })
-  }, [draftRows, winnersConsolation])
-
   return (
     <div className="flex flex-col gap-10">
       <div className="min-w-0 space-y-10">
@@ -89,11 +62,9 @@ export default function PlayoffsDraftHub({
 
       <div className="w-full border-t border-white/10 pt-8">
         <DraftOrderSidebar
-          rows={draftRows}
+          rows={nextDraftOrder}
           standingsById={standingsById}
           highlightTeamId={highlightTeamId}
-          clLadderMeta={clLadderMeta}
-          wclLadderMeta={wclLadderMeta}
           showRegenerateHint={!hasFullDraftData}
         />
       </div>
