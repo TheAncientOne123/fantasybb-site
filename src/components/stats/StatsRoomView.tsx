@@ -2,7 +2,8 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { useMemo, useState, useRef, useEffect, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
+import { useMemo, useState, useRef, useEffect, useCallback, useTransition } from 'react'
 import clsx from 'clsx'
 import { ChevronRight } from 'lucide-react'
 import type { Season } from '@/data/seasons'
@@ -16,10 +17,12 @@ import RegularSeasonMatchupCard, { getWeekLowestScoreTeamIds } from './RegularSe
 type Props = {
   data: StatsRoomData
   seasons: Season[]
+  hasData: boolean
 }
 
-export default function StatsRoomView({ data, seasons }: Props) {
-  const [seasonId, setSeasonId] = useState(data.seasonId)
+export default function StatsRoomView({ data, seasons, hasData }: Props) {
+  const router = useRouter()
+  const [isChangingSeason, startSeasonChange] = useTransition()
   const [teamFilter, setTeamFilter] = useState<string>('')
   /** Periodos colapsados (oculta todos los matchups de ese periodo). Por defecto todos expandidos. */
   const [collapsedPeriods, setCollapsedPeriods] = useState<Set<number>>(new Set())
@@ -74,7 +77,16 @@ export default function StatsRoomView({ data, seasons }: Props) {
     }
   }, [teamFilter])
 
-  const seasonMismatch = seasonId !== data.seasonId
+  useEffect(() => {
+    setTeamFilter('')
+    setCollapsedPeriods(new Set())
+  }, [data.seasonId])
+
+  const changeSeason = (seasonId: string) => {
+    startSeasonChange(() => {
+      router.replace(`/stats?season=${encodeURIComponent(seasonId)}`, { scroll: false })
+    })
+  }
 
   return (
     <div className="min-h-screen bg-slate-950 pb-16 pt-8 text-slate-100">
@@ -106,8 +118,9 @@ export default function StatsRoomView({ data, seasons }: Props) {
             Temporada
             <select
               className="rounded-lg border border-white/15 bg-slate-900 px-3 py-2 text-sm text-white"
-              value={seasonId}
-              onChange={(e) => setSeasonId(e.target.value)}
+              value={data.seasonId}
+              onChange={(e) => changeSeason(e.target.value)}
+              disabled={isChangingSeason}
             >
               {seasons.map((s) => (
                 <option key={s.id} value={s.id}>
@@ -131,14 +144,23 @@ export default function StatsRoomView({ data, seasons }: Props) {
               ))}
             </select>
           </label>
-          {seasonMismatch && (
-            <p className="text-xs text-amber-400/90">
-              Solo hay datos cargados para {data.seasonId}; el filtro de temporada es visual hasta que existan más
-              archivos stats-room.
-            </p>
+          {isChangingSeason && (
+            <p className="text-xs text-amber-400/90">Cargando temporada...</p>
           )}
         </div>
 
+        {!hasData ? (
+          <section className="rounded-2xl border border-dashed border-white/15 bg-white/[0.03] px-6 py-14 text-center">
+            <h2 className="font-heading text-xl font-semibold text-white">
+              Esta temporada todavía no tiene estadísticas
+            </h2>
+            <p className="mx-auto mt-2 max-w-xl text-sm text-slate-400">
+              La temporada ya está preparada en la base de datos. Sus standings, matchups y
+              estadísticas aparecerán aquí cuando se importe el primer dataset.
+            </p>
+          </section>
+        ) : (
+          <>
         {/* Standings */}
         <section className="space-y-3" id="standings">
           <h2 className="font-heading text-xl font-semibold text-white">Regular season — Standings</h2>
@@ -298,6 +320,8 @@ export default function StatsRoomView({ data, seasons }: Props) {
             </div>
           )}
         </section>
+          </>
+        )}
       </div>
     </div>
   )

@@ -81,6 +81,7 @@ export type TeamProfile = {
   displayName: string
   owner?: string
   description?: string
+  logoUrl?: string
   /** Seasons in reverse chronological order (newest first) */
   seasons: TeamProfileSeason[]
 }

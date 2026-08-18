@@ -7,6 +7,7 @@ import { getTeamLogoPath } from '@/data/team-profiles/team-logos'
 import { teamExists } from '@/data/getTeamRewind'
 import { getSeasonById } from '@/data/seasons'
 import { getNbaTeamPrimaryHex } from '@/lib/nbaTeamBranding'
+import TeamSeasonSelector from '@/components/team/TeamSeasonSelector'
 
 const CAT_ORDER = ['PTS', 'REB', 'AST', 'STL', 'BLK', '3PM', 'FG%', 'FT%', 'TO']
 
@@ -103,16 +104,26 @@ function nineCatGridRows(season: TeamProfileSeason): Array<{
   })
 }
 
-export default function TeamProfileView({ profile }: { profile: TeamProfile }) {
-  const logo = getTeamLogoPath(profile.id)
-  const hasRewind2026 = teamExists('2026', profile.id)
+export default function TeamProfileView({
+  profile,
+  selectedSeasonId,
+}: {
+  profile: TeamProfile
+  selectedSeasonId?: string
+}) {
+  const logo = profile.logoUrl ?? getTeamLogoPath(profile.id)
   const newestSeason = profile.seasons[0]
-  const headerSeasonLabel = newestSeason ? getSeasonById(newestSeason.seasonId)?.label ?? newestSeason.seasonLabel : ''
+  const selectedSeason =
+    profile.seasons.find((season) => season.seasonId === selectedSeasonId) ?? newestSeason
+  const selectedSeasonLabel = selectedSeason
+    ? getSeasonById(selectedSeason.seasonId)?.label ?? selectedSeason.seasonLabel
+    : ''
+  const hasSelectedRewind = selectedSeason ? teamExists(selectedSeason.seasonId, profile.id) : false
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100">
       <header className="sticky top-0 z-10 border-b border-zinc-800/80 bg-zinc-950/90 backdrop-blur-md">
-        <div className="mx-auto flex max-w-3xl items-center justify-between gap-4 px-4 py-4">
+        <div className="flex w-full items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-10 xl:px-14">
           <Link
             href="/"
             className="inline-flex items-center gap-2 rounded-full border border-zinc-700 bg-zinc-900/80 px-4 py-2 text-sm font-medium text-zinc-200 transition hover:border-sky-500/40 hover:bg-zinc-800"
@@ -120,19 +131,19 @@ export default function TeamProfileView({ profile }: { profile: TeamProfile }) {
             <ArrowLeft className="h-4 w-4" />
             Inicio
           </Link>
-          {hasRewind2026 && (
+          {hasSelectedRewind && selectedSeason && (
             <Link
-              href={`/rewind/2026/${profile.id}`}
+              href={`/rewind/${selectedSeason.seasonId}/${profile.id}`}
               className="inline-flex items-center gap-2 rounded-full border border-sky-500/35 bg-sky-500/10 px-4 py-2 text-sm font-medium text-sky-300 transition hover:bg-sky-500/15"
             >
               <Trophy className="h-4 w-4" />
-              Rewind 2025-26
+              Rewind {selectedSeasonLabel.replace(/\s+Season$/i, '')}
             </Link>
           )}
         </div>
       </header>
 
-      <main className="mx-auto max-w-3xl px-4 py-10">
+      <main className="w-full px-4 py-8 sm:px-6 sm:py-10 lg:px-10 xl:px-14">
         {/* Hero: logo, nombre, dueño, temporada, descripción */}
         <section className="mb-10 flex flex-col gap-6 sm:flex-row sm:items-start">
           <div className="relative mx-auto h-28 w-28 shrink-0 overflow-hidden rounded-full border-2 border-zinc-700 bg-zinc-900 shadow-lg shadow-black/40 sm:mx-0 sm:h-32 sm:w-32">
@@ -149,10 +160,15 @@ export default function TeamProfileView({ profile }: { profile: TeamProfile }) {
               <h1 className="font-heading text-3xl font-bold tracking-tight text-white sm:text-4xl">
                 {profile.displayName.trim()}
               </h1>
-              {headerSeasonLabel ? (
-                <span className="shrink-0 rounded-full border border-zinc-600 bg-zinc-900 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-zinc-400">
-                  {headerSeasonLabel}
-                </span>
+              {selectedSeason ? (
+                <TeamSeasonSelector
+                  teamId={profile.id}
+                  selectedSeasonId={selectedSeason.seasonId}
+                  seasons={profile.seasons.map((season) => ({
+                    id: season.seasonId,
+                    label: getSeasonById(season.seasonId)?.label ?? season.seasonLabel,
+                  }))}
+                />
               ) : null}
             </div>
             {profile.owner?.trim() ? (
@@ -186,11 +202,13 @@ export default function TeamProfileView({ profile }: { profile: TeamProfile }) {
         </section>
 
         <h2 className="mb-6 font-heading text-lg font-semibold uppercase tracking-wide text-zinc-500">Historial</h2>
-        <div className="flex flex-col gap-12">
-          {profile.seasons.map((season) => (
-            <SeasonBlock key={season.seasonId} season={season} teamId={profile.id} />
-          ))}
-        </div>
+        {selectedSeason ? (
+          <SeasonBlock season={selectedSeason} teamId={profile.id} />
+        ) : (
+          <p className="rounded-2xl border border-zinc-800 bg-zinc-900/35 p-6 text-zinc-500">
+            No hay estadísticas disponibles para este equipo.
+          </p>
+        )}
       </main>
 
       <footer className="border-t border-zinc-800 py-8 text-center">
@@ -226,23 +244,19 @@ function SeasonBlock({ season, teamId }: { season: TeamProfileSeason; teamId: st
         </p>
       </div>
 
-      {/* Récord · Standing · Estado (reservado) · Mejor semana */}
-      <div className="mb-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
+      {/* Récord · Standing · Mejor semana */}
+      <div className="mb-8 grid grid-cols-1 gap-3 min-[380px]:grid-cols-3">
         <StatCard k="Récord" v={season.record === '—' ? '—' : season.record} />
         <StatCard k="Standing" v={standingDisplay} highlight />
-        <div
-          className="min-h-[5.25rem] rounded-xl border border-dashed border-zinc-700 bg-zinc-950/50 px-4 py-3"
-          aria-label="Estado de playoffs: pendiente"
-        >
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-zinc-600">Estado</p>
-        </div>
         <StatCard k="Mejor semana" v={mejorSemana} />
       </div>
 
       {/* Rachas */}
       {streakParsed ? (
         <div className="mb-8">
-          <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-zinc-500">Rachas</h4>
+          <h4 className="mb-3 font-heading text-lg font-semibold uppercase tracking-wide text-zinc-300">
+            Rachas
+          </h4>
           <p className="mb-2 text-xs text-zinc-600">Mejor racha W / peor racha L (temporada regular)</p>
           <div className="flex flex-wrap gap-1.5">
             {Array.from({ length: streakParsed.wins }, (_, i) => (
@@ -268,7 +282,9 @@ function SeasonBlock({ season, teamId }: { season: TeamProfileSeason; teamId: st
         </div>
       ) : season.longestStreaks ? (
         <div className="mb-8">
-          <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">Rachas</h4>
+          <h4 className="mb-2 font-heading text-lg font-semibold uppercase tracking-wide text-zinc-300">
+            Rachas
+          </h4>
           <p className="text-sm text-zinc-400">{stripEmojis(season.longestStreaks)}</p>
         </div>
       ) : null}
@@ -276,7 +292,7 @@ function SeasonBlock({ season, teamId }: { season: TeamProfileSeason; teamId: st
       {/* Logros */}
       {season.achievements.length > 0 ? (
         <div className="mb-8">
-          <h4 className="mb-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+          <h4 className="mb-4 font-heading text-lg font-semibold uppercase tracking-wide text-zinc-300">
             Logros de temporada
           </h4>
           <ul className="custom-scrollbar flex gap-3 overflow-x-auto pb-2">
@@ -307,7 +323,7 @@ function SeasonBlock({ season, teamId }: { season: TeamProfileSeason; teamId: st
       {/* 9 categorías — rejilla */}
       {nineGrid.some((r) => r.rank > 0 || r.valueDisplay !== '—') ? (
         <div className="mb-8">
-          <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+          <h4 className="mb-2 font-heading text-lg font-semibold uppercase tracking-wide text-zinc-300">
             9 categorías — liga completa
           </h4>
           {!season.nineCatFull?.length && (
@@ -317,7 +333,7 @@ function SeasonBlock({ season, teamId }: { season: TeamProfileSeason; teamId: st
               las cantidades.
             </p>
           )}
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-9">
             {nineGrid.map((row) => (
               <div
                 key={row.category}
@@ -339,7 +355,9 @@ function SeasonBlock({ season, teamId }: { season: TeamProfileSeason; teamId: st
       {/* Roster: final, draft, permanencia */}
       <div className="space-y-10">
         <section>
-          <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">Roster final</h4>
+          <h4 className="mb-2 font-heading text-lg font-semibold uppercase tracking-wide text-zinc-300">
+            Roster final
+          </h4>
           <p className="mb-3 text-xs text-zinc-600">
             {rosterRows.some((p) => p.headshotUrl)
               ? 'Plantilla al cierre de temporada · nombre, posición y foto (ESPN).'
@@ -351,7 +369,7 @@ function SeasonBlock({ season, teamId }: { season: TeamProfileSeason; teamId: st
                 : 'Regenera con generate_team_data.py para headshots y posiciones (profileStats).'}
           </p>
           {rosterRows.some((p) => p.headshotUrl || p.positions?.length) ? (
-            <div className="grid gap-2 sm:grid-cols-2">
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {rosterRows.map((p) => (
                 <RosterPlayerCard key={`final-${p.playerId ?? p.name}`} player={p} />
               ))}
@@ -386,9 +404,11 @@ function SeasonBlock({ season, teamId }: { season: TeamProfileSeason; teamId: st
 
         {season.draftedRoster && season.draftedRoster.length > 0 ? (
           <section>
-            <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">Roster drafted</h4>
+            <h4 className="mb-2 font-heading text-lg font-semibold uppercase tracking-wide text-zinc-300">
+              Roster drafted
+            </h4>
             <p className="mb-3 text-xs text-zinc-600">Jugadores elegidos en el draft de esta temporada.</p>
-            <div className="grid gap-2 sm:grid-cols-2">
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {season.draftedRoster.map((p) => (
                 <RosterPlayerCard key={`draft-${p.playerId ?? p.name}`} player={p} />
               ))}
@@ -398,12 +418,12 @@ function SeasonBlock({ season, teamId }: { season: TeamProfileSeason; teamId: st
 
         {longevityRows.length > 0 ? (
           <section>
-            <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">
-              Mayor permanencia
+            <h4 className="mb-2 font-heading text-lg font-semibold uppercase tracking-wide text-zinc-300">
+              Core Team
             </h4>
             <p className="mb-3 text-xs text-zinc-600">
-              Core Team: hasta 14 jugadores con más permanencia y con más de 5 semanas como pieza clave
-              (temporada regular + playoffs). El resto queda en Waivers.
+              Hasta 14 jugadores con más permanencia y con más de 5 semanas como pieza clave durante la
+              temporada regular y playoffs. El resto queda en Waivers.
             </p>
             {season.longevityKeyWeeksTeamAvg != null ? (
               <p className="mb-3 text-xs text-zinc-500">
@@ -415,9 +435,8 @@ function SeasonBlock({ season, teamId }: { season: TeamProfileSeason; teamId: st
               </p>
             ) : null}
 
-            <h5 className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">Core Team</h5>
             {coreTeamRows.length > 0 ? (
-              <div className="grid gap-2 sm:grid-cols-2">
+              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {coreTeamRows.map((p) => (
                   <RosterPlayerCard
                     key={`core-${p.playerId ?? p.name}`}
@@ -434,7 +453,7 @@ function SeasonBlock({ season, teamId }: { season: TeamProfileSeason; teamId: st
 
             {waiverRows.length > 0 ? (
               <>
-                <h5 className="mb-2 mt-6 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
+                <h5 className="mb-2 mt-7 font-heading text-base font-semibold uppercase tracking-wide text-zinc-300">
                   Waivers
                 </h5>
                 <ul className="custom-scrollbar flex gap-2 overflow-x-auto pb-2">
@@ -448,8 +467,8 @@ function SeasonBlock({ season, teamId }: { season: TeamProfileSeason; teamId: st
             ) : null}
 
             {nbaComposition.length > 0 ? (
-              <div className="mt-6">
-                <h5 className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
+              <div className="mt-7">
+                <h5 className="mb-2 font-heading text-base font-semibold uppercase tracking-wide text-zinc-300">
                   Composición por equipo NBA
                 </h5>
                 <p className="mb-2 text-xs text-zinc-600">

@@ -1,10 +1,11 @@
 # LACMSI League – Sitio web (Fantasy Basketball)
 
-Aplicación web para la liga de Fantasy NBA **LACMSI** (Look At Curry Man So Inspirational): landing pública, **Rewind** estilo Wrapped, **Stats Room**, premios y reglas. Los datos del Rewind y del Stats Room se generan con scripts Python contra la API de ESPN y viven como TypeScript estático en el repo.
+Aplicación web para la liga de Fantasy NBA **LACMSI** (Look At Curry Man So Inspirational): landing pública, **Rewind** estilo Wrapped, **Stats Room**, premios y reglas. Temporadas, equipos, perfiles y Stats Room pueden leerse desde PostgreSQL con respaldo temporal en los datos TypeScript; Rewind todavía se genera como TypeScript estático.
 
 ## Tabla de contenidos
 
 - [Stack y scripts](#stack-y-scripts)
+- [PostgreSQL: temporadas, equipos y perfiles](#postgresql-temporadas-equipos-y-perfiles)
 - [Rutas de la app](#rutas-de-la-app)
 - [Estructura del repositorio](#estructura-del-repositorio)
 - [Contenido del sitio y reglas](#contenido-del-sitio-y-reglas)
@@ -26,6 +27,7 @@ Aplicación web para la liga de Fantasy NBA **LACMSI** (Look At Curry Man So Ins
 | Iconos | Lucide React |
 | Markdown en UI | react-markdown, remark-gfm |
 | Export / share | html-to-image, canvas-confetti |
+| Datos de perfiles | PostgreSQL mediante `postgres`, con fallback estático |
 
 ```bash
 npm install
@@ -34,9 +36,76 @@ npm run build        # producción
 npm start            # servir build
 npm run lint         # ESLint (Next)
 npm run type-check   # tsc --noEmit
+npm run database:setup # crea tablas, importa y verifica perfiles y Stats Room
 ```
 
 **Python (analytics):** ver sección [Analytics (Python)](#analytics-python).
+
+## PostgreSQL: temporadas, equipos, perfiles y Stats Room
+
+La migración cubre el catálogo de temporadas y equipos, la información mostrada en `/team/[teamId]` y los datos de `/stats`. Los archivos TypeScript siguen disponibles como fuente de importación y respaldo durante la transición.
+
+1. Crea una base PostgreSQL vacía (local o administrada).
+2. Copia `.env.example` como `.env.local` y reemplaza `DATABASE_URL`.
+3. Ejecuta:
+
+```bash
+npm run database:setup
+npm run dev
+```
+
+`database:setup` aplica las migraciones versionadas de `database/migrations/`, importa los datos existentes y compara los perfiles y Stats Room guardados contra los originales. La importación es idempotente: se puede repetir después de ejecutar `analytics/generate_team_data.py`.
+
+La importación respeta la temporada que ya esté marcada como activa en PostgreSQL; solo usa la temporada activa de los archivos estáticos cuando la base todavía no tiene ninguna.
+
+La variable `FANTASY_DATA_SOURCE` controla la transición:
+
+| Valor | Comportamiento |
+|---|---|
+| `auto` | Usa PostgreSQL si está configurado y contiene datos; si no, usa los `.ts`. Es el valor predeterminado. |
+| `database` | Exige PostgreSQL y muestra los errores de configuración o consulta. Recomendado después de validar la importación. |
+| `static` | Ignora PostgreSQL y fuerza los datos TypeScript. Útil como rollback temporal. |
+
+Comandos individuales:
+
+```bash
+npm run database:migrate  # aplica migraciones pendientes
+npm run database:import   # sincroniza perfiles y Stats Room desde los .ts
+npm run database:verify   # compara PostgreSQL contra los datos originales
+npm run database:status   # muestra equipos y disponibilidad de estadísticas por temporada
+```
+
+El esquema separa `seasons`, `teams`, perfiles históricos, rosters y Stats Room por `season_id`. Todavía no migra los slides de Rewind, Awards ni Hall of Fame.
+
+### Administrador local de Stats Room
+
+Con `npm run dev`, abre `http://localhost:3000/admin/stats`. La pantalla separa el flujo en dos fases: **Generar borrador** consulta ESPN y escribe sólo archivos locales; después muestra fecha, cantidades y standings para revisión. **Publicar en Neon** requiere confirmación, importa exactamente ese borrador y verifica el resultado.
+
+La ruta y su endpoint aceptan únicamente hosts loopback (`localhost`, `127.0.0.1` o `::1`) y están desactivados cuando `NODE_ENV=production`. No son un reemplazo para autenticación si en el futuro se desea ejecutar este flujo desde una web desplegada.
+
+Antes de usarla, configura las credenciales de ESPN (`LEAGUE_ID`, `SWID` y `ESPN_S2` cuando sean necesarias) en `analytics/.env`; la temporada `YEAR` se toma automáticamente del selector. `DATABASE_URL` continúa configurándose en el `.env` raíz.
+
+### Participantes y equipos de expansión
+
+`season_teams` registra qué equipos participan en cada temporada sin inventar estadísticas. `team_seasons` conserva únicamente el perfil estadístico de esa temporada. Esto permite preparar una temporada nueva antes de que comience.
+
+Para agregar un equipo nuevo desde el SQL Editor del proveedor, crea primero su identidad y después su participación:
+
+```sql
+insert into teams (id, display_name, owner, description, logo_url)
+values ('slug-del-equipo', 'Nombre del equipo', 'Nombre del dueño', null, null);
+
+insert into season_teams (season_id, team_id, is_expansion)
+values ('2027', 'slug-del-equipo', true);
+```
+
+Los equipos con `is_expansion = true` aparecen en “Equipos de Expansión”. Para corregir la marca:
+
+```sql
+update season_teams
+set is_expansion = true
+where season_id = '2027' and team_id = 'slug-del-equipo';
+```
 
 ## Rutas de la app
 
@@ -46,9 +115,10 @@ npm run type-check   # tsc --noEmit
 | `/rewind` | Selector / hub hacia rewinds por temporada |
 | `/rewind/[seasonId]/[teamId]` | Experiencia fullscreen de slides por equipo |
 | `/stats` | Stats Room (datos agregados por temporada) |
+| `/admin/stats` | Generar, previsualizar y publicar Stats Room; sólo en localhost y desarrollo |
 | `/awards` | Hall of Fame / premios y badges |
 | `/rules` | Reglas de la liga (lee `src/content/rules/league-rules.md`) |
-| `/team/[teamId]` | Páginas estáticas por equipo (SSG) |
+| `/team/[teamId]` | Perfil histórico por equipo (PostgreSQL o fallback estático) |
 | `/admin/rewinds`, `/admin/rewinds/[seasonId]`, `/admin/rewinds/[seasonId]/[teamId]` | Flujo admin de rewinds (cliente + API opcional) |
 | `/wrapped`, `/wrapped/[seasonId]`, `/wrapped/[seasonId]/team/[teamId]` | Flujo “Wrapped” alterno (admin) |
 | `/api/proxy-image` | Proxy de imágenes |
@@ -57,6 +127,8 @@ npm run type-check   # tsc --noEmit
 
 ```
 fantasybb-site/
+├── database/migrations/      # SQL versionado para PostgreSQL
+├── scripts/                  # Migración e importación de datos
 ├── analytics/                 # Python: ESPN + generación de TS
 │   ├── league_data.py
 │   ├── generate_team_data.py
@@ -110,7 +182,7 @@ Fondo `slate-950`, acentos `amber-400/500`, gradientes purple/blue; tipografía 
 
 ## Fantasy Rewind (datos y rutas)
 
-Experiencia tipo **Spotify Wrapped**: historias a pantalla completa con slides, navegación y exportación de la diapositiva actual (PNG). Los datos son **estáticos** en el frontend (TypeScript generado), sin base de datos en este repo.
+Experiencia tipo **Spotify Wrapped**: historias a pantalla completa con slides, navegación y exportación de la diapositiva actual (PNG). En esta fase los slides continúan siendo **estáticos** en el frontend (TypeScript generado); PostgreSQL se usa inicialmente para temporadas, equipos y perfiles.
 
 ### Cómo ejecutar
 
@@ -226,7 +298,7 @@ python analytics/generate_team_data.py --season 2026
 
 Documento histórico de diseño: **Wrapped administrado** (contenido cargado por admin), temporadas y equipos en tablas, flujo **ESPN → Python → tablas en memoria → métricas, awards (p. ej. “Highway Robbed”) → slides JSON → API → frontend**.
 
-En **esta** monorepo **no** existe la carpeta `backend/` ni el esquema SQL citado en planes antiguos. El flujo real de datos del sitio público es **Python → archivos `.ts` estáticos → Next.js**. Las rutas tipo `backend/api/...` del plan son **referencia futura**, no el estado actual del código.
+En esta monorepo no existe la carpeta `backend/` descrita por el plan antiguo. La integración PostgreSQL vive en `database/migrations/`, `scripts/` y repositorios server-side dentro de `src/data/`. Stats Room conserva los `.ts` como etapa de generación antes de importarlos a PostgreSQL; Rewind, Awards y Hall of Fame todavía usan el flujo **Python → archivos `.ts` → Next.js**. Las rutas antiguas tipo `backend/api/...` siguen siendo solo referencia.
 
 ---
 

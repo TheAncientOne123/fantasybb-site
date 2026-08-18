@@ -275,4 +275,6 @@ export type TeamRewindData = {
 export type TeamIndexEntry = {
   id: string
   displayName: string
+  logoUrl?: string
+  isExpansion?: boolean
 }

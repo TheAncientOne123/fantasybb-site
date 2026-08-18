@@ -8,7 +8,7 @@ const statsRoomLoaders: Record<string, () => Promise<{ default: StatsRoomData }>
   '2026': () => import('./seasons/2026/stats-room'),
 }
 
-export async function getStatsRoomData(seasonId: string): Promise<StatsRoomData | null> {
+export async function getStaticStatsRoomData(seasonId: string): Promise<StatsRoomData | null> {
   const load = statsRoomLoaders[seasonId]
   if (!load) return null
   try {
@@ -18,3 +18,6 @@ export async function getStatsRoomData(seasonId: string): Promise<StatsRoomData 
     return null
   }
 }
+
+/** @deprecated Prefer the database-aware Stats Room repository. */
+export const getStatsRoomData = getStaticStatsRoomData

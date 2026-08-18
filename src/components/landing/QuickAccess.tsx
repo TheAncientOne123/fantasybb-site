@@ -5,17 +5,54 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown, Search, Calendar } from 'lucide-react'
-import { getTeamsForSeason, searchTeams, findBestMatch, getTeamById } from '@/data/teams'
 import type { TeamIndexEntry } from '@/data/rewind-types'
-import { SEASONS, getActiveSeason, type Season } from '@/data/seasons'
+import type { Season } from '@/data/seasons'
 
-export default function QuickAccess() {
+function searchSeasonTeams(teams: TeamIndexEntry[], query: string): TeamIndexEntry[] {
+  const normalized = query.trim().toLowerCase()
+  if (!normalized) return teams
+  return teams.filter(
+    (team) =>
+      team.id.toLowerCase().includes(normalized) ||
+      team.displayName.toLowerCase().includes(normalized)
+  )
+}
+
+function findSeasonTeam(teams: TeamIndexEntry[], query: string): TeamIndexEntry | null {
+  const normalized = query.trim().toLowerCase()
+  if (!normalized) return null
+  return (
+    teams.find(
+      (team) => team.id === normalized || team.displayName.toLowerCase().trim() === normalized
+    ) ??
+    teams.find(
+      (team) =>
+        team.id.toLowerCase().startsWith(normalized) ||
+        team.displayName.toLowerCase().startsWith(normalized)
+    ) ??
+    teams.find(
+      (team) =>
+        team.id.toLowerCase().includes(normalized) ||
+        team.displayName.toLowerCase().includes(normalized)
+    ) ??
+    null
+  )
+}
+
+export default function QuickAccess({
+  seasons,
+  teamsBySeason,
+}: {
+  seasons: Season[]
+  teamsBySeason: Record<string, TeamIndexEntry[]>
+}) {
   const router = useRouter()
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)
-  const [suggestions, setSuggestions] = useState<TeamIndexEntry[]>([])
   const [error, setError] = useState<string | null>(null)
-  const [selectedSeason, setSelectedSeason] = useState<Season>(getActiveSeason() ?? SEASONS[0])
+  const [selectedSeason, setSelectedSeason] = useState<Season>(
+    seasons.find((season) => season.isActive) ?? seasons[0]
+  )
   /** Id del equipo elegido en el dropdown (evita depender solo de findBestMatch con espacios en displayName). */
   const [pickedTeamId, setPickedTeamId] = useState<string | null>(null)
   const [seasonOpen, setSeasonOpen] = useState(false)
@@ -23,11 +60,10 @@ export default function QuickAccess() {
   const containerRef = useRef<HTMLDivElement>(null)
   const seasonRef = useRef<HTMLDivElement>(null)
 
-  const teamsForSeason = getTeamsForSeason(selectedSeason.id)
+  const teamsForSeason = teamsBySeason[selectedSeason.id] ?? []
+  const suggestions = searchSeasonTeams(teamsForSeason, query)
 
   useEffect(() => {
-    const results = searchTeams(selectedSeason.id, query)
-    setSuggestions(results)
     setError(null)
   }, [selectedSeason.id, query])
 
@@ -43,7 +79,7 @@ export default function QuickAccess() {
     .slice()
     .sort((a, b) => a.id.localeCompare(b.id))
 
-  const profileLinkMatch = query.trim() ? findBestMatch(selectedSeason.id, query.trim()) : null
+  const profileLinkMatch = query.trim() ? findSeasonTeam(teamsForSeason, query.trim()) : null
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -69,20 +105,19 @@ export default function QuickAccess() {
       router.push(`/rewind/${selectedSeason.id}/${pickedTeamId}`)
       return
     }
-    const match = findBestMatch(selectedSeason.id, trimmed)
+    const match = findSeasonTeam(teamsForSeason, trimmed)
     if (match?.id) {
       router.push(`/rewind/${selectedSeason.id}/${match.id}`)
       return
     }
     setError('No se encontró el equipo. Prueba con las sugerencias.')
     setOpen(true)
-    setSuggestions(searchTeams(selectedSeason.id, trimmed))
   }
 
   const handleSelect = (id: string) => {
     setOpen(false)
     setPickedTeamId(id)
-    setQuery(getTeamById(selectedSeason.id, id)?.displayName ?? id)
+    setQuery(teamsForSeason.find((team) => team.id === id)?.displayName ?? id)
     setError(null)
   }
 
@@ -121,7 +156,7 @@ export default function QuickAccess() {
                     exit={{ opacity: 0, y: -8 }}
                     className="absolute left-0 right-0 top-full z-20 mt-2 rounded-xl border border-white/20 bg-slate-900/95 py-2 shadow-xl backdrop-blur-md"
                   >
-                    {SEASONS.map((season) => (
+                    {seasons.map((season) => (
                       <li key={season.id}>
                         <button
                           type="button"

@@ -4,6 +4,7 @@ import { achievementImageOrFallback } from './achievement-images'
 import { getSeasonDebtAmount } from './season-debt'
 import { getTeamRewindData, teamExists } from '../getTeamRewind'
 import { SEASONS } from '../seasons'
+import { getTeamLogoPath } from './team-logos'
 
 function findLastSlide<T extends Slide['type']>(
   slides: Slide[],
@@ -383,6 +384,7 @@ export async function buildTeamProfile(teamId: string): Promise<TeamProfile | nu
     displayName: newest.displayName,
     owner: newest.owner?.trim() || undefined,
     description: newest.description?.trim() || undefined,
+    logoUrl: getTeamLogoPath(teamId),
     seasons: seasonsOut,
   }
 }

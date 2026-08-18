@@ -8,7 +8,16 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "database:migrate": "node scripts/run-tsx.cjs scripts/migrate-database.ts",
+    "database:import:profiles": "node scripts/run-tsx.cjs scripts/import-profiles.ts",
+    "database:import:stats": "node scripts/run-tsx.cjs scripts/import-stats-room.ts",
+    "database:import": "npm run database:import:profiles && npm run database:import:stats",
+    "database:verify:profiles": "node scripts/run-tsx.cjs scripts/verify-profile-import.ts",
+    "database:verify:stats": "node scripts/run-tsx.cjs scripts/verify-stats-room-import.ts",
+    "database:verify": "npm run database:verify:profiles && npm run database:verify:stats",
+    "database:status": "node scripts/run-tsx.cjs scripts/database-status.ts",
+    "database:setup": "npm run database:migrate && npm run database:import && npm run database:verify"
   },
   "dependencies": {
     "@types/canvas-confetti": "^1.9.0",
@@ -19,6 +28,7 @@
     "html-to-image": "^1.11.11",
     "lucide-react": "^0.344.0",
     "next": "^14.2.0",
+    "postgres": "^3.4.9",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
     "react-markdown": "^10.1.0",
@@ -35,6 +45,7 @@
     "eslint-config-next": "^14.2.0",
     "postcss": "^8.4.0",
     "tailwindcss": "^3.4.0",
+    "tsx": "^4.23.12",
     "typescript": "^5.3.0"
   }
 }
