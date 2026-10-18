@@ -29,6 +29,7 @@ export default async function StatsPage({ searchParams }: Props) {
     <StatsRoomView
       data={storedData ?? createEmptyStatsRoomData(seasonId)}
       seasons={catalog.seasons}
+      teams={catalog.teamsBySeason[seasonId] ?? []}
       hasData={Boolean(storedData)}
     />
   )

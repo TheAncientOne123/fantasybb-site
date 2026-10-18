@@ -2,13 +2,19 @@ import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import QuickAccess from '@/components/landing/QuickAccess'
 import GiphyBackdrop from '@/components/ui/GiphyBackdrop'
-import { getStaticRewindCatalog } from '@/data/catalog/repository'
+import { getLeagueCatalog } from '@/data/catalog/repository'
+import { teamExists } from '@/data/getTeamRewind'
 
 export const revalidate = 300
 
 export default async function RewindEntryPage() {
-  // Rewinds remain file-based until their own database migration phase.
-  const catalog = getStaticRewindCatalog()
+  const catalog = await getLeagueCatalog()
+  const availableRewinds = Object.fromEntries(
+    catalog.seasons.map((season) => [
+      season.id,
+      (catalog.teamsBySeason[season.id] ?? []).filter((team) => teamExists(season.id, team.id)).map((team) => team.id),
+    ])
+  )
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-slate-950">
@@ -23,7 +29,7 @@ export default async function RewindEntryPage() {
         </Link>
       </header>
       <div className="relative z-10">
-        <QuickAccess seasons={catalog.seasons} teamsBySeason={catalog.teamsBySeason} />
+        <QuickAccess seasons={catalog.seasons} teamsBySeason={catalog.teamsBySeason} availableRewinds={availableRewinds} />
       </div>
     </div>
   )

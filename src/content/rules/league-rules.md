@@ -27,8 +27,6 @@ Con el objetivo de fomentar la competitividad en todas las rondas, las penalizac
 - Eliminación en **segunda ronda**: **$50 MXN**  
 - **Finalistas**: no pagan penalización por eliminación  
 
-- Peor puntaje semanal durante playoffs: **$50 MXN**  
-
 **Nota importante:**  
 Perder la final **no implica automáticamente** haber registrado el peor puntaje semanal durante playoffs; ambas penalizaciones son **independientes**.
 
@@ -36,9 +34,10 @@ Perder la final **no implica automáticamente** haber registrado el peor puntaje
 
 ## 3. Fondo de la Liga
 
-- El total recaudado se destinará a una **cena oficial de la liga**.  
-- El **campeón queda exento de pago** y tendrá prioridad sobre el uso del fondo.  
-- Cualquier excedente se reintegrará al fondo común para **reducir costos en futuras actividades o entre los miembros**.
+- El total recaudado será dividido entre los tres primeros lugares
+- 🥇 Primer lugar: 60%
+- 🥈 Segundo lugar: 25%
+- 🥉 Tercer lugar: 15%
 
 ---
 

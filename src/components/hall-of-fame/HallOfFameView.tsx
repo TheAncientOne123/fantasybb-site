@@ -13,6 +13,8 @@ import type {
   HofSeasonShowcase,
 } from '@/data/hall-of-fame-types'
 import { SEASONS } from '@/data/seasons'
+import type { Season } from '@/data/seasons'
+import type { TeamIndexEntry } from '@/data/rewind-types'
 import { getTeamLogoPath } from '@/data/team-profiles/team-logos'
 
 function recordTitle(kind: HofLeagueRecord['kind']): string {
@@ -305,15 +307,23 @@ function TeamSeasonShowcaseCard({
   )
 }
 
-export default function HallOfFameView({ data }: { data: HallOfFameData }) {
+export default function HallOfFameView({ data, seasons, teamsBySeason }: {
+  data: HallOfFameData
+  seasons: Season[]
+  teamsBySeason: Record<string, TeamIndexEntry[]>
+}) {
   const { order, labels, bySeason } = groupRecordsBySeason(data.leagueRecords)
   const showcaseSections = useMemo(() => buildShowcaseBySeason(data), [data])
   const seasonOptions = useMemo(
-    () => showcaseSections.filter((s) => s.cards.length > 0),
-    [showcaseSections]
+    () => seasons.map((season) => ({
+      seasonId: season.id,
+      seasonLabel: season.label,
+      cards: showcaseSections.find((section) => section.seasonId === season.id)?.cards ?? [],
+    })),
+    [seasons, showcaseSections]
   )
   const [vitrinaSeasonId, setVitrinaSeasonId] = useState<string | null>(null)
-  const activeVitrinaSeasonId = vitrinaSeasonId ?? seasonOptions[0]?.seasonId ?? null
+  const activeVitrinaSeasonId = vitrinaSeasonId ?? seasons.find((season) => season.isActive)?.id ?? seasonOptions[0]?.seasonId ?? null
   const vitrinaSection =
     seasonOptions.find((s) => s.seasonId === activeVitrinaSeasonId) ?? null
 
@@ -379,9 +389,6 @@ export default function HallOfFameView({ data }: { data: HallOfFameData }) {
           <div className="space-y-1 text-center">
             <p className="font-heading text-base font-semibold uppercase tracking-[0.2em] text-amber-400/90 sm:text-lg">
               Winners of Larry
-            </p>
-            <p className="text-sm text-slate-500">
-              Pasa el cursor sobre cada trofeo para ver la temporada. Resumen de todas las temporadas.
             </p>
           </div>
 
@@ -502,9 +509,14 @@ export default function HallOfFameView({ data }: { data: HallOfFameData }) {
               ))}
             </div>
           ) : (
-            <p className="rounded-xl border border-white/10 bg-slate-900/30 px-4 py-6 text-sm text-slate-500">
-              No hay datos de vitrina para ninguna temporada todavía.
-            </p>
+            <div className="rounded-xl border border-white/10 bg-slate-900/30 px-4 py-6 text-sm text-slate-400">
+              <p>Esta temporada todavía no tiene logros registrados.</p>
+              <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+                {(teamsBySeason[activeVitrinaSeasonId ?? ''] ?? []).map((team) => (
+                  <li key={team.id}>{team.displayName}</li>
+                ))}
+              </ul>
+            </div>
           )}
         </section>
 

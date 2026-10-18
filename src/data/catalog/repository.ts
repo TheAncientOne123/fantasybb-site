@@ -1,6 +1,7 @@
 import type { TeamIndexEntry } from '@/data/rewind-types'
 import { SEASONS, type Season } from '@/data/seasons'
 import { getTeamsForSeason } from '@/data/teams'
+import teams2027 from '@/data/seasons/2027/teams-catalog.json'
 import { getTeamLogoPath } from '@/data/team-profiles/team-logos'
 import {
   getDatabase,
@@ -46,6 +47,29 @@ function getStaticCatalog(): LeagueCatalog {
 
 export function getStaticRewindCatalog(): LeagueCatalog {
   return getStaticCatalog()
+}
+
+function getStaticLeagueCatalog(): LeagueCatalog {
+  const historicalCatalog = getStaticCatalog()
+  const historicalTeamIds = new Set(
+    Object.values(historicalCatalog.teamsBySeason).flat().map((team) => team.id)
+  )
+
+  return {
+    seasons: [
+      { id: teams2027.seasonId, year: '2027', label: '2026-27 Season', isActive: true },
+      ...historicalCatalog.seasons.map((season) => ({ ...season, isActive: false })),
+    ],
+    teamsBySeason: {
+      ...historicalCatalog.teamsBySeason,
+      [teams2027.seasonId]: teams2027.teams.map((team) => ({
+        id: team.id,
+        displayName: team.displayName.trim(),
+        logoUrl: team.logoUrl,
+        isExpansion: !historicalTeamIds.has(team.id),
+      })),
+    },
+  }
 }
 
 async function getDatabaseCatalog(): Promise<LeagueCatalog | null> {
@@ -97,7 +121,7 @@ async function getDatabaseCatalog(): Promise<LeagueCatalog | null> {
 
 export async function getLeagueCatalog(): Promise<LeagueCatalog> {
   const source = getFantasyDataSource()
-  const staticCatalog = getStaticCatalog()
+  const staticCatalog = getStaticLeagueCatalog()
   if (source === 'static') return staticCatalog
 
   if (!isDatabaseConfigured()) {

@@ -1,6 +1,6 @@
 {
   "seasonId": "2027",
-  "generatedAt": "2026-08-19T15:43:34Z",
+  "generatedAt": "2026-10-18T03:22:57Z",
   "teams": [
     {
       "id": "claudia-sheinballers",
@@ -24,13 +24,13 @@
       "id": "glizzy-goblers",
       "espnTeamId": 9,
       "displayName": "Glizzy Goblers",
-      "logoUrl": "/team-logos/glizzy-goblers-logo.jpg"
+      "logoUrl": "/team-logos/glizzy-goblers.jpg"
     },
     {
       "id": "huecox-y-un-dobel",
       "espnTeamId": 6,
       "displayName": "huecox y un Dobel",
-      "logoUrl": "/team-logos/huecox-y-un-dobel.png"
+      "logoUrl": "/team-logos/huecox-y-un-dobel.jpg"
     },
     {
       "id": "lalocomotora",
@@ -48,7 +48,7 @@
       "id": "mclovers",
       "espnTeamId": 12,
       "displayName": "McLovers",
-      "logoUrl": "https://g.espncdn.com/lm-static/fba/images/default_logos/20.svg"
+      "logoUrl": "https://g.espncdn.com/lm-static/logo-packs/core/Incredibles/incredibles_12.svg"
     },
     {
       "id": "metefierros",
@@ -60,19 +60,19 @@
       "id": "novigrad-21ers",
       "espnTeamId": 1,
       "displayName": "Novigrad 21ers ",
-      "logoUrl": "/team-logos/novigrad-21ers-logo.png"
+      "logoUrl": "/team-logos/novigrad-21ers.jpg"
     },
     {
       "id": "tochetaos",
       "espnTeamId": 5,
       "displayName": "Tochetaos",
-      "logoUrl": "/team-logos/tochetaos.png"
+      "logoUrl": "/team-logos/tochetaos.jpg"
     },
     {
       "id": "beijing-ducks",
       "espnTeamId": 8,
       "displayName": "北京首钢霹雳鸭",
-      "logoUrl": "/team-logos/beijing-ducks-logo.png"
+      "logoUrl": "/team-logos/beijing-ducks.jpg"
     }
   ]
 }

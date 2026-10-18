@@ -42,9 +42,11 @@ function findSeasonTeam(teams: TeamIndexEntry[], query: string): TeamIndexEntry 
 export default function QuickAccess({
   seasons,
   teamsBySeason,
+  availableRewinds,
 }: {
   seasons: Season[]
   teamsBySeason: Record<string, TeamIndexEntry[]>
+  availableRewinds: Record<string, string[]>
 }) {
   const router = useRouter()
   const [query, setQuery] = useState('')
@@ -102,11 +104,19 @@ export default function QuickAccess({
       return
     }
     if (pickedTeamId) {
+      if (!availableRewinds[selectedSeason.id]?.includes(pickedTeamId)) {
+        setError('El Rewind de este equipo todavía no está disponible para esta temporada.')
+        return
+      }
       router.push(`/rewind/${selectedSeason.id}/${pickedTeamId}`)
       return
     }
     const match = findSeasonTeam(teamsForSeason, trimmed)
     if (match?.id) {
+      if (!availableRewinds[selectedSeason.id]?.includes(match.id)) {
+        setError('El Rewind de este equipo todavía no está disponible para esta temporada.')
+        return
+      }
       router.push(`/rewind/${selectedSeason.id}/${match.id}`)
       return
     }
@@ -182,6 +192,11 @@ export default function QuickAccess({
           </div>
 
           <form onSubmit={handleSubmit}>
+            {(availableRewinds[selectedSeason.id]?.length ?? 0) === 0 && (
+              <p role="status" className="mb-6 rounded-xl border border-white/10 bg-white/5 p-4 text-center text-sm text-white/60">
+                Los Rewinds de esta temporada aparecerán cuando estén disponibles sus resultados.
+              </p>
+            )}
             <div className="relative" ref={containerRef}>
               <label htmlFor="team-input" className="sr-only">
                 Selecciona tu equipo

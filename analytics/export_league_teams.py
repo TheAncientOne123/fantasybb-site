@@ -25,7 +25,7 @@ from generate_team_data import (
 )
 
 
-def export_teams(season: str) -> Path:
+def export_teams(season: str, refresh_logos: bool = False) -> Path:
     league = league_data.get_league()
     teams = []
     for team in league.teams:
@@ -34,7 +34,8 @@ def export_teams(season: str) -> Path:
         if team_id in TEAM_LOGO_OVERRIDES:
             logo_url = TEAM_LOGO_OVERRIDES[team_id]
         elif logo_url and _is_mystique_logo_url(logo_url):
-            logo_url = get_local_logo_path(team_id) or download_team_logo(logo_url, team_id) or logo_url
+            refreshed_logo = download_team_logo(logo_url, team_id) if refresh_logos else None
+            logo_url = refreshed_logo or get_local_logo_path(team_id) or download_team_logo(logo_url, team_id) or logo_url
         teams.append(
             {
                 "id": team_id,
@@ -62,7 +63,8 @@ def export_teams(season: str) -> Path:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Exporta equipos de ESPN sin consultar semanas.")
     parser.add_argument("--season", required=True, help="Año de la temporada, por ejemplo 2027")
+    parser.add_argument("--refresh-logos", action="store_true", help="Vuelve a descargar los logos de ESPN aunque exista una copia local.")
     args = parser.parse_args()
     if not args.season.isdigit() or len(args.season) != 4:
         parser.error("--season debe ser un año de cuatro dígitos")
-    export_teams(args.season)
+    export_teams(args.season, refresh_logos=args.refresh_logos)
