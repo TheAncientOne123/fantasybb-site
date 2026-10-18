@@ -7,7 +7,7 @@ El objetivo de estas reglas es mantener una liga activa, competitiva y justa dur
 
 ## 1. Temporada Regular
 
-- Se aplicará una multa de **$100 MXN** al equipo que registre el **menor puntaje semanal**.  
+- Se aplicará una multa de **$50 MXN** al equipo que registre el **menor puntaje semanal**.  
 - Cada equipo podrá **revertir un trade (arrepentimiento)**, sujeto a una penalización de **$50 MXN**.  
 - Los equipos que queden **matemáticamente eliminados de la contienda por playoffs** dejarán de ser elegibles para la multa por peor puntaje semanal.  
 - En caso de que el peor puntaje semanal corresponda a un equipo eliminado, la penalización se asignará al **siguiente equipo elegible con menor puntaje**.

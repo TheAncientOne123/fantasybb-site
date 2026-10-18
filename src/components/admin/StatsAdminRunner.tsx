@@ -9,11 +9,12 @@ type Props = {
   defaultSeasonId: string
 }
 
-type Action = 'generate' | 'publish'
+type Action = 'sync-teams' | 'generate' | 'publish'
 type Result = { action: Action; status: 'success' | 'error' } | null
 
 export default function StatsAdminRunner({ seasons, defaultSeasonId }: Props) {
   const [seasonId, setSeasonId] = useState(defaultSeasonId)
+  const [syncConfirmed, setSyncConfirmed] = useState(false)
   const [publishConfirmed, setPublishConfirmed] = useState(false)
   const [runningAction, setRunningAction] = useState<Action | null>(null)
   const [log, setLog] = useState('')
@@ -52,7 +53,13 @@ export default function StatsAdminRunner({ seasons, defaultSeasonId }: Props) {
   const run = async (action: Action) => {
     setRunningAction(action)
     setResult(null)
-    setLog(`Iniciando ${action === 'generate' ? 'generación local' : 'publicación en Neon'}...\n`)
+    const actionLabel =
+      action === 'sync-teams'
+        ? 'sincronización de equipos'
+        : action === 'generate'
+          ? 'generación local'
+          : 'publicación en Neon'
+    setLog(`Iniciando ${actionLabel}...\n`)
 
     try {
       const response = await fetch('/api/admin/stats/run', {
@@ -85,6 +92,7 @@ export default function StatsAdminRunner({ seasons, defaultSeasonId }: Props) {
       setResult({ action, status: 'error' })
     } finally {
       setRunningAction(null)
+      if (action === 'sync-teams') setSyncConfirmed(false)
       if (action === 'publish') setPublishConfirmed(false)
     }
   }
@@ -102,6 +110,7 @@ export default function StatsAdminRunner({ seasons, defaultSeasonId }: Props) {
             value={seasonId}
             onChange={(event) => {
               setSeasonId(event.target.value)
+              setSyncConfirmed(false)
               setPublishConfirmed(false)
               setResult(null)
               setLog('')
@@ -116,6 +125,35 @@ export default function StatsAdminRunner({ seasons, defaultSeasonId }: Props) {
             ))}
           </select>
         </label>
+
+        <div className="mt-6 rounded-xl border border-violet-400/20 bg-violet-400/[0.05] p-4">
+          <p className="text-xs font-semibold uppercase tracking-wider text-violet-300">
+            Pretemporada
+          </p>
+          <h2 className="mt-1 font-heading text-xl text-white">Sincronizar equipos desde ESPN</h2>
+          <p className="mt-2 text-sm leading-6 text-slate-400">
+            Obtiene nombres y logos sin buscar semanas ni matchups. Registra los equipos nuevos en
+            Neon y marca como expansión a quienes no participaron en temporadas anteriores.
+          </p>
+          <label className="mt-3 flex items-start gap-2 text-xs leading-5 text-slate-400">
+            <input
+              type="checkbox"
+              checked={syncConfirmed}
+              onChange={(event) => setSyncConfirmed(event.target.checked)}
+              disabled={Boolean(runningAction)}
+              className="mt-1"
+            />
+            Deseo actualizar en Neon el catálogo de equipos de esta temporada.
+          </label>
+          <button
+            type="button"
+            onClick={() => run('sync-teams')}
+            disabled={Boolean(runningAction) || !syncConfirmed || !seasonId}
+            className="mt-4 rounded-xl bg-violet-400 px-5 py-3 font-semibold text-slate-950 transition hover:bg-violet-300 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            {runningAction === 'sync-teams' ? 'Sincronizando...' : 'Sincronizar equipos'}
+          </button>
+        </div>
 
         <div className="mt-6 grid gap-4 md:grid-cols-2">
           <div className="rounded-xl border border-sky-400/20 bg-sky-400/[0.05] p-4">

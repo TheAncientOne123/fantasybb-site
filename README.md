@@ -81,6 +81,8 @@ El esquema separa `seasons`, `teams`, perfiles históricos, rosters y Stats Room
 
 Con `npm run dev`, abre `http://localhost:3000/admin/stats`. La pantalla separa el flujo en dos fases: **Generar borrador** consulta ESPN y escribe sólo archivos locales; después muestra fecha, cantidades y standings para revisión. **Publicar en Neon** requiere confirmación, importa exactamente ese borrador y verifica el resultado.
 
+Antes de que comience una temporada, usa **Sincronizar equipos desde ESPN**. Esta acción obtiene nombres y logos sin consultar matchups, actualiza las membresías en Neon y marca los equipos de primera aparición como expansión. No crea estadísticas vacías.
+
 La ruta y su endpoint aceptan únicamente hosts loopback (`localhost`, `127.0.0.1` o `::1`) y están desactivados cuando `NODE_ENV=production`. No son un reemplazo para autenticación si en el futuro se desea ejecutar este flujo desde una web desplegada.
 
 Antes de usarla, configura las credenciales de ESPN (`LEAGUE_ID`, `SWID` y `ESPN_S2` cuando sean necesarias) en `analytics/.env`; la temporada `YEAR` se toma automáticamente del selector. `DATABASE_URL` continúa configurándose en el `.env` raíz.

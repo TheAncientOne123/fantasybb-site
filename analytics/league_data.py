@@ -99,16 +99,54 @@ def get_available_weeks(league, max_periods=25):
     2) Si no hay ninguno, usa league.matchup_ids (periodos del schedule) si existe.
     """
     available = []
+    empty_streak = 0
     for m in range(1, max_periods + 1):
         try:
             sb = _scoreboard_with_retry(league, m)
             if sb and len(sb) > 0:
                 available.append(m)
+                empty_streak = 0
+            else:
+                empty_streak += 1
+                # Los periodos son contiguos. En pretemporada, un primer
+                # periodo vacío significa que todavía no hay calendario que
+                # analizar; después de iniciada, dos vacíos marcan el final.
+                if not available or empty_streak >= 2:
+                    break
         except Exception:
-            continue
+            # _scoreboard_with_retry ya agotó sus reintentos. Evita repetir
+            # el mismo costo hasta max_periods cuando la temporada no inició.
+            if not available:
+                break
+            empty_streak += 1
+            if empty_streak >= 2:
+                break
     if not available and hasattr(league, "matchup_ids") and league.matchup_ids:
         available = sorted(league.matchup_ids.keys())
     return available
+
+
+def has_scored_matchups(league, weeks):
+    """True cuando al menos un periodo disponible ya contiene puntuación real."""
+    for period in list(weeks)[:2]:
+        try:
+            matchups = _scoreboard_with_retry(league, period)
+        except Exception:
+            continue
+        for matchup in matchups or []:
+            for field in (
+                "home_final_score",
+                "away_final_score",
+                "home_team_live_score",
+                "away_team_live_score",
+            ):
+                value = getattr(matchup, field, None)
+                try:
+                    if value is not None and float(value) > 0:
+                        return True
+                except (TypeError, ValueError):
+                    continue
+    return False
 
 
 # ---------------------------------------------------------------------------

@@ -7,7 +7,7 @@ import { isLocalAdminHost } from '@/lib/local-admin'
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
-type Action = 'generate' | 'publish'
+type Action = 'sync-teams' | 'generate' | 'publish'
 type RunnerGlobal = typeof globalThis & { __fantasyStatsAdminRunning?: boolean }
 
 const runnerGlobal = globalThis as RunnerGlobal
@@ -65,7 +65,9 @@ export async function POST(request: Request) {
   } | null
   const seasonId = typeof body?.seasonId === 'string' ? body.seasonId : ''
   const action: Action | null =
-    body?.action === 'generate' || body?.action === 'publish' ? body.action : null
+    body?.action === 'sync-teams' || body?.action === 'generate' || body?.action === 'publish'
+      ? body.action
+      : null
 
   if (!/^\d{4}$/.test(seasonId)) {
     return Response.json({ error: 'Temporada inválida.' }, { status: 400 })
@@ -90,13 +92,33 @@ export async function POST(request: Request) {
   const stream = new ReadableStream<Uint8Array>({
     start(controller) {
       const write = (message: string) => controller.enqueue(encoder.encode(message))
-      const environment = { ...process.env, YEAR: seasonId, PYTHONUNBUFFERED: '1' }
+      const environment = {
+        ...process.env,
+        YEAR: seasonId,
+        PYTHONUNBUFFERED: '1',
+        PYTHONUTF8: '1',
+        PYTHONIOENCODING: 'utf-8',
+      }
       const pythonScript = resolve(process.cwd(), 'analytics', 'generate_team_data.py')
+      const teamsScript = resolve(process.cwd(), 'analytics', 'export_league_teams.py')
       const tsxRunner = resolve(process.cwd(), 'scripts', 'run-tsx.cjs')
 
       void (async () => {
         try {
-          if (action === 'generate') {
+          if (action === 'sync-teams') {
+            write(`Sincronizando equipos de la temporada ${seasonId}.\n`)
+            write('Paso 1/2: leyendo el catálogo de ESPN sin consultar matchups...\n')
+            await runPython([teamsScript, '--season', seasonId], environment, write)
+
+            write('\nPaso 2/2: actualizando equipos y membresías en Neon...\n')
+            await runCommand(
+              process.execPath,
+              [tsxRunner, 'scripts/import-season-teams.ts', '--season', seasonId],
+              environment,
+              write
+            )
+            write('\n[DONE] Equipos sincronizados sin generar estadísticas.\n')
+          } else if (action === 'generate') {
             write(`Generando borrador local de Stats Room ${seasonId}.\n`)
             write('Consultando ESPN y generando archivos locales...\n')
             await runPython([pythonScript, '--season', seasonId], environment, write)

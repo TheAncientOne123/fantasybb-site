@@ -16,6 +16,13 @@ from typing import Dict, Optional
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
 
+# Windows suele iniciar Python con cp1252. La liga contiene nombres Unicode,
+# así que la salida debe ser UTF-8 tanto desde terminal como desde /admin/stats.
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
 
 def _progress_bar(current: int, total: int, prefix: str = "", suffix: str = "", width: int = 30) -> None:
     """Print a simple terminal progress bar. No external deps."""
@@ -351,6 +358,13 @@ def download_team_logo(logo_url: str, team_slug: str) -> Optional[str]:
         "Accept": "image/*,*/*",
     }
     cookies = os.environ.get("ESPN_COOKIES")
+    if not cookies:
+        cookie_parts = []
+        if os.environ.get("SWID"):
+            cookie_parts.append(f"SWID={os.environ['SWID'].strip().strip(chr(34))}")
+        if os.environ.get("ESPN_S2"):
+            cookie_parts.append(f"espn_s2={os.environ['ESPN_S2'].strip()}")
+        cookies = "; ".join(cookie_parts)
     if cookies:
         headers["Cookie"] = cookies
     try:
@@ -1790,8 +1804,16 @@ def generate_all_teams(season: str = "2026"):
     
     weeks_all = nv.get_available_weeks(league)
     if not weeks_all:
-        print("No weeks found. Check LEAGUE_ID, YEAR and ESPN credentials.")
-        return
+        raise RuntimeError(
+            "La temporada todavía no tiene matchups. Usa 'Sincronizar equipos' "
+            "en /admin/stats y genera las estadísticas cuando inicie la temporada."
+        )
+    if not nv.has_scored_matchups(league, weeks_all):
+        raise RuntimeError(
+            "ESPN ya publicó el calendario, pero los matchups todavía no tienen puntuación. "
+            "Usa 'Sincronizar equipos' en /admin/stats y genera las estadísticas cuando "
+            "comience la temporada."
+        )
 
     # Split entre temporada regular vs playoffs para que premios "semana" no se mezclen.
     # En ESPN Fantasy, reg_season_count indica cuántos matchup periods son de temporada regular.

@@ -1,0 +1,78 @@
+{
+  "seasonId": "2027",
+  "generatedAt": "2026-08-19T15:43:34Z",
+  "teams": [
+    {
+      "id": "claudia-sheinballers",
+      "espnTeamId": 11,
+      "displayName": "Claudia Sheinballers",
+      "logoUrl": "https://g.espncdn.com/lm-static/fba/images/default_logos/16.svg"
+    },
+    {
+      "id": "diegos-daring-team",
+      "espnTeamId": 2,
+      "displayName": "Diego's Daring Team",
+      "logoUrl": "https://g.espncdn.com/lm-static/fba/images/default_logos/1.svg"
+    },
+    {
+      "id": "fiestas-fantastic-team",
+      "espnTeamId": 7,
+      "displayName": "Fiesta's Fantastic Team",
+      "logoUrl": "https://g.espncdn.com/lm-static/fba/images/default_logos/3.svg"
+    },
+    {
+      "id": "glizzy-goblers",
+      "espnTeamId": 9,
+      "displayName": "Glizzy Goblers",
+      "logoUrl": "/team-logos/glizzy-goblers-logo.jpg"
+    },
+    {
+      "id": "huecox-y-un-dobel",
+      "espnTeamId": 6,
+      "displayName": "huecox y un Dobel",
+      "logoUrl": "/team-logos/huecox-y-un-dobel.png"
+    },
+    {
+      "id": "lalocomotora",
+      "espnTeamId": 10,
+      "displayName": "LaloComotora",
+      "logoUrl": "https://g.espncdn.com/lm-static/fba/images/default_logos/5.svg"
+    },
+    {
+      "id": "lububumatcha",
+      "espnTeamId": 3,
+      "displayName": "LububuMatcha",
+      "logoUrl": "/team-logos/labubu-matcha-logo.png"
+    },
+    {
+      "id": "mclovers",
+      "espnTeamId": 12,
+      "displayName": "McLovers",
+      "logoUrl": "https://g.espncdn.com/lm-static/fba/images/default_logos/20.svg"
+    },
+    {
+      "id": "metefierros",
+      "espnTeamId": 4,
+      "displayName": "METEFIERROS",
+      "logoUrl": "https://g.espncdn.com/lm-static/logo-packs/core/SimpleShields/shields-4.svg"
+    },
+    {
+      "id": "novigrad-21ers",
+      "espnTeamId": 1,
+      "displayName": "Novigrad 21ers ",
+      "logoUrl": "/team-logos/novigrad-21ers-logo.png"
+    },
+    {
+      "id": "tochetaos",
+      "espnTeamId": 5,
+      "displayName": "Tochetaos",
+      "logoUrl": "/team-logos/tochetaos.png"
+    },
+    {
+      "id": "beijing-ducks",
+      "espnTeamId": 8,
+      "displayName": "北京首钢霹雳鸭",
+      "logoUrl": "/team-logos/beijing-ducks-logo.png"
+    }
+  ]
+}
