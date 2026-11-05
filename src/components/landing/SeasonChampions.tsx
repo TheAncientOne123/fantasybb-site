@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Trophy, Crown } from 'lucide-react'
 import { getTeamLogoPath } from '@/data/team-profiles/team-logos'
+import { ui } from '@/components/ui/styles'
 
 interface Champion {
   seasonId: string
@@ -89,7 +90,7 @@ export default function SeasonChampions() {
     <section className="relative py-20 px-6">
       <div className="mx-auto max-w-6xl">
         <motion.h2
-          className="mb-12 text-center font-heading text-3xl font-bold text-white sm:text-4xl"
+          className={`${ui.pageTitle} mb-12 text-center`}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}

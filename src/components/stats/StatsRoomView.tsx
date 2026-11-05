@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useMemo, useState, useRef, useEffect, useCallback, useTransition } from 'react'
@@ -9,7 +8,8 @@ import { ChevronRight } from 'lucide-react'
 import type { Season } from '@/data/seasons'
 import type { TeamIndexEntry } from '@/data/rewind-types'
 import type { StatsRoomData } from '@/data/stats-room-types'
-import { getTeamLogoPath } from '@/data/team-profiles/team-logos'
+import { useTeamLogo } from '@/components/team/TeamIdentityProvider'
+import { Card, PageHeader, PageShell, Section, ui } from '@/components/ui'
 import PlayoffsDraftHub from './PlayoffsDraftHub'
 import type { ConsolationLadder } from '@/data/stats-room-types'
 import SeasonStatsTable from './SeasonStatsTable'
@@ -19,15 +19,17 @@ type Props = {
   data: StatsRoomData
   seasons: Season[]
   teams: TeamIndexEntry[]
-  hasData: boolean
 }
 
-export default function StatsRoomView({ data, seasons, teams, hasData }: Props) {
+export default function StatsRoomView({ data, seasons, teams }: Props) {
+  const getTeamLogoPath = useTeamLogo()
   const router = useRouter()
   const [isChangingSeason, startSeasonChange] = useTransition()
   const [teamFilter, setTeamFilter] = useState<string>('')
   /** Periodos colapsados (oculta todos los matchups de ese periodo). Por defecto todos expandidos. */
   const [collapsedPeriods, setCollapsedPeriods] = useState<Set<number>>(new Set())
+  /** Carpeta padre "Todos los matchups": cerrada por defecto. */
+  const [allMatchupsOpen, setAllMatchupsOpen] = useState(false)
 
   const togglePeriod = useCallback((week: number) => {
     setCollapsedPeriods((prev) => {
@@ -42,6 +44,9 @@ export default function StatsRoomView({ data, seasons, teams, hasData }: Props) 
     () => new Map(data.standings.map((r) => [r.teamId, r])),
     [data.standings]
   )
+  const displayedStandings = data.standings.length > 0 ? data.standings : teams.map((team) => ({
+    teamId: team.id, displayName: team.displayName, rank: 0, wins: 0, losses: 0, ties: 0,
+  }))
 
   const nineByTeam = useMemo(() => {
     const m = new Map<string, Map<string, { rank: number; valueDisplay: string }>>()
@@ -82,6 +87,7 @@ export default function StatsRoomView({ data, seasons, teams, hasData }: Props) 
   useEffect(() => {
     setTeamFilter('')
     setCollapsedPeriods(new Set())
+    setAllMatchupsOpen(false)
   }, [data.seasonId])
 
   const changeSeason = (seasonId: string) => {
@@ -91,31 +97,21 @@ export default function StatsRoomView({ data, seasons, teams, hasData }: Props) 
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 pb-16 pt-8 text-slate-100">
-      <div className="mx-auto max-w-7xl space-y-10 px-4 sm:px-6">
-        <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <h1 className="font-heading text-3xl font-bold text-white sm:text-4xl">Stats Room</h1>
-            {data.generatedAt && (
-              <p className="mt-2 text-xs text-slate-600">Datos generados: {data.generatedAt}</p>
-            )}
-          </div>
-          <Link
-            href="/"
-            className="inline-flex w-fit items-center rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm text-slate-200 hover:bg-white/10"
-          >
-            Volver al inicio
-          </Link>
-        </header>
+    <PageShell width="wide">
+        <PageHeader
+          title="Stats Room"
+          description={data.generatedAt ? `Datos actualizados: ${data.generatedAt}` : undefined}
+        />
 
-        <div
+        <Card
           ref={highlightRef}
-          className="flex flex-wrap items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-4"
+          padding="sm"
+          className="flex flex-wrap items-center gap-4"
         >
-          <label className="flex flex-col gap-1 text-xs text-slate-500">
+          <label className={ui.field}>
             Temporada
             <select
-              className="rounded-lg border border-white/15 bg-slate-900 px-3 py-2 text-sm text-white"
+              className={ui.select}
               value={data.seasonId}
               onChange={(e) => changeSeason(e.target.value)}
               disabled={isChangingSeason}
@@ -127,10 +123,10 @@ export default function StatsRoomView({ data, seasons, teams, hasData }: Props) 
               ))}
             </select>
           </label>
-          <label className="flex flex-col gap-1 text-xs text-slate-500">
+          <label className={ui.field}>
             Equipo
             <select
-              className="min-w-[200px] rounded-lg border border-white/15 bg-slate-900 px-3 py-2 text-sm text-white"
+              className={clsx(ui.select, 'min-w-[200px]')}
               value={teamFilter}
               onChange={(e) => setTeamFilter(e.target.value)}
             >
@@ -145,23 +141,9 @@ export default function StatsRoomView({ data, seasons, teams, hasData }: Props) 
           {isChangingSeason && (
             <p className="text-xs text-amber-400/90">Cargando temporada...</p>
           )}
-        </div>
+        </Card>
 
-        {!hasData ? (
-          <section className="rounded-2xl border border-dashed border-white/15 bg-white/[0.03] px-6 py-14 text-center">
-            <h2 className="font-heading text-xl font-semibold text-white">
-              Esta temporada todavía no tiene estadísticas
-            </h2>
-            <p className="mx-auto mt-2 max-w-xl text-sm text-slate-400">
-              La temporada ya está preparada en la base de datos. Sus standings, matchups y
-              estadísticas aparecerán aquí cuando se importe el primer dataset.
-            </p>
-          </section>
-        ) : (
-          <>
-        {/* Standings */}
-        <section className="space-y-3" id="standings">
-          <h2 className="font-heading text-xl font-semibold text-white">Regular season — Standings</h2>
+        <Section title="Regular season — Standings" id="standings">
           <div className="overflow-x-auto rounded-2xl border border-white/10">
             <table className="w-full min-w-[520px] text-left text-sm">
               <thead className="border-b border-white/10 bg-white/[0.04] text-xs uppercase tracking-wide text-slate-500">
@@ -172,7 +154,7 @@ export default function StatsRoomView({ data, seasons, teams, hasData }: Props) 
                 </tr>
               </thead>
               <tbody>
-                {data.standings.map((r) => (
+                {displayedStandings.map((r) => (
                   <tr
                     key={r.teamId}
                     className={clsx(
@@ -180,7 +162,7 @@ export default function StatsRoomView({ data, seasons, teams, hasData }: Props) 
                       teamFilter === r.teamId && 'bg-amber-500/10'
                     )}
                   >
-                    <td className="px-4 py-2.5 font-mono text-amber-400/90">{r.rank}</td>
+                    <td className="px-4 py-2.5 font-mono text-amber-400/90">{r.rank > 0 ? r.rank : '—'}</td>
                     <td className="px-4 py-2.5">
                       <div className="flex items-center gap-2">
                         {getTeamLogoPath(r.teamId) ? (
@@ -200,23 +182,26 @@ export default function StatsRoomView({ data, seasons, teams, hasData }: Props) 
                       </div>
                     </td>
                     <td className="px-4 py-2.5 text-slate-300">
-                      {r.wins}-{r.losses}
-                      {r.ties ? `-${r.ties}` : ''}
+                      {data.standings.length > 0 ? `${r.wins}-${r.losses}${r.ties ? `-${r.ties}` : ''}` : '—'}
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-        </section>
+        </Section>
 
-        <section className="space-y-3" id="playoffs">
-          <h2 className="font-heading text-xl font-semibold text-white">Playoffs y orden de draft</h2>
-          <p className="max-w-3xl text-sm text-slate-400">
-            Bracket principal (top 6), winner&apos;s consolation, consolación seeds 7–10; a la derecha, el orden de
-            draft de la siguiente temporada.
-          </p>
-          <div className="rounded-2xl border border-white/10 bg-slate-900/40 p-4 sm:p-6">
+        <Section
+          title="Playoffs y orden de draft"
+          id="playoffs"
+          description={
+            <>
+              Bracket principal (top 6), winner&apos;s consolation, consolación seeds 7–10; a la derecha, el orden de
+              draft de la siguiente temporada.
+            </>
+          }
+        >
+          <Card>
             <PlayoffsDraftHub
               playoffBracket={data.playoffBracket}
               winnersConsolation={
@@ -225,7 +210,7 @@ export default function StatsRoomView({ data, seasons, teams, hasData }: Props) 
                   title: "Winner's consolation ladder",
                   rounds: [],
                   notes:
-                    'Sin datos de consolación. Ejecuta python analytics/generate_team_data.py para cargar partidos desde ESPN.',
+                    'Todavía no hay partidos de consolación.',
                 } satisfies ConsolationLadder)
               }
               bottomFour={
@@ -234,7 +219,7 @@ export default function StatsRoomView({ data, seasons, teams, hasData }: Props) 
                   title: 'Consolation ladder (seeds 7–10)',
                   rounds: [],
                   notes:
-                    'Sin datos de consolación. Ejecuta python analytics/generate_team_data.py para cargar partidos desde ESPN.',
+                    'Todavía no hay partidos de consolación.',
                 } satisfies ConsolationLadder)
               }
               nextDraftOrder={data.nextDraftOrder}
@@ -244,40 +229,71 @@ export default function StatsRoomView({ data, seasons, teams, hasData }: Props) 
                 data.consolationBrackets && data.nextDraftOrder && data.nextDraftOrder.length === 10
               )}
             />
-          </div>
-        </section>
+          </Card>
+        </Section>
 
         <SeasonStatsTable
           seasonId={data.seasonId}
-          standings={data.standings}
+          standings={displayedStandings}
           seasonStatsLeague={data.seasonStatsLeague}
           nineByTeam={nineByTeam}
           teamFilter={teamFilter}
         />
 
         {/* Matchups RS */}
-        <section className="space-y-3" id="matchups">
-          <h2 className="font-heading text-xl font-semibold text-white">Matchups — Temporada regular</h2>
+        <Section title="Matchups — Temporada regular" id="matchups">
           {weeksGrouped.length === 0 ? (
-            <p className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-6 text-sm text-slate-500">
-              No hay matchups en el dataset. Vuelve a generar con{' '}
-              <code className="text-slate-400">python analytics/generate_team_data.py</code>.
-            </p>
+            <Card className="text-sm text-slate-500">Todavía no hay matchups de temporada regular.</Card>
           ) : (
-            <div className="space-y-6">
+            <Card padding="sm">
+              <button
+                type="button"
+                id="stats-all-matchups"
+                aria-expanded={allMatchupsOpen}
+                aria-controls="stats-all-matchups-panel"
+                onClick={() => setAllMatchupsOpen((open) => !open)}
+                className={clsx(
+                  'flex w-full items-center gap-2 rounded-lg px-1 py-2 text-left transition hover:bg-white/[0.04]',
+                  allMatchupsOpen && 'mb-4'
+                )}
+              >
+                <ChevronRight
+                  className={clsx(
+                    'h-5 w-5 shrink-0 text-amber-400 transition-transform',
+                    allMatchupsOpen && 'rotate-90'
+                  )}
+                  aria-hidden
+                />
+                <span className="font-heading text-lg text-amber-300">Todos los matchups</span>
+                <span className="ml-auto text-xs text-slate-500">
+                  {weeksGrouped.length} {weeksGrouped.length === 1 ? 'periodo' : 'periodos'} ·{' '}
+                  {matchupsFiltered.length} {matchupsFiltered.length === 1 ? 'duelo' : 'duelos'}
+                  {allMatchupsOpen ? ' · Ocultar' : ' · Mostrar'}
+                </span>
+              </button>
+              {allMatchupsOpen && (
+            <div
+              id="stats-all-matchups-panel"
+              role="region"
+              aria-labelledby="stats-all-matchups"
+              className="space-y-4"
+            >
               {weeksGrouped.map(([week, rows]) => {
                 const lowestIds = getWeekLowestScoreTeamIds(rows)
                 const periodOpen = !collapsedPeriods.has(week)
                 const periodToggleId = `stats-period-${week}`
                 return (
-                  <div key={week} className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
+                  <Card key={week} padding="sm">
                     <button
                       type="button"
                       id={periodToggleId}
                       aria-expanded={periodOpen}
                       aria-controls={`${periodToggleId}-panel`}
                       onClick={() => togglePeriod(week)}
-                      className="mb-3 flex w-full items-center gap-2 rounded-lg px-1 py-2 text-left transition hover:bg-white/[0.04]"
+                      className={clsx(
+                        'flex w-full items-center gap-2 rounded-lg px-1 py-2 text-left transition hover:bg-white/[0.04]',
+                        periodOpen && 'mb-3'
+                      )}
                     >
                       <ChevronRight
                         className={clsx(
@@ -312,15 +328,14 @@ export default function StatsRoomView({ data, seasons, teams, hasData }: Props) 
                         ))}
                       </ul>
                     )}
-                  </div>
+                  </Card>
                 )
               })}
             </div>
+              )}
+            </Card>
           )}
-        </section>
-          </>
-        )}
-      </div>
-    </div>
+        </Section>
+    </PageShell>
   )
 }

@@ -1,0 +1,914 @@
+{
+  "seasonId": "2027",
+  "methodVersion": "fantasy-roster-v1",
+  "source": "ESPN",
+  "generatedAt": "2026-10-18T18:01:27Z",
+  "projection": {
+    "capturedAt": "2026-10-18T18:01:27Z",
+    "windowGames": 82,
+    "referenceSize": 11,
+    "teams": [
+      {
+        "teamId": "novigrad-21ers",
+        "playerIds": [
+          5041939,
+          4396993,
+          4396907,
+          3078576,
+          6442,
+          4431680,
+          4017837,
+          2490149,
+          3059319,
+          5144091,
+          4433247,
+          4592479,
+          5174983
+        ],
+        "knownPlayers": 12,
+        "totalPlayers": 13,
+        "rawValue": null,
+        "score": null,
+        "rank": null
+      },
+      {
+        "teamId": "diegos-daring-team",
+        "playerIds": [
+          3032977,
+          3155942,
+          6583,
+          4066320,
+          4066336,
+          4566434,
+          4433136,
+          4869780,
+          4397140,
+          4278585,
+          4903027,
+          4397424,
+          4351852
+        ],
+        "knownPlayers": 13,
+        "totalPlayers": 13,
+        "rawValue": 30.9353,
+        "score": 80.0,
+        "rank": 3
+      },
+      {
+        "teamId": "lububumatcha",
+        "playerIds": [
+          4701230,
+          4431678,
+          4432158,
+          3147657,
+          5041935,
+          4065733,
+          4277961,
+          4395724,
+          5041955,
+          4432848,
+          5174563,
+          4278049,
+          4683774
+        ],
+        "knownPlayers": 13,
+        "totalPlayers": 13,
+        "rawValue": 28.8626,
+        "score": 10.0,
+        "rank": 10
+      },
+      {
+        "teamId": "metefierros",
+        "playerIds": [
+          4278073,
+          3136195,
+          3992,
+          4396971,
+          4278104,
+          2595516,
+          4711294,
+          5142620,
+          4397002,
+          4594327,
+          4576087,
+          4066262,
+          4432194
+        ],
+        "knownPlayers": 13,
+        "totalPlayers": 13,
+        "rawValue": 31.0165,
+        "score": 90.0,
+        "rank": 2
+      },
+      {
+        "teamId": "tochetaos",
+        "playerIds": [
+          4432166,
+          4277905,
+          4066457,
+          5061575,
+          4066328,
+          4397688,
+          5105623,
+          4066354,
+          3908845,
+          3133628,
+          4432639,
+          3995,
+          4397136
+        ],
+        "knownPlayers": 13,
+        "totalPlayers": 13,
+        "rawValue": 30.0546,
+        "score": 40.0,
+        "rank": 7
+      },
+      {
+        "teamId": "huecox-y-un-dobel",
+        "playerIds": [
+          5104157,
+          4684740,
+          3936299,
+          4066259,
+          4869342,
+          6606,
+          4066383,
+          4437244,
+          4711272,
+          4278067,
+          3134908,
+          3448,
+          3155526
+        ],
+        "knownPlayers": 13,
+        "totalPlayers": 13,
+        "rawValue": 30.9262,
+        "score": 70.0,
+        "rank": 4
+      },
+      {
+        "teamId": "fiestas-fantastic-team",
+        "playerIds": [
+          4065648,
+          3136193,
+          4683021,
+          4278039,
+          4395725,
+          4395628,
+          5037871,
+          4395651,
+          3102531,
+          6478,
+          4277811,
+          4601023,
+          4395723
+        ],
+        "knownPlayers": 13,
+        "totalPlayers": 13,
+        "rawValue": 30.1477,
+        "score": 50.0,
+        "rank": 6
+      },
+      {
+        "teamId": "beijing-ducks",
+        "playerIds": [
+          4594268,
+          3934672,
+          6450,
+          3917376,
+          4433627,
+          5160992,
+          4591725,
+          3059318,
+          4395625,
+          6440,
+          4222252,
+          4432165,
+          5254165
+        ],
+        "knownPlayers": 13,
+        "totalPlayers": 13,
+        "rawValue": 29.5414,
+        "score": 20.0,
+        "rank": 9
+      },
+      {
+        "teamId": "glizzy-goblers",
+        "playerIds": [
+          3112335,
+          3202,
+          4433621,
+          5142718,
+          4845367,
+          5095151,
+          3934719,
+          4251,
+          2991230,
+          3064440,
+          3064290,
+          4278594,
+          4683692
+        ],
+        "knownPlayers": 13,
+        "totalPlayers": 13,
+        "rawValue": 30.3645,
+        "score": 60.0,
+        "rank": 5
+      },
+      {
+        "teamId": "lalocomotora",
+        "playerIds": [
+          3945274,
+          4432816,
+          3149673,
+          1966,
+          3064514,
+          4433287,
+          5105565,
+          3978,
+          3062679,
+          3913176,
+          4397014,
+          4712849,
+          4395630
+        ],
+        "knownPlayers": 13,
+        "totalPlayers": 13,
+        "rawValue": 31.17,
+        "score": 100.0,
+        "rank": 1
+      },
+      {
+        "teamId": "claudia-sheinballers",
+        "playerIds": [
+          3908809,
+          4871145,
+          4066261,
+          4432573,
+          3032976,
+          4431671,
+          4709138,
+          4684742,
+          5175737,
+          4431785,
+          4066648,
+          6589,
+          6585
+        ],
+        "knownPlayers": 13,
+        "totalPlayers": 13,
+        "rawValue": 27.8086,
+        "score": 0.0,
+        "rank": 11
+      },
+      {
+        "teamId": "mclovers",
+        "playerIds": [
+          4433134,
+          4871144,
+          3975,
+          4593803,
+          3907497,
+          4433255,
+          4279888,
+          5124612,
+          4600663,
+          5175643,
+          4395712,
+          4873138,
+          2991070
+        ],
+        "knownPlayers": 13,
+        "totalPlayers": 13,
+        "rawValue": 29.9134,
+        "score": 30.0,
+        "rank": 8
+      }
+    ],
+    "players": {
+      "5041939": {
+        "pointsPerGame": 45.36,
+        "games": 72.0
+      },
+      "4396993": {
+        "pointsPerGame": 48.62,
+        "games": 64.0
+      },
+      "4396907": {
+        "pointsPerGame": 40.38,
+        "games": 69.0
+      },
+      "3078576": {
+        "pointsPerGame": 37.01,
+        "games": 77.0
+      },
+      "6442": {
+        "pointsPerGame": 44.2,
+        "games": 59.0
+      },
+      "4431680": {
+        "pointsPerGame": 34.81,
+        "games": 72.0
+      },
+      "4017837": {
+        "pointsPerGame": 35.46,
+        "games": 69.0
+      },
+      "2490149": {
+        "pointsPerGame": 32.44,
+        "games": 73.0
+      },
+      "3059319": {
+        "pointsPerGame": 32.03,
+        "games": 67.0
+      },
+      "5144091": {
+        "pointsPerGame": 27.3,
+        "games": 77.0
+      },
+      "4433247": {
+        "pointsPerGame": 26.25,
+        "games": 67.0
+      },
+      "4592479": {
+        "pointsPerGame": 23.34,
+        "games": 82.0
+      },
+      "5174983": null,
+      "3032977": {
+        "pointsPerGame": 57.55,
+        "games": 67.0
+      },
+      "3155942": {
+        "pointsPerGame": 46.7,
+        "games": 69.0
+      },
+      "6583": {
+        "pointsPerGame": 49.56,
+        "games": 61.0
+      },
+      "4066320": {
+        "pointsPerGame": 38.25,
+        "games": 72.0
+      },
+      "4066336": {
+        "pointsPerGame": 38.65,
+        "games": 69.0
+      },
+      "4566434": {
+        "pointsPerGame": 38.64,
+        "games": 66.0
+      },
+      "4433136": {
+        "pointsPerGame": 38.61,
+        "games": 64.0
+      },
+      "4869780": {
+        "pointsPerGame": 30.49,
+        "games": 76.0
+      },
+      "4397140": {
+        "pointsPerGame": 33.02,
+        "games": 66.0
+      },
+      "4278585": {
+        "pointsPerGame": 28.48,
+        "games": 73.0
+      },
+      "4903027": {
+        "pointsPerGame": 29.74,
+        "games": 69.0
+      },
+      "4397424": {
+        "pointsPerGame": 27.19,
+        "games": 72.0
+      },
+      "4351852": {
+        "pointsPerGame": 30.3,
+        "games": 61.0
+      },
+      "4701230": {
+        "pointsPerGame": 49.99,
+        "games": 72.0
+      },
+      "4431678": {
+        "pointsPerGame": 45.13,
+        "games": 71.0
+      },
+      "4432158": {
+        "pointsPerGame": 43.33,
+        "games": 66.0
+      },
+      "3147657": {
+        "pointsPerGame": 32.84,
+        "games": 82.0
+      },
+      "5041935": {
+        "pointsPerGame": 34.33,
+        "games": 72.0
+      },
+      "4065733": {
+        "pointsPerGame": 39.8,
+        "games": 64.0
+      },
+      "4277961": {
+        "pointsPerGame": 38.11,
+        "games": 62.0
+      },
+      "4395724": {
+        "pointsPerGame": 34.92,
+        "games": 65.0
+      },
+      "5041955": {
+        "pointsPerGame": 29.07,
+        "games": 73.0
+      },
+      "4432848": {
+        "pointsPerGame": 28.22,
+        "games": 74.0
+      },
+      "5174563": {
+        "pointsPerGame": 30.15,
+        "games": 66.0
+      },
+      "4278049": {
+        "pointsPerGame": 29.32,
+        "games": 68.0
+      },
+      "4683774": {
+        "pointsPerGame": 8.98,
+        "games": 63.0
+      },
+      "4278073": {
+        "pointsPerGame": 56.84,
+        "games": 76.0
+      },
+      "3136195": {
+        "pointsPerGame": 44.09,
+        "games": 70.0
+      },
+      "3992": {
+        "pointsPerGame": 42.08,
+        "games": 73.0
+      },
+      "4396971": {
+        "pointsPerGame": 35.51,
+        "games": 76.0
+      },
+      "4278104": {
+        "pointsPerGame": 38.93,
+        "games": 69.0
+      },
+      "2595516": {
+        "pointsPerGame": 35.97,
+        "games": 69.0
+      },
+      "4711294": {
+        "pointsPerGame": 32.54,
+        "games": 74.0
+      },
+      "5142620": {
+        "pointsPerGame": 30.4,
+        "games": 73.0
+      },
+      "4397002": {
+        "pointsPerGame": 30.36,
+        "games": 72.0
+      },
+      "4594327": {
+        "pointsPerGame": 29.28,
+        "games": 71.0
+      },
+      "4576087": {
+        "pointsPerGame": 29.25,
+        "games": 71.0
+      },
+      "4066262": {
+        "pointsPerGame": 27.72,
+        "games": 68.0
+      },
+      "4432194": {
+        "pointsPerGame": 27.03,
+        "games": 69.0
+      },
+      "4432166": {
+        "pointsPerGame": 50.45,
+        "games": 69.0
+      },
+      "4277905": {
+        "pointsPerGame": 44.35,
+        "games": 71.0
+      },
+      "4066457": {
+        "pointsPerGame": 43.33,
+        "games": 67.0
+      },
+      "5061575": {
+        "pointsPerGame": 35.17,
+        "games": 78.0
+      },
+      "4066328": {
+        "pointsPerGame": 36.86,
+        "games": 71.0
+      },
+      "4397688": {
+        "pointsPerGame": 36.75,
+        "games": 68.0
+      },
+      "5105623": {
+        "pointsPerGame": 33.78,
+        "games": 72.0
+      },
+      "4066354": {
+        "pointsPerGame": 31.56,
+        "games": 72.0
+      },
+      "3908845": {
+        "pointsPerGame": 31.78,
+        "games": 68.0
+      },
+      "3133628": {
+        "pointsPerGame": 28.41,
+        "games": 71.0
+      },
+      "4432639": {
+        "pointsPerGame": 27.64,
+        "games": 73.0
+      },
+      "3995": {
+        "pointsPerGame": 28.07,
+        "games": 68.0
+      },
+      "4397136": {
+        "pointsPerGame": 25.87,
+        "games": 71.0
+      },
+      "5104157": {
+        "pointsPerGame": 60.51,
+        "games": 67.0
+      },
+      "4684740": {
+        "pointsPerGame": 39.96,
+        "games": 78.0
+      },
+      "3936299": {
+        "pointsPerGame": 43.93,
+        "games": 69.0
+      },
+      "4066259": {
+        "pointsPerGame": 38.15,
+        "games": 71.0
+      },
+      "4869342": {
+        "pointsPerGame": 35.65,
+        "games": 75.0
+      },
+      "6606": {
+        "pointsPerGame": 38.62,
+        "games": 65.0
+      },
+      "4066383": {
+        "pointsPerGame": 33.92,
+        "games": 71.0
+      },
+      "4437244": {
+        "pointsPerGame": 32.43,
+        "games": 70.0
+      },
+      "4711272": {
+        "pointsPerGame": 29.92,
+        "games": 76.0
+      },
+      "4278067": {
+        "pointsPerGame": 30.29,
+        "games": 69.0
+      },
+      "3134908": {
+        "pointsPerGame": 31.65,
+        "games": 66.0
+      },
+      "3448": {
+        "pointsPerGame": 26.21,
+        "games": 72.0
+      },
+      "3155526": {
+        "pointsPerGame": 26.87,
+        "games": 69.0
+      },
+      "4065648": {
+        "pointsPerGame": 48.1,
+        "games": 70.0
+      },
+      "3136193": {
+        "pointsPerGame": 43.24,
+        "games": 72.0
+      },
+      "4683021": {
+        "pointsPerGame": 40.38,
+        "games": 72.0
+      },
+      "4278039": {
+        "pointsPerGame": 34.05,
+        "games": 79.0
+      },
+      "4395725": {
+        "pointsPerGame": 38.81,
+        "games": 67.0
+      },
+      "4395628": {
+        "pointsPerGame": 39.97,
+        "games": 64.0
+      },
+      "5037871": {
+        "pointsPerGame": 32.26,
+        "games": 72.0
+      },
+      "4395651": {
+        "pointsPerGame": 32.86,
+        "games": 72.0
+      },
+      "3102531": {
+        "pointsPerGame": 36.95,
+        "games": 59.0
+      },
+      "6478": {
+        "pointsPerGame": 30.19,
+        "games": 72.0
+      },
+      "4277811": {
+        "pointsPerGame": 28.76,
+        "games": 70.0
+      },
+      "4601023": {
+        "pointsPerGame": 25.33,
+        "games": 79.0
+      },
+      "4395723": {
+        "pointsPerGame": 23.96,
+        "games": 77.0
+      },
+      "4594268": {
+        "pointsPerGame": 47.25,
+        "games": 72.0
+      },
+      "3934672": {
+        "pointsPerGame": 43.83,
+        "games": 72.0
+      },
+      "6450": {
+        "pointsPerGame": 45.75,
+        "games": 63.0
+      },
+      "3917376": {
+        "pointsPerGame": 38.61,
+        "games": 71.0
+      },
+      "4433627": {
+        "pointsPerGame": 36.76,
+        "games": 68.0
+      },
+      "5160992": {
+        "pointsPerGame": 36.61,
+        "games": 66.0
+      },
+      "4591725": {
+        "pointsPerGame": 31.86,
+        "games": 69.0
+      },
+      "3059318": {
+        "pointsPerGame": 45.35,
+        "games": 54.0
+      },
+      "4395625": {
+        "pointsPerGame": 32.56,
+        "games": 66.0
+      },
+      "6440": {
+        "pointsPerGame": 30.07,
+        "games": 71.0
+      },
+      "4222252": {
+        "pointsPerGame": 30.52,
+        "games": 64.0
+      },
+      "4432165": {
+        "pointsPerGame": 29.1,
+        "games": 62.0
+      },
+      "5254165": {
+        "pointsPerGame": 24.36,
+        "games": 70.0
+      },
+      "3112335": {
+        "pointsPerGame": 67.19,
+        "games": 72.0
+      },
+      "3202": {
+        "pointsPerGame": 42.9,
+        "games": 72.0
+      },
+      "4433621": {
+        "pointsPerGame": 42.21,
+        "games": 72.0
+      },
+      "5142718": {
+        "pointsPerGame": 32.92,
+        "games": 72.0
+      },
+      "4845367": {
+        "pointsPerGame": 36.86,
+        "games": 72.0
+      },
+      "5095151": {
+        "pointsPerGame": 34.9,
+        "games": 71.0
+      },
+      "3934719": {
+        "pointsPerGame": 33.09,
+        "games": 68.0
+      },
+      "4251": {
+        "pointsPerGame": 38.47,
+        "games": 55.0
+      },
+      "2991230": {
+        "pointsPerGame": 33.43,
+        "games": 68.0
+      },
+      "3064440": {
+        "pointsPerGame": 32.02,
+        "games": 61.0
+      },
+      "3064290": {
+        "pointsPerGame": 28.91,
+        "games": 66.0
+      },
+      "4278594": {
+        "pointsPerGame": 22.39,
+        "games": 70.0
+      },
+      "4683692": {
+        "pointsPerGame": 24.12,
+        "games": 76.0
+      },
+      "3945274": {
+        "pointsPerGame": 60.63,
+        "games": 68.0
+      },
+      "4432816": {
+        "pointsPerGame": 46.43,
+        "games": 68.0
+      },
+      "3149673": {
+        "pointsPerGame": 41.11,
+        "games": 74.0
+      },
+      "1966": {
+        "pointsPerGame": 42.48,
+        "games": 64.0
+      },
+      "3064514": {
+        "pointsPerGame": 37.04,
+        "games": 72.0
+      },
+      "4433287": {
+        "pointsPerGame": 37.41,
+        "games": 68.0
+      },
+      "5105565": {
+        "pointsPerGame": 33.86,
+        "games": 73.0
+      },
+      "3978": {
+        "pointsPerGame": 29.83,
+        "games": 77.0
+      },
+      "3062679": {
+        "pointsPerGame": 33.01,
+        "games": 68.0
+      },
+      "3913176": {
+        "pointsPerGame": 38.47,
+        "games": 55.0
+      },
+      "4397014": {
+        "pointsPerGame": 28.11,
+        "games": 73.0
+      },
+      "4712849": {
+        "pointsPerGame": 28.16,
+        "games": 69.0
+      },
+      "4395630": {
+        "pointsPerGame": 26.83,
+        "games": 69.0
+      },
+      "3908809": {
+        "pointsPerGame": 46.48,
+        "games": 71.0
+      },
+      "4871145": {
+        "pointsPerGame": 46.16,
+        "games": 68.0
+      },
+      "4066261": {
+        "pointsPerGame": 39.63,
+        "games": 73.0
+      },
+      "4432573": {
+        "pointsPerGame": 39.0,
+        "games": 69.0
+      },
+      "3032976": {
+        "pointsPerGame": 34.31,
+        "games": 72.0
+      },
+      "4431671": {
+        "pointsPerGame": 29.73,
+        "games": 74.0
+      },
+      "4709138": {
+        "pointsPerGame": 30.84,
+        "games": 79.0
+      },
+      "4684742": {
+        "pointsPerGame": 30.8,
+        "games": 70.0
+      },
+      "5175737": {
+        "pointsPerGame": 23.49,
+        "games": 71.0
+      },
+      "4431785": {
+        "pointsPerGame": 30.57,
+        "games": 63.0
+      },
+      "4066648": {
+        "pointsPerGame": 23.97,
+        "games": 71.0
+      },
+      "6589": {
+        "pointsPerGame": 28.45,
+        "games": 64.0
+      },
+      "6585": {
+        "pointsPerGame": 20.7,
+        "games": 60.0
+      },
+      "4433134": {
+        "pointsPerGame": 43.68,
+        "games": 72.0
+      },
+      "4871144": {
+        "pointsPerGame": 43.01,
+        "games": 72.0
+      },
+      "3975": {
+        "pointsPerGame": 43.05,
+        "games": 66.0
+      },
+      "4593803": {
+        "pointsPerGame": 40.96,
+        "games": 70.0
+      },
+      "3907497": {
+        "pointsPerGame": 39.04,
+        "games": 68.0
+      },
+      "4433255": {
+        "pointsPerGame": 37.94,
+        "games": 65.0
+      },
+      "4279888": {
+        "pointsPerGame": 37.54,
+        "games": 65.0
+      },
+      "5124612": {
+        "pointsPerGame": 33.69,
+        "games": 72.0
+      },
+      "4600663": {
+        "pointsPerGame": 33.16,
+        "games": 62.0
+      },
+      "5175643": {
+        "pointsPerGame": 30.04,
+        "games": 71.0
+      },
+      "4395712": {
+        "pointsPerGame": 28.18,
+        "games": 71.0
+      },
+      "4873138": {
+        "pointsPerGame": 26.75,
+        "games": 72.0
+      },
+      "2991070": {
+        "pointsPerGame": 26.99,
+        "games": 68.0
+      }
+    }
+  },
+  "performance": null,
+  "projectionStatus": "captured"
+}

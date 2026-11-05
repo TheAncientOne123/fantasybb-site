@@ -32,7 +32,7 @@ export default function TeamSeasonSelector({
             scroll: false,
           })
         }}
-        className="cursor-pointer appearance-none rounded-full border border-zinc-600 bg-zinc-900 py-1.5 pl-3 pr-9 text-xs font-semibold uppercase tracking-wider text-zinc-300 outline-none transition hover:border-sky-500/60 hover:text-white focus:border-sky-400 focus:ring-2 focus:ring-sky-500/20"
+        className="cursor-pointer appearance-none rounded-full border border-slate-600 bg-slate-900 py-1.5 pl-3 pr-9 text-xs font-semibold uppercase tracking-wider text-slate-300 outline-none transition hover:border-amber-400/50 hover:text-white focus:border-amber-500/40 focus:ring-1 focus:ring-amber-500/30"
       >
         {seasons.map((season) => (
           <option key={season.id} value={season.id}>
@@ -42,7 +42,7 @@ export default function TeamSeasonSelector({
       </select>
       <ChevronDown
         aria-hidden="true"
-        className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400"
+        className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
       />
     </div>
   )

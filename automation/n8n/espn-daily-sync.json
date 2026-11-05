@@ -1,0 +1,190 @@
+{
+  "name": "LACMSI – Sync diario ESPN → Neon",
+  "nodes": [
+    {
+      "id": "b7a1c0de-0001-4000-8000-000000000001",
+      "name": "Diario 3:00 AM",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 3 * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "b7a1c0de-0002-4000-8000-000000000002",
+      "name": "¿Dentro de la temporada?",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "jsCode": "// Ventana de 5 meses (fechas en America/Mexico_City, inclusivas).\n// Edita estas dos fechas para la próxima temporada.\nconst START = '2026-11-06'\nconst END = '2027-04-05'\n\nconst today = $now.setZone('America/Mexico_City').toISODate()\nif (today < START || today > END) {\n  // Fuera de la ventana: no devolver items detiene el flujo sin error.\n  return []\n}\nreturn [{ json: { today, start: START, end: END } }]"
+      }
+    },
+    {
+      "id": "b7a1c0de-0003-4000-8000-000000000003",
+      "name": "Ejecutar sync ESPN",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        440,
+        0
+      ],
+      "parameters": {
+        "command": "cd /d \"C:UsersRamiroDocumentsDev\fantasybb-site\" && npm run --silent sync:espn || exit /b 0"
+      }
+    },
+    {
+      "id": "b7a1c0de-0004-4000-8000-000000000004",
+      "name": "Leer resultado",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        660,
+        0
+      ],
+      "parameters": {
+        "jsCode": "// El script siempre termina con: ESPN_SYNC_RESULT {json}\nconst stdout = String($json.stdout ?? '')\nconst line = stdout.split(/\r?\n/).reverse().find((l) => l.startsWith('ESPN_SYNC_RESULT '))\nconst tail = stdout.split(/\r?\n/).slice(-40).join('\n')\n\nif (!line) {\n  return [{ json: { ok: false, error: 'El script no devolvió ESPN_SYNC_RESULT (¿ruta, npm o python?).', stderr: $json.stderr, tail } }]\n}\nconst result = JSON.parse(line.slice('ESPN_SYNC_RESULT '.length))\nreturn [{ json: { ...result, tail } }]"
+      }
+    },
+    {
+      "id": "b7a1c0de-0005-4000-8000-000000000005",
+      "name": "¿Éxito?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        880,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "b7a1c0de-0006-4000-8000-000000000006",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "b7a1c0de-0007-4000-8000-000000000007",
+      "name": "Sitio actualizado",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1100,
+        -100
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "b7a1c0de-0008-4000-8000-000000000008",
+      "name": "Marcar fallo",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        1100,
+        100
+      ],
+      "parameters": {
+        "errorMessage": "={{ \"Sync ESPN falló: \" + $json.error }}"
+      }
+    }
+  ],
+  "connections": {
+    "Diario 3:00 AM": {
+      "main": [
+        [
+          {
+            "node": "¿Dentro de la temporada?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Dentro de la temporada?": {
+      "main": [
+        [
+          {
+            "node": "Ejecutar sync ESPN",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ejecutar sync ESPN": {
+      "main": [
+        [
+          {
+            "node": "Leer resultado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer resultado": {
+      "main": [
+        [
+          {
+            "node": "¿Éxito?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Éxito?": {
+      "main": [
+        [
+          {
+            "node": "Sitio actualizado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Marcar fallo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Mexico_City"
+  },
+  "pinData": {}
+}

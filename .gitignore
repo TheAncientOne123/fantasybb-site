@@ -8,6 +8,7 @@ node_modules/
 
 # Next.js
 /.next/
+/.next-check/
 /out/
 
 # Production
@@ -43,3 +44,6 @@ next-env.d.ts
 *.swp
 *.swo
 *~
+
+# Logs locales (sincronización ESPN / n8n)
+/.logs/

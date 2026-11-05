@@ -1,5 +1,9 @@
 import type { ProfileRosterPlayer, TeamProfile, TeamProfileSeason } from './types'
 import { buildTeamProfile as buildStaticTeamProfile } from './buildFromRewind'
+import { STATIC_ROSTERS, STATIC_TEAM_CATALOGS } from '@/data/catalog/static'
+import { SEASONS } from '@/data/seasons'
+import { STATIC_ROSTER_QUALITY } from './quality-static'
+import { teamRosterQuality, type RosterQualitySeason } from './roster-quality'
 import {
   getDatabase,
   getFantasyDataSource,
@@ -17,6 +21,14 @@ type TeamRow = {
 type TeamSeasonRow = {
   season_id: string
   season_label: string
+  display_name: string
+  logo_url: string | null
+  owner: string | null
+  description: string | null
+  is_active: boolean
+  has_stats: boolean
+  current_roster: ProfileRosterPlayer[] | null
+  drafted_roster: ProfileRosterPlayer[] | null
   record: string
   regular_season_rank: number
   made_playoffs: boolean
@@ -24,7 +36,6 @@ type TeamSeasonRow = {
   playoff_depth_label: string
   longest_streaks: string | null
   highest_scoring_week: string | null
-  debt_paid: string
   longevity_key_weeks_team_avg: number | null
 }
 
@@ -107,7 +118,7 @@ function rosterPlayer(row: RosterRow): ProfileRosterPlayer {
 
 async function getDatabaseTeamProfile(teamId: string): Promise<TeamProfile | null> {
   const sql = getDatabase()
-  const [teamRows, seasonRows, achievementRows, rosterRows, categoryRows, compositionRows] =
+  const [teamRows, seasonRows, achievementRows, rosterRows, categoryRows, compositionRows, qualityRows] =
     await Promise.all([
       sql<TeamRow[]>`
         select id, display_name, owner, description, logo_url
@@ -118,21 +129,30 @@ async function getDatabaseTeamProfile(teamId: string): Promise<TeamProfile | nul
         select
           st.season_id,
           s.label as season_label,
+          st.display_name,
+          st.logo_url,
+          coalesce(ts.owner, t.owner) as owner,
+          coalesce(ts.description, t.description) as description,
+          s.is_active,
+          (ts.team_id is not null) as has_stats,
+          sr.current_roster,
+          sr.drafted_roster,
           coalesce(ts.record, '—') as record,
           coalesce(ts.regular_season_rank, 0) as regular_season_rank,
           coalesce(ts.made_playoffs, false) as made_playoffs,
           coalesce(ts.won_finals, false) as won_finals,
-          coalesce(ts.playoff_depth_label, 'Temporada próxima') as playoff_depth_label,
+          coalesce(ts.playoff_depth_label, 'Sin resultados todavía') as playoff_depth_label,
           ts.longest_streaks,
           ts.highest_scoring_week,
-          coalesce(ts.debt_paid, '—') as debt_paid,
           ts.longevity_key_weeks_team_avg
         from season_teams st
         join seasons s on s.id = st.season_id
+        join teams t on t.id = st.team_id
+        left join season_rosters sr on sr.team_id = st.team_id and sr.season_id = st.season_id
         left join team_seasons ts
           on ts.team_id = st.team_id and ts.season_id = st.season_id
         where st.team_id = ${teamId}
-        order by s.year desc, s.id desc
+        order by s.is_active desc, s.year desc, s.id desc
       `,
       sql<AchievementRow[]>`
         select season_id, name, label, image_url
@@ -171,6 +191,16 @@ async function getDatabaseTeamProfile(teamId: string): Promise<TeamProfile | nul
         from team_nba_composition
         where team_id = ${teamId}
         order by season_id desc, percentage desc, team_abbrev
+      `,
+      sql<Array<{ season_id: string; data: RosterQualitySeason }>>`
+        select q.season_id, jsonb_build_object(
+          'seasonId', q.season_id, 'methodVersion', q.method_version, 'source', 'ESPN',
+          'generatedAt', q.generated_at, 'projectionStatus', q.projection_status,
+          'projection', q.projection, 'performance', q.performance
+        ) as data
+        from roster_quality_snapshots q
+        join season_teams st on st.season_id = q.season_id
+        where st.team_id = ${teamId}
       `,
     ])
 
@@ -217,24 +247,31 @@ async function getDatabaseTeamProfile(teamId: string): Promise<TeamProfile | nul
 
   return {
     id: team.id,
-    displayName: team.display_name,
+    displayName: seasonRows[0].display_name,
     owner: optionalText(team.owner),
     description: optionalText(team.description),
-    logoUrl: optionalText(team.logo_url),
+    logoUrl: optionalText(seasonRows[0].logo_url),
+    activeSeasonId: seasonRows.find((row) => row.is_active)?.season_id,
     seasons: seasonRows.map((row) => {
       const rosters = rostersBySeason.get(row.season_id) ?? {}
       const categories = categoriesBySeason.get(row.season_id) ?? []
       return {
         seasonId: row.season_id,
         seasonLabel: row.season_label,
+        displayName: row.display_name,
+        logoUrl: optionalText(row.logo_url),
+        owner: optionalText(row.owner),
+        description: optionalText(row.description),
+        hasStats: row.has_stats,
+        rosterQuality: teamRosterQuality(qualityRows.find((quality) => quality.season_id === row.season_id)?.data, teamId),
         record: row.record,
         regularSeasonRank: row.regular_season_rank,
         madePlayoffs: row.made_playoffs,
         wonFinals: row.won_finals,
         playoffDepthLabel: row.playoff_depth_label,
         achievements: achievementsBySeason.get(row.season_id) ?? [],
-        finalRoster: rosters.final ?? [],
-        draftedRoster: rosters.drafted,
+        finalRoster: row.current_roster ?? rosters.final ?? [],
+        draftedRoster: row.drafted_roster ?? rosters.drafted,
         longevityRoster: rosters.longevity,
         coreTeamRoster: rosters.core,
         waiverRoster: rosters.waiver,
@@ -250,21 +287,52 @@ async function getDatabaseTeamProfile(teamId: string): Promise<TeamProfile | nul
         })),
         longestStreaks: optionalText(row.longest_streaks),
         highestScoringWeek: optionalText(row.highest_scoring_week),
-        debtPaid: row.debt_paid,
       }
     }),
   }
 }
 
+async function getStaticProfile(teamId: string): Promise<TeamProfile | null> {
+  const historical = await buildStaticTeamProfile(teamId)
+  const seasons = SEASONS.flatMap((season): TeamProfileSeason[] => {
+    const identity = STATIC_TEAM_CATALOGS[season.id]?.teams.find((team) => team.id === teamId)
+    const existing = historical?.seasons.find((entry) => entry.seasonId === season.id)
+    if (!identity && !existing) return []
+    const roster = STATIC_ROSTERS[season.id]?.teams.find((team) => team.id === teamId)
+    return [{
+      seasonId: season.id, seasonLabel: season.label,
+      record: '—', regularSeasonRank: 0, madePlayoffs: false, wonFinals: false,
+      playoffDepthLabel: 'Sin resultados todavía', achievements: [], finalRoster: [],
+      categoryRanks9cat: {}, hasStats: false,
+      ...existing,
+      ...identity,
+      displayName: (identity?.displayName ?? existing?.displayName ?? teamId).trim(),
+      rosterQuality: teamRosterQuality(STATIC_ROSTER_QUALITY[season.id], teamId),
+      ...(roster ? { finalRoster: roster.currentRoster, draftedRoster: roster.draftedRoster } : {}),
+    }]
+  }).sort((a, b) => {
+    const activeId = SEASONS.find((season) => season.isActive)?.id
+    return Number(b.seasonId === activeId) - Number(a.seasonId === activeId) || b.seasonId.localeCompare(a.seasonId)
+  })
+  if (!seasons.length) return null
+  return {
+    ...historical, id: teamId,
+    displayName: seasons[0].displayName ?? historical?.displayName ?? teamId,
+    logoUrl: seasons[0].logoUrl,
+    activeSeasonId: SEASONS.find((season) => season.isActive)?.id,
+    seasons,
+  }
+}
+
 export async function getTeamProfile(teamId: string): Promise<TeamProfile | null> {
   const source = getFantasyDataSource()
-  if (source === 'static') return buildStaticTeamProfile(teamId)
+  if (source === 'static') return getStaticProfile(teamId)
 
   if (!isDatabaseConfigured()) {
     if (source === 'database') {
       throw new Error('FANTASY_DATA_SOURCE=database requiere DATABASE_URL.')
     }
-    return buildStaticTeamProfile(teamId)
+    return getStaticProfile(teamId)
   }
 
   try {
@@ -276,5 +344,5 @@ export async function getTeamProfile(teamId: string): Promise<TeamProfile | null
     console.warn(`[data] No se pudo leer el perfil ${teamId} de PostgreSQL; se usará el archivo estático.`, error)
   }
 
-  return buildStaticTeamProfile(teamId)
+  return getStaticProfile(teamId)
 }

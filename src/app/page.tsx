@@ -5,6 +5,7 @@ import LeagueIntro from '@/components/landing/LeagueIntro'
 import LeagueMembers from '@/components/landing/LeagueMembers'
 import LeagueRules from '@/components/landing/LeagueRules'
 import SeasonChampions from '@/components/landing/SeasonChampions'
+import { SiteFooter } from '@/components/ui'
 
 export const revalidate = 300
 
@@ -25,15 +26,7 @@ export default async function LandingPage() {
       <LeagueMembers teams={teams} />
       <LeagueRules />
       <SeasonChampions />
-      
-      {/* Footer */}
-      <footer className="relative py-12 px-6 border-t border-white/10">
-        <div className="max-w-6xl mx-auto text-center">
-          <p className="text-white/40 text-sm">
-            © {new Date().getFullYear()} LACMSI League. Look at Curry man, so inspirational.
-          </p>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   )
 }

@@ -1,6 +1,6 @@
 {
   "seasonId": "2027",
-  "generatedAt": "2026-10-18T03:22:57Z",
+  "generatedAt": "2026-10-18T17:37:33Z",
   "teams": [
     {
       "id": "claudia-sheinballers",
@@ -24,13 +24,13 @@
       "id": "glizzy-goblers",
       "espnTeamId": 9,
       "displayName": "Glizzy Goblers",
-      "logoUrl": "/team-logos/glizzy-goblers.jpg"
+      "logoUrl": "/team-logos/2027/glizzy-goblers-b782c514f993.jpg"
     },
     {
       "id": "huecox-y-un-dobel",
       "espnTeamId": 6,
       "displayName": "huecox y un Dobel",
-      "logoUrl": "/team-logos/huecox-y-un-dobel.jpg"
+      "logoUrl": "/team-logos/2027/huecox-y-un-dobel-78049a848d64.jpg"
     },
     {
       "id": "lalocomotora",
@@ -42,7 +42,7 @@
       "id": "lububumatcha",
       "espnTeamId": 3,
       "displayName": "LububuMatcha",
-      "logoUrl": "/team-logos/labubu-matcha-logo.png"
+      "logoUrl": "/team-logos/2027/lububumatcha-b5a07ab0be36.jpg"
     },
     {
       "id": "mclovers",
@@ -60,19 +60,19 @@
       "id": "novigrad-21ers",
       "espnTeamId": 1,
       "displayName": "Novigrad 21ers ",
-      "logoUrl": "/team-logos/novigrad-21ers.jpg"
+      "logoUrl": "/team-logos/2027/novigrad-21ers-f741effc1c5f.jpg"
+    },
+    {
+      "id": "beijing-ducks",
+      "espnTeamId": 8,
+      "displayName": "THANOS",
+      "logoUrl": "https://g.espncdn.com/lm-static/logo-packs/core/DIS_Avengers_EndGame/DIS_Avengers_EndGame_Thanos.svg"
     },
     {
       "id": "tochetaos",
       "espnTeamId": 5,
       "displayName": "Tochetaos",
-      "logoUrl": "/team-logos/tochetaos.jpg"
-    },
-    {
-      "id": "beijing-ducks",
-      "espnTeamId": 8,
-      "displayName": "北京首钢霹雳鸭",
-      "logoUrl": "/team-logos/beijing-ducks.jpg"
+      "logoUrl": "/team-logos/2027/tochetaos-a90d096b26be.jpg"
     }
   ]
 }

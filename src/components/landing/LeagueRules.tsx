@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { FileText, ExternalLink } from 'lucide-react'
+import { ui } from '@/components/ui/styles'
 
 export default function LeagueRules() {
   return (
@@ -19,7 +20,7 @@ export default function LeagueRules() {
             <div className="rounded-full bg-amber-500/20 p-3">
               <FileText className="h-8 w-8 text-amber-400" />
             </div>
-            <h2 className="font-heading text-3xl sm:text-4xl font-bold text-white">
+            <h2 className={ui.pageTitle}>
               Reglas de la Liga
             </h2>
           </div>

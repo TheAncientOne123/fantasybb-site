@@ -10,6 +10,7 @@ Aplicación web para la liga de Fantasy NBA **LACMSI** (Look At Curry Man So Ins
 - [Estructura del repositorio](#estructura-del-repositorio)
 - [Contenido del sitio y reglas](#contenido-del-sitio-y-reglas)
 - [Landing page](#landing-page)
+- [Sistema de diseño](#sistema-de-diseño)
 - [Fantasy Rewind (datos y rutas)](#fantasy-rewind-datos-y-rutas)
 - [Analytics (Python)](#analytics-python)
 - [Plan Wrapped / visión de producto](#plan-wrapped--visión-de-producto-no-implementado-en-esta-repo)
@@ -37,6 +38,7 @@ npm start            # servir build
 npm run lint         # ESLint (Next)
 npm run type-check   # tsc --noEmit
 npm run database:setup # crea tablas, importa y verifica perfiles y Stats Room
+npm run sync:espn    # sincronización ESPN → Neon sin interfaz (la usa n8n)
 ```
 
 **Python (analytics):** ver sección [Analytics (Python)](#analytics-python).
@@ -87,7 +89,33 @@ La ruta y su endpoint aceptan únicamente hosts loopback (`localhost`, `127.0.0.
 
 Antes de usarla, configura las credenciales de ESPN (`LEAGUE_ID`, `SWID` y `ESPN_S2` cuando sean necesarias) en `analytics/.env`; la temporada `YEAR` se toma automáticamente del selector. `DATABASE_URL` continúa configurándose en el `.env` raíz.
 
+### Sincronización automática diaria (GitHub Actions)
+
+`npm run sync:espn` ejecuta sin interfaz el mismo flujo que el administrador (ESPN → archivos locales → equipos/rosters → Stats Room en Neon → verificación).
+
+[`.github/workflows/espn-daily-sync.yml`](.github/workflows/espn-daily-sync.yml) lo corre en la nube todos los días a las 3:00 AM (America/Mexico_City, `0 9 * * *` UTC) entre `SYNC_START` y `SYNC_END`, sin necesidad de tener la PC encendida. Requiere los secrets `DATABASE_URL`, `LEAGUE_ID`, `ESPN_S2` y `SWID` en *Settings → Secrets and variables → Actions*. Si ESPN trae un logo nuevo, el workflow sube sólo la imagen (`public/team-logos`) con un commit automático, así que haz `git pull` antes de tu siguiente push. Los archivos del Rewind (`src/data/seasons`) no se suben; se publican a mano al terminar la temporada. El registro de cada ejecución queda como artifact durante 14 días. También se puede lanzar a mano desde *Actions → ESPN daily sync → Run workflow*.
+
+Alternativa local con n8n (requiere la PC encendida): [`automation/n8n/README.md`](automation/n8n/README.md).
+
 ### Participantes y equipos de expansión
+
+Los nombres y logos se guardan en `season_teams` por temporada. El ID numérico de ESPN mantiene la identidad del equipo aunque cambie de nombre. Las imágenes descargadas usan una ruta por temporada y una huella del contenido, por lo que una foto nueva no reemplaza la anterior. El perfil abre primero la temporada activa y cambia de nombre, foto y roster al elegir otro año.
+
+Para actualizar la temporada actual después del draft o durante la liga, usa la pantalla local existente en `http://localhost:3000/admin/stats`. **Sincronizar equipos** refresca nombres, fotos, draft y rosters en Neon. **Generar borrador local** consulta ESPN y sólo modifica los archivos de la temporada elegida. **Publicar en Neon** importa ese borrador a la base compartida. Estas acciones no requieren hacer push de código; las escrituras en Neon pueden reflejarse en producción si usa la misma base.
+
+Antes del primer partido, las vistas existentes de Stats Room permanecen visibles con valores pendientes. No se generan premios ni Rewinds vacíos. Las demás temporadas no se vuelven a importar.
+
+`season_rosters` guarda los rosters y el draft sin exigir estadísticas. Los catálogos locales `teams-catalog.json` y `team-rosters.json` son su respaldo. Para comprobar los casos de cambio de nombre, conservación de fotos y temporadas sin puntuación: `python -m unittest discover -s analytics -p test_season_sync.py`.
+
+### Calidad de Roster en los perfiles
+
+Cada perfil muestra la expectativa de pretemporada y una comparación del rendimiento de los jugadores drafteados con los del roster final (o actual mientras sigue la temporada). La fuente es ESPN y la puntuación configurada en la liga. Por jugador se usa el promedio fantasy por partido multiplicado por su disponibilidad; la media de toda la plantilla incorpora profundidad. Para la proyección, la disponibilidad es partidos previstos / 82; para el desempeño es partidos jugados / máximo de partidos registrado entre los jugadores consultados. Ambos rosters usan la misma ventana NBA, incluidos jugadores que ya salieron del equipo. La calificación es el percentil 0–100; drafteado y final se normalizan juntos y su diferencia es la mejora. Los empates comparten calificación (50 cuando todo el grupo empata).
+
+Las capturas se guardan por temporada en `roster-quality.json` y `roster_quality_snapshots`. **Sincronizar equipos** desde `/admin/stats` conserva la primera proyección disponible antes de empezar los partidos. La evaluación final archivada también se conserva. Las temporadas anteriores sin captura de pretemporada indican que la proyección original no está disponible. Un roster con jugadores sin datos queda pendiente; una calificación válida de cero se muestra como `0.0/100`.
+
+Para evaluar un año histórico usando sus rosters archivados, `scripts/export-quality-rosters.ts --season 2026` prepara `quality-rosters.json`; `python analytics/roster_quality.py --season 2026 --rosters-file src/data/seasons/2026/quality-rosters.json` consulta el rendimiento de esos jugadores sin reemplazar los rosters históricos. `scripts/import-roster-quality.ts --season 2026` importa sólo la evaluación. Ejecuta los scripts TypeScript con `node scripts/run-tsx.cjs`.
+
+Pruebas: `python -m unittest discover -s analytics -p test_roster_quality.py`. `node scripts/run-tsx.cjs scripts/verify-roster-quality.ts` comprueba datos estáticos, PostgreSQL e inmutabilidad dentro de una transacción revertida.
 
 `season_teams` registra qué equipos participan en cada temporada sin inventar estadísticas. `team_seasons` conserva únicamente el perfil estadístico de esa temporada. Esto permite preparar una temporada nueva antes de que comience.
 
@@ -97,8 +125,8 @@ Para agregar un equipo nuevo desde el SQL Editor del proveedor, crea primero su 
 insert into teams (id, display_name, owner, description, logo_url)
 values ('slug-del-equipo', 'Nombre del equipo', 'Nombre del dueño', null, null);
 
-insert into season_teams (season_id, team_id, is_expansion)
-values ('2027', 'slug-del-equipo', true);
+insert into season_teams (season_id, team_id, is_expansion, display_name, logo_url)
+values ('2027', 'slug-del-equipo', true, 'Nombre del equipo en 2026-27', null);
 ```
 
 Los equipos con `is_expansion = true` aparecen en “Equipos de Expansión”. Para corregir la marca:
@@ -121,8 +149,6 @@ where season_id = '2027' and team_id = 'slug-del-equipo';
 | `/awards` | Hall of Fame / premios y badges |
 | `/rules` | Reglas de la liga (lee `src/content/rules/league-rules.md`) |
 | `/team/[teamId]` | Perfil histórico por equipo (PostgreSQL o fallback estático) |
-| `/admin/rewinds`, `/admin/rewinds/[seasonId]`, `/admin/rewinds/[seasonId]/[teamId]` | Flujo admin de rewinds (cliente + API opcional) |
-| `/wrapped`, `/wrapped/[seasonId]`, `/wrapped/[seasonId]/team/[teamId]` | Flujo “Wrapped” alterno (admin) |
 | `/api/proxy-image` | Proxy de imágenes |
 
 ## Estructura del repositorio
@@ -138,11 +164,12 @@ fantasybb-site/
 ├── public/                    # Assets estáticos, badges, team-logos
 ├── src/
 │   ├── app/                   # App Router (páginas y layouts)
-│   ├── components/            # landing, layout, rewind, stats, ui, …
+│   ├── components/            # landing, rewind, stats, team, hall-of-fame, admin
+│   │   └── ui/                # design system: tokens + PageShell, Card, Button…
 │   ├── content/rules/         # league-rules.md (fuente de /rules)
 │   ├── data/                  # rewind-types, getTeamRewind, seasons/{year}/…
-│   ├── hooks/
-│   └── lib/                   # utils, api client, auth helpers, rewind-image
+│   └── lib/                   # utils, stats-pipeline (ESPN → Neon), rewind-image
+├── automation/n8n/            # flujo n8n de sincronización diaria + guía
 ├── README.md
 └── package.json
 ```
@@ -180,7 +207,24 @@ La landing presenta la liga y enlaces rápidos a Rewind, premios y estadísticas
 
 ### Estilo
 
-Fondo `slate-950`, acentos `amber-400/500`, gradientes purple/blue; tipografía **Bebas Neue** (headings) + **Inter** (body); bordes translúcidos y blur.
+Ver [Sistema de diseño](#sistema-de-diseño).
+
+## Sistema de diseño
+
+Todas las páginas comparten la misma apariencia desde `src/components/ui/`:
+
+| Pieza | Uso |
+|---|---|
+| `styles.ts` (`ui`, `buttonClass`) | Tokens: fondo, anchos, títulos, tarjetas, selects, foco. Única fuente de clases compartidas. |
+| `PageShell` | Estructura de cualquier página interna: `SiteHeader` (logo + navegación), contenido centrado (`width="narrow" \| "default" \| "wide"`) y `SiteFooter`. Acepta `background` (p. ej. `GiphyBackdrop`). |
+| `PageHeader` | Título `h1`, `eyebrow`, descripción y `actions`. |
+| `Section` | Título de sección `h2` + descripción + contenido. |
+| `Card` | Superficie de vidrio (`padding`, `interactive`). |
+| `Button` / `LinkButton` | Variantes `primary`, `secondary`, `accent`, `ghost`. |
+
+Reglas de color: **slate** para la base, **amber** para marca e interacción (navegación activa, botones, foco), **sky** sólo para resaltar datos. Tipografía: **Bebas Neue** para títulos (`font-heading`, peso único: no usar `font-bold`) e **Inter** para texto, cargadas con `next/font`.
+
+La landing (`/`) conserva su hero a pantalla completa y usa los mismos títulos y footer; el reproductor de Rewind mantiene su diseño inmersivo propio.
 
 ## Fantasy Rewind (datos y rutas)
 

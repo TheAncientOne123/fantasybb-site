@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown, Search, Calendar } from 'lucide-react'
 import type { TeamIndexEntry } from '@/data/rewind-types'
 import type { Season } from '@/data/seasons'
+import { ui } from '@/components/ui/styles'
 
 function searchSeasonTeams(teams: TeamIndexEntry[], query: string): TeamIndexEntry[] {
   const normalized = query.trim().toLowerCase()
@@ -140,7 +141,7 @@ export default function QuickAccess({
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="font-heading text-3xl sm:text-4xl font-bold text-white text-center mb-4">
+          <h2 className={`${ui.pageTitle} mb-4 text-center`}>
             Rewind
           </h2>
           <p className="text-white/60 text-center mb-8">
@@ -285,7 +286,7 @@ export default function QuickAccess({
             {profileLinkMatch ? (
               <p className="mt-4 text-center text-sm text-white/50">
                 <Link
-                  href={`/team/${profileLinkMatch.id}`}
+                  href={`/team/${profileLinkMatch.id}?season=${selectedSeason.id}`}
                   className="text-amber-400/90 underline-offset-2 hover:underline"
                 >
                   Ver perfil del equipo

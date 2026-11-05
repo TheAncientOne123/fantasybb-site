@@ -4,6 +4,7 @@ import { SEASONS } from '../src/data/seasons'
 import { getAllRewindTeamIds } from '../src/data/getTeamRewind'
 import { buildTeamProfile } from '../src/data/team-profiles/buildFromRewind'
 import type { ProfileRosterPlayer, TeamProfileSeason } from '../src/data/team-profiles/types'
+import { readSeasonArgument } from './stats-room-datasets'
 
 loadEnvConfig(process.cwd())
 
@@ -122,6 +123,7 @@ async function insertSeasonDetails(
 }
 
 async function main() {
+  const selectedSeasonId = readSeasonArgument()
   const databaseUrl = process.env.DATABASE_URL?.trim()
   if (!databaseUrl) throw new Error('Falta DATABASE_URL en .env.local o en el entorno.')
 
@@ -132,7 +134,7 @@ async function main() {
     ).filter((profile) => profile != null)
 
     await sql.begin(async (transaction) => {
-      for (const season of SEASONS) {
+      for (const season of SEASONS.filter((season) => !selectedSeasonId || season.id === selectedSeasonId)) {
         await transaction`
           insert into seasons (id, year, label, is_active)
           values (${season.id}, ${Number(season.year)}, ${season.label}, false)
@@ -156,6 +158,7 @@ async function main() {
       }
 
       for (const profile of profiles) {
+        if (selectedSeasonId && !profile.seasons.some((season) => season.seasonId === selectedSeasonId)) continue
         await transaction`
           insert into teams (id, display_name, owner, description, logo_url)
           values (
@@ -171,12 +174,16 @@ async function main() {
             description = excluded.description,
             logo_url = excluded.logo_url,
             updated_at = now()
+          where not exists (
+            select 1 from season_teams newer join seasons s on s.id = newer.season_id
+            where newer.team_id = teams.id and s.year > ${Number(profile.seasons[0]?.seasonId)}
+          )
         `
 
-        for (const season of profile.seasons) {
+        for (const season of profile.seasons.filter((season) => !selectedSeasonId || season.seasonId === selectedSeasonId)) {
           await transaction`
-            insert into season_teams (season_id, team_id, is_expansion)
-            values (${season.seasonId}, ${profile.id}, false)
+            insert into season_teams (season_id, team_id, is_expansion, display_name, logo_url)
+            values (${season.seasonId}, ${profile.id}, false, ${season.displayName ?? profile.displayName}, ${season.logoUrl ?? profile.logoUrl ?? null})
             on conflict (season_id, team_id) do nothing
           `
 
@@ -194,14 +201,13 @@ async function main() {
               playoff_depth_label,
               longest_streaks,
               highest_scoring_week,
-              debt_paid,
               longevity_key_weeks_team_avg
             ) values (
               ${profile.id},
               ${season.seasonId},
-              ${profile.displayName.trim()},
-              ${profile.owner ?? null},
-              ${profile.description ?? null},
+              ${(season.displayName ?? profile.displayName).trim()},
+              ${season.owner ?? profile.owner ?? null},
+              ${season.description ?? profile.description ?? null},
               ${season.record},
               ${season.regularSeasonRank},
               ${season.madePlayoffs},
@@ -209,7 +215,6 @@ async function main() {
               ${season.playoffDepthLabel},
               ${season.longestStreaks ?? null},
               ${season.highestScoringWeek ?? null},
-              ${season.debtPaid},
               ${season.longevityKeyWeeksTeamAvg ?? null}
             )
             on conflict (team_id, season_id) do update set
@@ -223,7 +228,6 @@ async function main() {
               playoff_depth_label = excluded.playoff_depth_label,
               longest_streaks = excluded.longest_streaks,
               highest_scoring_week = excluded.highest_scoring_week,
-              debt_paid = excluded.debt_paid,
               longevity_key_weeks_team_avg = excluded.longevity_key_weeks_team_avg,
               updated_at = now()
           `

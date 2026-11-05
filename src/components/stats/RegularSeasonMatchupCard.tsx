@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import clsx from 'clsx'
 import type { RegularSeasonMatchupRow } from '@/data/stats-room-types'
-import { getTeamLogoPath } from '@/data/team-profiles/team-logos'
+import { useTeamLogo } from '@/components/team/TeamIdentityProvider'
 
 type StandingsLookup = Map<string, { displayName: string }>
 
@@ -41,6 +41,7 @@ export default function RegularSeasonMatchupCard({
   teamFilter,
   lowestScoreTeamIds,
 }: Props) {
+  const getTeamLogoPath = useTeamLogo()
   const { scoreA, scoreB, teamAId, teamBId } = m
   const aWins = scoreA > scoreB
   const bWins = scoreB > scoreA

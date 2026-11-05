@@ -10,11 +10,12 @@ export type Season = {
 }
 
 export const SEASONS: Season[] = [
+  { id: '2027', year: '2027', label: '2026-27 Season', isActive: true },
   {
     id: '2026',
     year: '2026',
     label: '2025-26 Season',
-    isActive: true,
+    isActive: false,
   },
 ]
 

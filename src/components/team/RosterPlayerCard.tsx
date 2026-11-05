@@ -39,13 +39,13 @@ export function RosterPlayerCard({ player, subtitle, className }: Props) {
   return (
     <div
       className={clsx(
-        'flex gap-3 rounded-xl border border-zinc-800 p-3 shadow-sm shadow-black/20',
-        !tint && 'bg-zinc-950/60',
+        'flex gap-3 rounded-xl border border-slate-800 p-3 shadow-sm shadow-black/20',
+        !tint && 'bg-slate-950/60',
         className
       )}
       style={tint ? { backgroundColor: tint } : undefined}
     >
-      <div className="relative h-14 w-11 shrink-0 overflow-hidden rounded-lg bg-zinc-800">
+      <div className="relative h-14 w-11 shrink-0 overflow-hidden rounded-lg bg-slate-800">
         {showImg ? (
           <Image
             src={player.headshotUrl!}
@@ -57,21 +57,21 @@ export function RosterPlayerCard({ player, subtitle, className }: Props) {
             onError={() => setImgFailed(true)}
           />
         ) : (
-          <span className="flex h-full w-full items-center justify-center text-sm font-bold text-zinc-500">
+          <span className="flex h-full w-full items-center justify-center text-sm font-bold text-slate-500">
             {initial}
           </span>
         )}
       </div>
       <div className="min-w-0 flex-1">
         <div className="flex min-w-0 flex-wrap items-center gap-2">
-          <p className="min-w-0 truncate font-medium text-zinc-100">{player.name}</p>
+          <p className="min-w-0 truncate font-medium text-slate-100">{player.name}</p>
           {player.proTeamName?.trim() ? (
-            <span className="shrink-0 text-[11px] font-medium text-zinc-500">
+            <span className="shrink-0 text-[11px] font-medium text-slate-500">
               {player.proTeamName.trim()}
             </span>
           ) : null}
           {showLogo ? (
-            <span className="relative h-5 w-5 shrink-0 overflow-hidden rounded-full ring-1 ring-zinc-600/80">
+            <span className="relative h-5 w-5 shrink-0 overflow-hidden rounded-full ring-1 ring-slate-600/80">
               <Image
                 src={logoUrl!}
                 alt=""
@@ -83,7 +83,7 @@ export function RosterPlayerCard({ player, subtitle, className }: Props) {
               />
             </span>
           ) : isFA ? (
-            <span className="shrink-0 rounded border border-zinc-600 px-1 py-0 text-[9px] font-semibold uppercase tracking-wide text-zinc-500">
+            <span className="shrink-0 rounded border border-slate-600 px-1 py-0 text-[9px] font-semibold uppercase tracking-wide text-slate-500">
               FA
             </span>
           ) : null}
@@ -92,13 +92,13 @@ export function RosterPlayerCard({ player, subtitle, className }: Props) {
           {positions.map((pos, i) => (
             <span
               key={`${pos}-${i}`}
-              className="rounded border border-zinc-700 bg-zinc-900/80 px-1.5 py-0.5 text-[10px] font-semibold tracking-wide text-zinc-400"
+              className="rounded border border-slate-700 bg-slate-900/80 px-1.5 py-0.5 text-[10px] font-semibold tracking-wide text-slate-400"
             >
               {pos}
             </span>
           ))}
         </div>
-        {subtitle ? <p className="mt-1 text-[11px] text-zinc-500">{subtitle}</p> : null}
+        {subtitle ? <p className="mt-1 text-[11px] text-slate-500">{subtitle}</p> : null}
       </div>
     </div>
   )

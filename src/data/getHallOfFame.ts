@@ -12,6 +12,7 @@ import type {
   HofTrophyKind,
 } from './hall-of-fame-types'
 import { SEASONS } from './seasons'
+import { STATIC_TEAM_CATALOGS } from './catalog/static'
 import { getTeamRewindData, teamExists } from './getTeamRewind'
 import { getTeamsForSeason } from './teams'
 import { getStatsRoomData } from './getStatsRoomData'
@@ -351,7 +352,7 @@ function mergeDisplayNamesByNewestSeason(): Map<string, string> {
   const chronological = [...SEASONS].sort((a, b) => a.id.localeCompare(b.id))
   const byId = new Map<string, string>()
   for (const s of chronological) {
-    for (const t of getTeamsForSeason(s.id)) {
+    for (const t of STATIC_TEAM_CATALOGS[s.id]?.teams ?? getTeamsForSeason(s.id)) {
       byId.set(t.id, t.displayName)
     }
   }
@@ -396,7 +397,7 @@ export async function getHallOfFameData(): Promise<HallOfFameData> {
         rows.push({
           ...motySnapshot,
           teamId,
-          displayName: displayById.get(teamId) ?? data.displayName ?? dataFallbackName(teamId),
+          displayName: data.displayName ?? dataFallbackName(teamId),
         })
         motyRowsBySeason.set(meta.id, rows)
       }

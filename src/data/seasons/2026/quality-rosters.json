@@ -1,0 +1,821 @@
+{
+  "seasonId": "2026",
+  "teams": [
+    {
+      "id": "novigrad-21ers",
+      "currentRoster": [
+        {
+          "playerId": 4871144
+        },
+        {
+          "playerId": 4066261
+        },
+        {
+          "playerId": 5041939
+        },
+        {
+          "playerId": 3149673
+        },
+        {
+          "playerId": 4845367
+        },
+        {
+          "playerId": 4066457
+        },
+        {
+          "playerId": 6589
+        },
+        {
+          "playerId": 4396907
+        },
+        {
+          "playerId": 5104155
+        },
+        {
+          "playerId": 4222252
+        },
+        {
+          "playerId": 4251
+        },
+        {
+          "playerId": 5144126
+        },
+        {
+          "playerId": 4566434
+        }
+      ],
+      "draftedRoster": [
+        {
+          "playerId": 4871144
+        },
+        {
+          "playerId": 3155942
+        },
+        {
+          "playerId": 4566434
+        },
+        {
+          "playerId": 5041939
+        },
+        {
+          "playerId": 3062679
+        },
+        {
+          "playerId": 4066457
+        },
+        {
+          "playerId": 4683021
+        },
+        {
+          "playerId": 4431767
+        },
+        {
+          "playerId": 4066354
+        },
+        {
+          "playerId": 4278129
+        },
+        {
+          "playerId": 4278049
+        },
+        {
+          "playerId": 3133603
+        },
+        {
+          "playerId": 5175643
+        }
+      ]
+    },
+    {
+      "id": "diegos-daring-team",
+      "currentRoster": [
+        {
+          "playerId": 3936299
+        },
+        {
+          "playerId": 3917376
+        },
+        {
+          "playerId": 3064514
+        },
+        {
+          "playerId": 4066354
+        },
+        {
+          "playerId": 5124612
+        },
+        {
+          "playerId": 3934673
+        },
+        {
+          "playerId": 4431671
+        },
+        {
+          "playerId": 5105623
+        },
+        {
+          "playerId": 4278067
+        },
+        {
+          "playerId": 3468
+        },
+        {
+          "playerId": 4684742
+        },
+        {
+          "playerId": 3138196
+        },
+        {
+          "playerId": 3102531
+        }
+      ],
+      "draftedRoster": [
+        {
+          "playerId": 4594268
+        },
+        {
+          "playerId": 3136195
+        },
+        {
+          "playerId": 3917376
+        },
+        {
+          "playerId": 4432816
+        },
+        {
+          "playerId": 4277956
+        },
+        {
+          "playerId": 3064514
+        },
+        {
+          "playerId": 2595516
+        },
+        {
+          "playerId": 4396907
+        },
+        {
+          "playerId": 4432174
+        },
+        {
+          "playerId": 4845367
+        },
+        {
+          "playerId": 5124612
+        },
+        {
+          "playerId": 4277811
+        },
+        {
+          "playerId": 4600663
+        }
+      ]
+    },
+    {
+      "id": "lububumatcha",
+      "currentRoster": [
+        {
+          "playerId": 4701230
+        },
+        {
+          "playerId": 3908809
+        },
+        {
+          "playerId": 4432166
+        },
+        {
+          "playerId": 3934672
+        },
+        {
+          "playerId": 4869342
+        },
+        {
+          "playerId": 4432158
+        },
+        {
+          "playerId": 4683021
+        },
+        {
+          "playerId": 3032976
+        },
+        {
+          "playerId": 4711294
+        },
+        {
+          "playerId": 4684793
+        },
+        {
+          "playerId": 3975
+        },
+        {
+          "playerId": 3995
+        },
+        {
+          "playerId": 4065648
+        },
+        {
+          "playerId": 3907497
+        }
+      ],
+      "draftedRoster": [
+        {
+          "playerId": 4432166
+        },
+        {
+          "playerId": 3992
+        },
+        {
+          "playerId": 4066261
+        },
+        {
+          "playerId": 4277961
+        },
+        {
+          "playerId": 6430
+        },
+        {
+          "playerId": 4395651
+        },
+        {
+          "playerId": 4395724
+        },
+        {
+          "playerId": 4433287
+        },
+        {
+          "playerId": 5160992
+        },
+        {
+          "playerId": 4433192
+        },
+        {
+          "playerId": 4593125
+        },
+        {
+          "playerId": 3064482
+        },
+        {
+          "playerId": 4280151
+        }
+      ]
+    },
+    {
+      "id": "metefierros",
+      "currentRoster": [
+        {
+          "playerId": 4431678
+        },
+        {
+          "playerId": 5104157
+        },
+        {
+          "playerId": 3978
+        },
+        {
+          "playerId": 4869780
+        },
+        {
+          "playerId": 4433627
+        },
+        {
+          "playerId": 4395712
+        },
+        {
+          "playerId": 4712849
+        },
+        {
+          "playerId": 3032977
+        },
+        {
+          "playerId": 3059318
+        },
+        {
+          "playerId": 5174563
+        },
+        {
+          "playerId": 6583
+        },
+        {
+          "playerId": 4065733
+        },
+        {
+          "playerId": 4398207
+        }
+      ],
+      "draftedRoster": [
+        {
+          "playerId": 5104157
+        },
+        {
+          "playerId": 4431678
+        },
+        {
+          "playerId": 4871145
+        },
+        {
+          "playerId": 3978
+        },
+        {
+          "playerId": 4066383
+        },
+        {
+          "playerId": 3133628
+        },
+        {
+          "playerId": 3134908
+        },
+        {
+          "playerId": 2490149
+        },
+        {
+          "playerId": 4351851
+        },
+        {
+          "playerId": 4251
+        },
+        {
+          "playerId": 4873138
+        },
+        {
+          "playerId": 3134907
+        },
+        {
+          "playerId": 3138196
+        }
+      ]
+    },
+    {
+      "id": "tochetaos",
+      "currentRoster": [
+        {
+          "playerId": 4433134
+        },
+        {
+          "playerId": 4684740
+        },
+        {
+          "playerId": 4591725
+        },
+        {
+          "playerId": 3913176
+        },
+        {
+          "playerId": 4431680
+        },
+        {
+          "playerId": 4433255
+        },
+        {
+          "playerId": 4871145
+        },
+        {
+          "playerId": 4396971
+        },
+        {
+          "playerId": 4397014
+        },
+        {
+          "playerId": 4873138
+        },
+        {
+          "playerId": 4351852
+        },
+        {
+          "playerId": 4278562
+        },
+        {
+          "playerId": 3134908
+        }
+      ],
+      "draftedRoster": [
+        {
+          "playerId": 3032977
+        },
+        {
+          "playerId": 4684740
+        },
+        {
+          "playerId": 3975
+        },
+        {
+          "playerId": 4433134
+        },
+        {
+          "playerId": 4433255
+        },
+        {
+          "playerId": 4437244
+        },
+        {
+          "playerId": 4431680
+        },
+        {
+          "playerId": 3913176
+        },
+        {
+          "playerId": 4395712
+        },
+        {
+          "playerId": 4278067
+        },
+        {
+          "playerId": 6589
+        },
+        {
+          "playerId": 4432165
+        },
+        {
+          "playerId": 5105565
+        }
+      ]
+    },
+    {
+      "id": "huecox-y-un-dobel",
+      "currentRoster": [
+        {
+          "playerId": 4594268
+        },
+        {
+          "playerId": 4432816
+        },
+        {
+          "playerId": 3147657
+        },
+        {
+          "playerId": 4066259
+        },
+        {
+          "playerId": 3136193
+        },
+        {
+          "playerId": 4709138
+        },
+        {
+          "playerId": 4397002
+        },
+        {
+          "playerId": 3133628
+        },
+        {
+          "playerId": 4066328
+        },
+        {
+          "playerId": 4432165
+        },
+        {
+          "playerId": 4914336
+        },
+        {
+          "playerId": 4433192
+        },
+        {
+          "playerId": 3064290
+        }
+      ],
+      "draftedRoster": [
+        {
+          "playerId": 6583
+        },
+        {
+          "playerId": 3136193
+        },
+        {
+          "playerId": 6478
+        },
+        {
+          "playerId": 4066259
+        },
+        {
+          "playerId": 3936299
+        },
+        {
+          "playerId": 3147657
+        },
+        {
+          "playerId": 3064440
+        },
+        {
+          "playerId": 3059319
+        },
+        {
+          "playerId": 3908845
+        },
+        {
+          "playerId": 4914336
+        },
+        {
+          "playerId": 3064290
+        },
+        {
+          "playerId": 3136776
+        },
+        {
+          "playerId": 2530530
+        }
+      ]
+    },
+    {
+      "id": "fiestas-fantastic-team",
+      "currentRoster": [
+        {
+          "playerId": 4278073
+        },
+        {
+          "playerId": 6450
+        },
+        {
+          "playerId": 3992
+        },
+        {
+          "playerId": 4066320
+        },
+        {
+          "playerId": 3136195
+        },
+        {
+          "playerId": 4433621
+        },
+        {
+          "playerId": 4278585
+        },
+        {
+          "playerId": 2490149
+        },
+        {
+          "playerId": 4432639
+        },
+        {
+          "playerId": 2595516
+        },
+        {
+          "playerId": 4278053
+        },
+        {
+          "playerId": 5160992
+        },
+        {
+          "playerId": 3135045
+        }
+      ],
+      "draftedRoster": [
+        {
+          "playerId": 4278073
+        },
+        {
+          "playerId": 4593803
+        },
+        {
+          "playerId": 3908809
+        },
+        {
+          "playerId": 4017837
+        },
+        {
+          "playerId": 4279888
+        },
+        {
+          "playerId": 4433621
+        },
+        {
+          "playerId": 3934719
+        },
+        {
+          "playerId": 3032976
+        },
+        {
+          "playerId": 4066336
+        },
+        {
+          "playerId": 4222252
+        },
+        {
+          "playerId": 4431671
+        },
+        {
+          "playerId": 4683778
+        },
+        {
+          "playerId": 4433247
+        }
+      ]
+    },
+    {
+      "id": "beijing-ducks",
+      "currentRoster": [
+        {
+          "playerId": 3112335
+        },
+        {
+          "playerId": 3202
+        },
+        {
+          "playerId": 3078576
+        },
+        {
+          "playerId": 4397688
+        },
+        {
+          "playerId": 4433287
+        },
+        {
+          "playerId": 4395625
+        },
+        {
+          "playerId": 4431679
+        },
+        {
+          "playerId": 4432907
+        },
+        {
+          "playerId": 3448
+        },
+        {
+          "playerId": 5107199
+        },
+        {
+          "playerId": 4593803
+        },
+        {
+          "playerId": 4395725
+        },
+        {
+          "playerId": 4437244
+        }
+      ],
+      "draftedRoster": [
+        {
+          "playerId": 3112335
+        },
+        {
+          "playerId": 3934672
+        },
+        {
+          "playerId": 3202
+        },
+        {
+          "playerId": 4701230
+        },
+        {
+          "playerId": 3078576
+        },
+        {
+          "playerId": 4395625
+        },
+        {
+          "playerId": 4395725
+        },
+        {
+          "playerId": 3102531
+        },
+        {
+          "playerId": 4711272
+        },
+        {
+          "playerId": 4684742
+        },
+        {
+          "playerId": 6442
+        },
+        {
+          "playerId": 4432639
+        },
+        {
+          "playerId": 4397020
+        }
+      ]
+    },
+    {
+      "id": "glizzy-goblers",
+      "currentRoster": [],
+      "draftedRoster": [
+        {
+          "playerId": 3945274
+        },
+        {
+          "playerId": 1966
+        },
+        {
+          "playerId": 4432158
+        },
+        {
+          "playerId": 4395628
+        },
+        {
+          "playerId": 4066328
+        },
+        {
+          "playerId": 4278104
+        },
+        {
+          "playerId": 4433136
+        },
+        {
+          "playerId": 4397140
+        },
+        {
+          "playerId": 4396971
+        },
+        {
+          "playerId": 6440
+        },
+        {
+          "playerId": 3468
+        },
+        {
+          "playerId": 4278355
+        },
+        {
+          "playerId": 2779
+        }
+      ]
+    },
+    {
+      "id": "lalocomotora",
+      "currentRoster": [
+        {
+          "playerId": 4432573
+        },
+        {
+          "playerId": 5061575
+        },
+        {
+          "playerId": 4395628
+        },
+        {
+          "playerId": 4397424
+        },
+        {
+          "playerId": 4432848
+        },
+        {
+          "playerId": 4395626
+        },
+        {
+          "playerId": 4278129
+        },
+        {
+          "playerId": 4898371
+        },
+        {
+          "playerId": 3908845
+        },
+        {
+          "playerId": 4278078
+        },
+        {
+          "playerId": 4432241
+        },
+        {
+          "playerId": 4900671
+        },
+        {
+          "playerId": 3133603
+        },
+        {
+          "playerId": 4277905
+        }
+      ],
+      "draftedRoster": [
+        {
+          "playerId": 4277905
+        },
+        {
+          "playerId": 3149673
+        },
+        {
+          "playerId": 4432573
+        },
+        {
+          "playerId": 3059318
+        },
+        {
+          "playerId": 4066320
+        },
+        {
+          "playerId": 4869342
+        },
+        {
+          "playerId": 4397688
+        },
+        {
+          "playerId": 6450
+        },
+        {
+          "playerId": 4701232
+        },
+        {
+          "playerId": 4066262
+        },
+        {
+          "playerId": 4683634
+        },
+        {
+          "playerId": 4395630
+        },
+        {
+          "playerId": 6477
+        }
+      ]
+    }
+  ]
+}

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import { ui } from '@/components/ui/styles'
 
 type GiphyGif = {
   id: string
@@ -71,7 +72,7 @@ export default function LeagueIntro() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="font-heading text-3xl sm:text-4xl font-bold text-white mb-6">
+          <h2 className={`${ui.pageTitle} mb-6`}>
             Sobre la Liga
           </h2>
           <div className="space-y-4 text-white/70 text-lg leading-relaxed">

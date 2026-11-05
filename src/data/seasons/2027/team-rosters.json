@@ -1,0 +1,3949 @@
+{
+  "seasonId": "2027",
+  "generatedAt": "2026-10-18T17:37:33Z",
+  "teams": [
+    {
+      "id": "novigrad-21ers",
+      "currentRoster": [
+        {
+          "playerId": 5174983,
+          "name": "Aday Mara",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5174983.png",
+          "proTeamAbbrev": "OKC"
+        },
+        {
+          "playerId": 3059319,
+          "name": "Andrew Wiggins",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3059319.png",
+          "proTeamAbbrev": "MIA"
+        },
+        {
+          "playerId": 2490149,
+          "name": "CJ McCollum",
+          "positions": [
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/2490149.png",
+          "proTeamAbbrev": "ATL"
+        },
+        {
+          "playerId": 5041939,
+          "name": "Cooper Flagg",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5041939.png",
+          "proTeamAbbrev": "DAL"
+        },
+        {
+          "playerId": 4396907,
+          "name": "Darius Garland",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4396907.png",
+          "proTeamAbbrev": "LAC"
+        },
+        {
+          "playerId": 3078576,
+          "name": "Derrick White",
+          "positions": [
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3078576.png",
+          "proTeamAbbrev": "BOS"
+        },
+        {
+          "playerId": 4017837,
+          "name": "Ivica Zubac",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4017837.png",
+          "proTeamAbbrev": "IND"
+        },
+        {
+          "playerId": 5144091,
+          "name": "Jeremiah Fears",
+          "positions": [
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5144091.png",
+          "proTeamAbbrev": "NOP"
+        },
+        {
+          "playerId": 4433247,
+          "name": "Jonathan Kuminga",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4433247.png",
+          "proTeamAbbrev": "MIN"
+        },
+        {
+          "playerId": 4592479,
+          "name": "Julian Champagnie",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4592479.png",
+          "proTeamAbbrev": "SAS"
+        },
+        {
+          "playerId": 6442,
+          "name": "Kyrie Irving",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/6442.png",
+          "proTeamAbbrev": "DAL"
+        },
+        {
+          "playerId": 4431680,
+          "name": "Onyeka Okongwu",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4431680.png",
+          "proTeamAbbrev": "ATL"
+        },
+        {
+          "playerId": 4396993,
+          "name": "Tyrese Haliburton",
+          "positions": [
+            "PG",
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4396993.png",
+          "proTeamAbbrev": "IND"
+        }
+      ],
+      "draftedRoster": [
+        {
+          "playerId": 5041939,
+          "name": "Cooper Flagg",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5041939.png",
+          "proTeamAbbrev": "DAL"
+        },
+        {
+          "playerId": 4396993,
+          "name": "Tyrese Haliburton",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4396993.png",
+          "proTeamAbbrev": "IND"
+        },
+        {
+          "playerId": 4396907,
+          "name": "Darius Garland",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4396907.png",
+          "proTeamAbbrev": "LAC"
+        },
+        {
+          "playerId": 3078576,
+          "name": "Derrick White",
+          "positions": [
+            "SG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3078576.png",
+          "proTeamAbbrev": "BOS"
+        },
+        {
+          "playerId": 6442,
+          "name": "Kyrie Irving",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/6442.png",
+          "proTeamAbbrev": "DAL"
+        },
+        {
+          "playerId": 4431680,
+          "name": "Onyeka Okongwu",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4431680.png",
+          "proTeamAbbrev": "ATL"
+        },
+        {
+          "playerId": 4017837,
+          "name": "Ivica Zubac",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4017837.png",
+          "proTeamAbbrev": "IND"
+        },
+        {
+          "playerId": 2490149,
+          "name": "CJ McCollum",
+          "positions": [
+            "SG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/2490149.png",
+          "proTeamAbbrev": "ATL"
+        },
+        {
+          "playerId": 3059319,
+          "name": "Andrew Wiggins",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3059319.png",
+          "proTeamAbbrev": "MIA"
+        },
+        {
+          "playerId": 5144091,
+          "name": "Jeremiah Fears",
+          "positions": [
+            "SG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5144091.png",
+          "proTeamAbbrev": "NOP"
+        },
+        {
+          "playerId": 4433247,
+          "name": "Jonathan Kuminga",
+          "positions": [
+            "PF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4433247.png",
+          "proTeamAbbrev": "MIN"
+        },
+        {
+          "playerId": 4592479,
+          "name": "Julian Champagnie",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4592479.png",
+          "proTeamAbbrev": "SAS"
+        },
+        {
+          "playerId": 5174983,
+          "name": "Aday Mara",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5174983.png",
+          "proTeamAbbrev": "OKC"
+        }
+      ],
+      "draftPicks": [
+        {
+          "playerId": 5041939,
+          "round": 1,
+          "pick": 10
+        },
+        {
+          "playerId": 4396993,
+          "round": 2,
+          "pick": 3
+        },
+        {
+          "playerId": 4396907,
+          "round": 3,
+          "pick": 10
+        },
+        {
+          "playerId": 3078576,
+          "round": 4,
+          "pick": 3
+        },
+        {
+          "playerId": 6442,
+          "round": 5,
+          "pick": 10
+        },
+        {
+          "playerId": 4431680,
+          "round": 6,
+          "pick": 3
+        },
+        {
+          "playerId": 4017837,
+          "round": 7,
+          "pick": 10
+        },
+        {
+          "playerId": 2490149,
+          "round": 8,
+          "pick": 3
+        },
+        {
+          "playerId": 3059319,
+          "round": 9,
+          "pick": 10
+        },
+        {
+          "playerId": 5144091,
+          "round": 10,
+          "pick": 3
+        },
+        {
+          "playerId": 4433247,
+          "round": 11,
+          "pick": 10
+        },
+        {
+          "playerId": 4592479,
+          "round": 12,
+          "pick": 3
+        },
+        {
+          "playerId": 5174983,
+          "round": 13,
+          "pick": 10
+        }
+      ]
+    },
+    {
+      "id": "diegos-daring-team",
+      "currentRoster": [
+        {
+          "playerId": 6583,
+          "name": "Anthony Davis",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/6583.png",
+          "proTeamAbbrev": "WAS"
+        },
+        {
+          "playerId": 4903027,
+          "name": "Cedric Coward",
+          "positions": [
+            "SG",
+            "SF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4903027.png",
+          "proTeamAbbrev": "MEM"
+        },
+        {
+          "playerId": 4278585,
+          "name": "Collin Gillespie",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4278585.png",
+          "proTeamAbbrev": "PHO"
+        },
+        {
+          "playerId": 4869780,
+          "name": "Derik Queen",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4869780.png",
+          "proTeamAbbrev": "NOP"
+        },
+        {
+          "playerId": 4066320,
+          "name": "Desmond Bane",
+          "positions": [
+            "SG",
+            "SF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4066320.png",
+          "proTeamAbbrev": "ORL"
+        },
+        {
+          "playerId": 3155942,
+          "name": "Domantas Sabonis",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3155942.png",
+          "proTeamAbbrev": "SAC"
+        },
+        {
+          "playerId": 4566434,
+          "name": "Franz Wagner",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4566434.png",
+          "proTeamAbbrev": "ORL"
+        },
+        {
+          "playerId": 3032977,
+          "name": "Giannis Antetokounmpo",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3032977.png",
+          "proTeamAbbrev": "MIA"
+        },
+        {
+          "playerId": 4397140,
+          "name": "Kevin Porter Jr.",
+          "positions": [
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4397140.png",
+          "proTeamAbbrev": "MIL"
+        },
+        {
+          "playerId": 4066336,
+          "name": "Lauri Markkanen",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4066336.png",
+          "proTeamAbbrev": "UTA"
+        },
+        {
+          "playerId": 4351852,
+          "name": "Mitchell Robinson",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4351852.png",
+          "proTeamAbbrev": "BOS"
+        },
+        {
+          "playerId": 4397424,
+          "name": "Neemias Queta",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4397424.png",
+          "proTeamAbbrev": "BOS"
+        },
+        {
+          "playerId": 4433136,
+          "name": "Walker Kessler",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4433136.png",
+          "proTeamAbbrev": "LAL"
+        }
+      ],
+      "draftedRoster": [
+        {
+          "playerId": 3032977,
+          "name": "Giannis Antetokounmpo",
+          "positions": [
+            "PF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3032977.png",
+          "proTeamAbbrev": "MIA"
+        },
+        {
+          "playerId": 3155942,
+          "name": "Domantas Sabonis",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3155942.png",
+          "proTeamAbbrev": "SAC"
+        },
+        {
+          "playerId": 6583,
+          "name": "Anthony Davis",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/6583.png",
+          "proTeamAbbrev": "WAS"
+        },
+        {
+          "playerId": 4066320,
+          "name": "Desmond Bane",
+          "positions": [
+            "SG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4066320.png",
+          "proTeamAbbrev": "ORL"
+        },
+        {
+          "playerId": 4066336,
+          "name": "Lauri Markkanen",
+          "positions": [
+            "PF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4066336.png",
+          "proTeamAbbrev": "UTA"
+        },
+        {
+          "playerId": 4566434,
+          "name": "Franz Wagner",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4566434.png",
+          "proTeamAbbrev": "ORL"
+        },
+        {
+          "playerId": 4433136,
+          "name": "Walker Kessler",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4433136.png",
+          "proTeamAbbrev": "LAL"
+        },
+        {
+          "playerId": 4869780,
+          "name": "Derik Queen",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4869780.png",
+          "proTeamAbbrev": "NOP"
+        },
+        {
+          "playerId": 4397140,
+          "name": "Kevin Porter Jr.",
+          "positions": [
+            "SG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4397140.png",
+          "proTeamAbbrev": "MIL"
+        },
+        {
+          "playerId": 4278585,
+          "name": "Collin Gillespie",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4278585.png",
+          "proTeamAbbrev": "PHO"
+        },
+        {
+          "playerId": 4903027,
+          "name": "Cedric Coward",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4903027.png",
+          "proTeamAbbrev": "MEM"
+        },
+        {
+          "playerId": 4397424,
+          "name": "Neemias Queta",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4397424.png",
+          "proTeamAbbrev": "BOS"
+        },
+        {
+          "playerId": 4351852,
+          "name": "Mitchell Robinson",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4351852.png",
+          "proTeamAbbrev": "BOS"
+        }
+      ],
+      "draftPicks": [
+        {
+          "playerId": 3032977,
+          "round": 1,
+          "pick": 5
+        },
+        {
+          "playerId": 3155942,
+          "round": 2,
+          "pick": 8
+        },
+        {
+          "playerId": 6583,
+          "round": 3,
+          "pick": 5
+        },
+        {
+          "playerId": 4066320,
+          "round": 4,
+          "pick": 8
+        },
+        {
+          "playerId": 4066336,
+          "round": 5,
+          "pick": 5
+        },
+        {
+          "playerId": 4566434,
+          "round": 6,
+          "pick": 8
+        },
+        {
+          "playerId": 4433136,
+          "round": 7,
+          "pick": 5
+        },
+        {
+          "playerId": 4869780,
+          "round": 8,
+          "pick": 8
+        },
+        {
+          "playerId": 4397140,
+          "round": 9,
+          "pick": 5
+        },
+        {
+          "playerId": 4278585,
+          "round": 10,
+          "pick": 8
+        },
+        {
+          "playerId": 4903027,
+          "round": 11,
+          "pick": 5
+        },
+        {
+          "playerId": 4397424,
+          "round": 12,
+          "pick": 8
+        },
+        {
+          "playerId": 4351852,
+          "round": 13,
+          "pick": 5
+        }
+      ]
+    },
+    {
+      "id": "lububumatcha",
+      "currentRoster": [
+        {
+          "playerId": 4683774,
+          "name": "Bronny James",
+          "positions": [
+            "PG",
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4683774.png",
+          "proTeamAbbrev": "LAL"
+        },
+        {
+          "playerId": 5041935,
+          "name": "Cameron Boozer",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5041935.png",
+          "proTeamAbbrev": "MEM"
+        },
+        {
+          "playerId": 4278049,
+          "name": "Daniel Gafford",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4278049.png",
+          "proTeamAbbrev": "DAL"
+        },
+        {
+          "playerId": 5041955,
+          "name": "Darryn Peterson",
+          "positions": [
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5041955.png",
+          "proTeamAbbrev": "UTA"
+        },
+        {
+          "playerId": 4432158,
+          "name": "Evan Mobley",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4432158.png",
+          "proTeamAbbrev": "CLE"
+        },
+        {
+          "playerId": 4395724,
+          "name": "Immanuel Quickley",
+          "positions": [
+            "PG",
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4395724.png",
+          "proTeamAbbrev": "TOR"
+        },
+        {
+          "playerId": 4432848,
+          "name": "Jaime Jaquez Jr.",
+          "positions": [
+            "SG",
+            "SF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4432848.png",
+          "proTeamAbbrev": "MIL"
+        },
+        {
+          "playerId": 4701230,
+          "name": "Jalen Johnson",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4701230.png",
+          "proTeamAbbrev": "ATL"
+        },
+        {
+          "playerId": 4277961,
+          "name": "Jaren Jackson Jr.",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4277961.png",
+          "proTeamAbbrev": "UTA"
+        },
+        {
+          "playerId": 5174563,
+          "name": "Kyshawn George",
+          "positions": [
+            "SG",
+            "SF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5174563.png",
+          "proTeamAbbrev": "WAS"
+        },
+        {
+          "playerId": 3147657,
+          "name": "Mikal Bridges",
+          "positions": [
+            "SG",
+            "SF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3147657.png",
+          "proTeamAbbrev": "NYK"
+        },
+        {
+          "playerId": 4065733,
+          "name": "Ty Jerome",
+          "positions": [
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4065733.png",
+          "proTeamAbbrev": "MEM"
+        },
+        {
+          "playerId": 4431678,
+          "name": "Tyrese Maxey",
+          "positions": [
+            "PG",
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4431678.png",
+          "proTeamAbbrev": "PHL"
+        }
+      ],
+      "draftedRoster": [
+        {
+          "playerId": 4701230,
+          "name": "Jalen Johnson",
+          "positions": [
+            "PF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4701230.png",
+          "proTeamAbbrev": "ATL"
+        },
+        {
+          "playerId": 4431678,
+          "name": "Tyrese Maxey",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4431678.png",
+          "proTeamAbbrev": "PHL"
+        },
+        {
+          "playerId": 4432158,
+          "name": "Evan Mobley",
+          "positions": [
+            "PF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4432158.png",
+          "proTeamAbbrev": "CLE"
+        },
+        {
+          "playerId": 3147657,
+          "name": "Mikal Bridges",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3147657.png",
+          "proTeamAbbrev": "NYK"
+        },
+        {
+          "playerId": 5041935,
+          "name": "Cameron Boozer",
+          "positions": [
+            "PF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5041935.png",
+          "proTeamAbbrev": "MEM"
+        },
+        {
+          "playerId": 4065733,
+          "name": "Ty Jerome",
+          "positions": [
+            "SG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4065733.png",
+          "proTeamAbbrev": "MEM"
+        },
+        {
+          "playerId": 4277961,
+          "name": "Jaren Jackson Jr.",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4277961.png",
+          "proTeamAbbrev": "UTA"
+        },
+        {
+          "playerId": 4395724,
+          "name": "Immanuel Quickley",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4395724.png",
+          "proTeamAbbrev": "TOR"
+        },
+        {
+          "playerId": 5041955,
+          "name": "Darryn Peterson",
+          "positions": [
+            "SG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5041955.png",
+          "proTeamAbbrev": "UTA"
+        },
+        {
+          "playerId": 4432848,
+          "name": "Jaime Jaquez Jr.",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4432848.png",
+          "proTeamAbbrev": "MIL"
+        },
+        {
+          "playerId": 5174563,
+          "name": "Kyshawn George",
+          "positions": [
+            "SG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5174563.png",
+          "proTeamAbbrev": "WAS"
+        },
+        {
+          "playerId": 4278049,
+          "name": "Daniel Gafford",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4278049.png",
+          "proTeamAbbrev": "DAL"
+        },
+        {
+          "playerId": 4683774,
+          "name": "Bronny James",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4683774.png",
+          "proTeamAbbrev": "LAL"
+        }
+      ],
+      "draftPicks": [
+        {
+          "playerId": 4701230,
+          "round": 1,
+          "pick": 8
+        },
+        {
+          "playerId": 4431678,
+          "round": 2,
+          "pick": 5
+        },
+        {
+          "playerId": 4432158,
+          "round": 3,
+          "pick": 8
+        },
+        {
+          "playerId": 3147657,
+          "round": 4,
+          "pick": 5
+        },
+        {
+          "playerId": 5041935,
+          "round": 5,
+          "pick": 8
+        },
+        {
+          "playerId": 4065733,
+          "round": 6,
+          "pick": 5
+        },
+        {
+          "playerId": 4277961,
+          "round": 7,
+          "pick": 8
+        },
+        {
+          "playerId": 4395724,
+          "round": 8,
+          "pick": 5
+        },
+        {
+          "playerId": 5041955,
+          "round": 9,
+          "pick": 8
+        },
+        {
+          "playerId": 4432848,
+          "round": 10,
+          "pick": 5
+        },
+        {
+          "playerId": 5174563,
+          "round": 11,
+          "pick": 8
+        },
+        {
+          "playerId": 4278049,
+          "round": 12,
+          "pick": 5
+        },
+        {
+          "playerId": 4683774,
+          "round": 13,
+          "pick": 8
+        }
+      ]
+    },
+    {
+      "id": "metefierros",
+      "currentRoster": [
+        {
+          "playerId": 4397002,
+          "name": "Ayo Dosunmu",
+          "positions": [
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4397002.png",
+          "proTeamAbbrev": "MIN"
+        },
+        {
+          "playerId": 5142620,
+          "name": "Darius Acuff Jr.",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5142620.png",
+          "proTeamAbbrev": "SAC"
+        },
+        {
+          "playerId": 4432194,
+          "name": "Day'Ron Sharpe",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4432194.png",
+          "proTeamAbbrev": "BKN"
+        },
+        {
+          "playerId": 3992,
+          "name": "James Harden",
+          "positions": [
+            "PG",
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3992.png",
+          "proTeamAbbrev": "CLE"
+        },
+        {
+          "playerId": 3136195,
+          "name": "Karl-Anthony Towns",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3136195.png",
+          "proTeamAbbrev": "NYK"
+        },
+        {
+          "playerId": 4594327,
+          "name": "Keegan Murray",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4594327.png",
+          "proTeamAbbrev": "SAC"
+        },
+        {
+          "playerId": 4066262,
+          "name": "Malik Monk",
+          "positions": [
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4066262.png",
+          "proTeamAbbrev": "SAC"
+        },
+        {
+          "playerId": 4711294,
+          "name": "Matas Buzelis",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4711294.png",
+          "proTeamAbbrev": "CHI"
+        },
+        {
+          "playerId": 4278104,
+          "name": "Michael Porter Jr.",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4278104.png",
+          "proTeamAbbrev": "BKN"
+        },
+        {
+          "playerId": 4396971,
+          "name": "Naz Reid",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4396971.png",
+          "proTeamAbbrev": "CHA"
+        },
+        {
+          "playerId": 2595516,
+          "name": "Norman Powell",
+          "positions": [
+            "SG",
+            "SF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/2595516.png",
+          "proTeamAbbrev": "CHI"
+        },
+        {
+          "playerId": 4576087,
+          "name": "Peyton Watson",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4576087.png",
+          "proTeamAbbrev": "CLE"
+        },
+        {
+          "playerId": 4278073,
+          "name": "Shai Gilgeous-Alexander",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4278073.png",
+          "proTeamAbbrev": "OKC"
+        }
+      ],
+      "draftedRoster": [
+        {
+          "playerId": 4278073,
+          "name": "Shai Gilgeous-Alexander",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4278073.png",
+          "proTeamAbbrev": "OKC"
+        },
+        {
+          "playerId": 3136195,
+          "name": "Karl-Anthony Towns",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3136195.png",
+          "proTeamAbbrev": "NYK"
+        },
+        {
+          "playerId": 3992,
+          "name": "James Harden",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3992.png",
+          "proTeamAbbrev": "CLE"
+        },
+        {
+          "playerId": 4396971,
+          "name": "Naz Reid",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4396971.png",
+          "proTeamAbbrev": "CHA"
+        },
+        {
+          "playerId": 4278104,
+          "name": "Michael Porter Jr.",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4278104.png",
+          "proTeamAbbrev": "BKN"
+        },
+        {
+          "playerId": 2595516,
+          "name": "Norman Powell",
+          "positions": [
+            "SG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/2595516.png",
+          "proTeamAbbrev": "CHI"
+        },
+        {
+          "playerId": 4711294,
+          "name": "Matas Buzelis",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4711294.png",
+          "proTeamAbbrev": "CHI"
+        },
+        {
+          "playerId": 5142620,
+          "name": "Darius Acuff Jr.",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5142620.png",
+          "proTeamAbbrev": "SAC"
+        },
+        {
+          "playerId": 4397002,
+          "name": "Ayo Dosunmu",
+          "positions": [
+            "SG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4397002.png",
+          "proTeamAbbrev": "MIN"
+        },
+        {
+          "playerId": 4594327,
+          "name": "Keegan Murray",
+          "positions": [
+            "PF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4594327.png",
+          "proTeamAbbrev": "SAC"
+        },
+        {
+          "playerId": 4576087,
+          "name": "Peyton Watson",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4576087.png",
+          "proTeamAbbrev": "CLE"
+        },
+        {
+          "playerId": 4066262,
+          "name": "Malik Monk",
+          "positions": [
+            "SG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4066262.png",
+          "proTeamAbbrev": "SAC"
+        },
+        {
+          "playerId": 4432194,
+          "name": "Day'Ron Sharpe",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4432194.png",
+          "proTeamAbbrev": "BKN"
+        }
+      ],
+      "draftPicks": [
+        {
+          "playerId": 4278073,
+          "round": 1,
+          "pick": 2
+        },
+        {
+          "playerId": 3136195,
+          "round": 2,
+          "pick": 11
+        },
+        {
+          "playerId": 3992,
+          "round": 3,
+          "pick": 2
+        },
+        {
+          "playerId": 4396971,
+          "round": 4,
+          "pick": 11
+        },
+        {
+          "playerId": 4278104,
+          "round": 5,
+          "pick": 2
+        },
+        {
+          "playerId": 2595516,
+          "round": 6,
+          "pick": 11
+        },
+        {
+          "playerId": 4711294,
+          "round": 7,
+          "pick": 2
+        },
+        {
+          "playerId": 5142620,
+          "round": 8,
+          "pick": 11
+        },
+        {
+          "playerId": 4397002,
+          "round": 9,
+          "pick": 2
+        },
+        {
+          "playerId": 4594327,
+          "round": 10,
+          "pick": 11
+        },
+        {
+          "playerId": 4576087,
+          "round": 11,
+          "pick": 2
+        },
+        {
+          "playerId": 4066262,
+          "round": 12,
+          "pick": 11
+        },
+        {
+          "playerId": 4432194,
+          "round": 13,
+          "pick": 2
+        }
+      ]
+    },
+    {
+      "id": "tochetaos",
+      "currentRoster": [
+        {
+          "playerId": 4066457,
+          "name": "Austin Reaves",
+          "positions": [
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4066457.png",
+          "proTeamAbbrev": "LAL"
+        },
+        {
+          "playerId": 4432166,
+          "name": "Cade Cunningham",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4432166.png",
+          "proTeamAbbrev": "DET"
+        },
+        {
+          "playerId": 4432639,
+          "name": "Jabari Smith Jr.",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4432639.png",
+          "proTeamAbbrev": "HOU"
+        },
+        {
+          "playerId": 4066328,
+          "name": "Jarrett Allen",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4066328.png",
+          "proTeamAbbrev": "CLE"
+        },
+        {
+          "playerId": 3908845,
+          "name": "John Collins",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3908845.png",
+          "proTeamAbbrev": "DET"
+        },
+        {
+          "playerId": 3995,
+          "name": "Jrue Holiday",
+          "positions": [
+            "PG",
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3995.png",
+          "proTeamAbbrev": "POR"
+        },
+        {
+          "playerId": 5105623,
+          "name": "Kel'el Ware",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5105623.png",
+          "proTeamAbbrev": "MIL"
+        },
+        {
+          "playerId": 5061575,
+          "name": "Kon Knueppel",
+          "positions": [
+            "SG",
+            "SF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5061575.png",
+          "proTeamAbbrev": "CHA"
+        },
+        {
+          "playerId": 3133628,
+          "name": "Myles Turner",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3133628.png",
+          "proTeamAbbrev": "MIL"
+        },
+        {
+          "playerId": 4066354,
+          "name": "Payton Pritchard",
+          "positions": [
+            "PG",
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4066354.png",
+          "proTeamAbbrev": "BOS"
+        },
+        {
+          "playerId": 4397136,
+          "name": "Saddiq Bey",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4397136.png",
+          "proTeamAbbrev": "NOP"
+        },
+        {
+          "playerId": 4277905,
+          "name": "Trae Young",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4277905.png",
+          "proTeamAbbrev": "WAS"
+        },
+        {
+          "playerId": 4397688,
+          "name": "Trey Murphy III",
+          "positions": [
+            "SG",
+            "SF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4397688.png",
+          "proTeamAbbrev": "NOP"
+        }
+      ],
+      "draftedRoster": [
+        {
+          "playerId": 4432166,
+          "name": "Cade Cunningham",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4432166.png",
+          "proTeamAbbrev": "DET"
+        },
+        {
+          "playerId": 4277905,
+          "name": "Trae Young",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4277905.png",
+          "proTeamAbbrev": "WAS"
+        },
+        {
+          "playerId": 4066457,
+          "name": "Austin Reaves",
+          "positions": [
+            "SG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4066457.png",
+          "proTeamAbbrev": "LAL"
+        },
+        {
+          "playerId": 5061575,
+          "name": "Kon Knueppel",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5061575.png",
+          "proTeamAbbrev": "CHA"
+        },
+        {
+          "playerId": 4066328,
+          "name": "Jarrett Allen",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4066328.png",
+          "proTeamAbbrev": "CLE"
+        },
+        {
+          "playerId": 4397688,
+          "name": "Trey Murphy III",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4397688.png",
+          "proTeamAbbrev": "NOP"
+        },
+        {
+          "playerId": 5105623,
+          "name": "Kel'el Ware",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5105623.png",
+          "proTeamAbbrev": "MIL"
+        },
+        {
+          "playerId": 4066354,
+          "name": "Payton Pritchard",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4066354.png",
+          "proTeamAbbrev": "BOS"
+        },
+        {
+          "playerId": 3908845,
+          "name": "John Collins",
+          "positions": [
+            "PF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3908845.png",
+          "proTeamAbbrev": "DET"
+        },
+        {
+          "playerId": 3133628,
+          "name": "Myles Turner",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3133628.png",
+          "proTeamAbbrev": "MIL"
+        },
+        {
+          "playerId": 4432639,
+          "name": "Jabari Smith Jr.",
+          "positions": [
+            "PF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4432639.png",
+          "proTeamAbbrev": "HOU"
+        },
+        {
+          "playerId": 3995,
+          "name": "Jrue Holiday",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3995.png",
+          "proTeamAbbrev": "POR"
+        },
+        {
+          "playerId": 4397136,
+          "name": "Saddiq Bey",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4397136.png",
+          "proTeamAbbrev": "NOP"
+        }
+      ],
+      "draftPicks": [
+        {
+          "playerId": 4432166,
+          "round": 1,
+          "pick": 6
+        },
+        {
+          "playerId": 4277905,
+          "round": 2,
+          "pick": 7
+        },
+        {
+          "playerId": 4066457,
+          "round": 3,
+          "pick": 6
+        },
+        {
+          "playerId": 5061575,
+          "round": 4,
+          "pick": 7
+        },
+        {
+          "playerId": 4066328,
+          "round": 5,
+          "pick": 6
+        },
+        {
+          "playerId": 4397688,
+          "round": 6,
+          "pick": 7
+        },
+        {
+          "playerId": 5105623,
+          "round": 7,
+          "pick": 6
+        },
+        {
+          "playerId": 4066354,
+          "round": 8,
+          "pick": 7
+        },
+        {
+          "playerId": 3908845,
+          "round": 9,
+          "pick": 6
+        },
+        {
+          "playerId": 3133628,
+          "round": 10,
+          "pick": 7
+        },
+        {
+          "playerId": 4432639,
+          "round": 11,
+          "pick": 6
+        },
+        {
+          "playerId": 3995,
+          "round": 12,
+          "pick": 7
+        },
+        {
+          "playerId": 4397136,
+          "round": 13,
+          "pick": 6
+        }
+      ]
+    },
+    {
+      "id": "huecox-y-un-dobel",
+      "currentRoster": [
+        {
+          "playerId": 4684740,
+          "name": "Amen Thompson",
+          "positions": [
+            "SG",
+            "SF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4684740.png",
+          "proTeamAbbrev": "HOU"
+        },
+        {
+          "playerId": 3448,
+          "name": "Brook Lopez",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3448.png",
+          "proTeamAbbrev": "LAC"
+        },
+        {
+          "playerId": 6606,
+          "name": "Damian Lillard",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/6606.png",
+          "proTeamAbbrev": "POR"
+        },
+        {
+          "playerId": 4066259,
+          "name": "De'Aaron Fox",
+          "positions": [
+            "PG",
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4066259.png",
+          "proTeamAbbrev": "SAS"
+        },
+        {
+          "playerId": 3155526,
+          "name": "Dillon Brooks",
+          "positions": [
+            "SG",
+            "SF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3155526.png",
+          "proTeamAbbrev": "PHO"
+        },
+        {
+          "playerId": 4869342,
+          "name": "Dyson Daniels",
+          "positions": [
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4869342.png",
+          "proTeamAbbrev": "ATL"
+        },
+        {
+          "playerId": 3134908,
+          "name": "Jakob Poeltl",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3134908.png",
+          "proTeamAbbrev": "TOR"
+        },
+        {
+          "playerId": 4437244,
+          "name": "Jalen Green",
+          "positions": [
+            "SG",
+            "SF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4437244.png",
+          "proTeamAbbrev": "PHO"
+        },
+        {
+          "playerId": 3936299,
+          "name": "Jamal Murray",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3936299.png",
+          "proTeamAbbrev": "DEN"
+        },
+        {
+          "playerId": 4066383,
+          "name": "Miles Bridges",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4066383.png",
+          "proTeamAbbrev": "PHO"
+        },
+        {
+          "playerId": 4278067,
+          "name": "Nic Claxton",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4278067.png",
+          "proTeamAbbrev": "CHI"
+        },
+        {
+          "playerId": 4711272,
+          "name": "Reed Sheppard",
+          "positions": [
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4711272.png",
+          "proTeamAbbrev": "HOU"
+        },
+        {
+          "playerId": 5104157,
+          "name": "Victor Wembanyama",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5104157.png",
+          "proTeamAbbrev": "SAS"
+        }
+      ],
+      "draftedRoster": [
+        {
+          "playerId": 5104157,
+          "name": "Victor Wembanyama",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5104157.png",
+          "proTeamAbbrev": "SAS"
+        },
+        {
+          "playerId": 4684740,
+          "name": "Amen Thompson",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4684740.png",
+          "proTeamAbbrev": "HOU"
+        },
+        {
+          "playerId": 3936299,
+          "name": "Jamal Murray",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3936299.png",
+          "proTeamAbbrev": "DEN"
+        },
+        {
+          "playerId": 4066259,
+          "name": "De'Aaron Fox",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4066259.png",
+          "proTeamAbbrev": "SAS"
+        },
+        {
+          "playerId": 4869342,
+          "name": "Dyson Daniels",
+          "positions": [
+            "SG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4869342.png",
+          "proTeamAbbrev": "ATL"
+        },
+        {
+          "playerId": 6606,
+          "name": "Damian Lillard",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/6606.png",
+          "proTeamAbbrev": "POR"
+        },
+        {
+          "playerId": 4066383,
+          "name": "Miles Bridges",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4066383.png",
+          "proTeamAbbrev": "PHO"
+        },
+        {
+          "playerId": 4437244,
+          "name": "Jalen Green",
+          "positions": [
+            "SG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4437244.png",
+          "proTeamAbbrev": "PHO"
+        },
+        {
+          "playerId": 4711272,
+          "name": "Reed Sheppard",
+          "positions": [
+            "SG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4711272.png",
+          "proTeamAbbrev": "HOU"
+        },
+        {
+          "playerId": 4278067,
+          "name": "Nic Claxton",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4278067.png",
+          "proTeamAbbrev": "CHI"
+        },
+        {
+          "playerId": 3134908,
+          "name": "Jakob Poeltl",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3134908.png",
+          "proTeamAbbrev": "TOR"
+        },
+        {
+          "playerId": 3448,
+          "name": "Brook Lopez",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3448.png",
+          "proTeamAbbrev": "LAC"
+        },
+        {
+          "playerId": 3155526,
+          "name": "Dillon Brooks",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3155526.png",
+          "proTeamAbbrev": "PHO"
+        }
+      ],
+      "draftPicks": [
+        {
+          "playerId": 5104157,
+          "round": 1,
+          "pick": 3
+        },
+        {
+          "playerId": 4684740,
+          "round": 2,
+          "pick": 10
+        },
+        {
+          "playerId": 3936299,
+          "round": 3,
+          "pick": 3
+        },
+        {
+          "playerId": 4066259,
+          "round": 4,
+          "pick": 10
+        },
+        {
+          "playerId": 4869342,
+          "round": 5,
+          "pick": 3
+        },
+        {
+          "playerId": 6606,
+          "round": 6,
+          "pick": 10
+        },
+        {
+          "playerId": 4066383,
+          "round": 7,
+          "pick": 3
+        },
+        {
+          "playerId": 4437244,
+          "round": 8,
+          "pick": 10
+        },
+        {
+          "playerId": 4711272,
+          "round": 9,
+          "pick": 3
+        },
+        {
+          "playerId": 4278067,
+          "round": 10,
+          "pick": 10
+        },
+        {
+          "playerId": 3134908,
+          "round": 11,
+          "pick": 3
+        },
+        {
+          "playerId": 3448,
+          "round": 12,
+          "pick": 10
+        },
+        {
+          "playerId": 3155526,
+          "round": 13,
+          "pick": 3
+        }
+      ]
+    },
+    {
+      "id": "fiestas-fantastic-team",
+      "currentRoster": [
+        {
+          "playerId": 4395651,
+          "name": "Coby White",
+          "positions": [
+            "PG",
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4395651.png",
+          "proTeamAbbrev": "CHA"
+        },
+        {
+          "playerId": 4277811,
+          "name": "Collin Sexton",
+          "positions": [
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4277811.png",
+          "proTeamAbbrev": "LAL"
+        },
+        {
+          "playerId": 4683021,
+          "name": "Deni Avdija",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4683021.png",
+          "proTeamAbbrev": "POR"
+        },
+        {
+          "playerId": 3136193,
+          "name": "Devin Booker",
+          "positions": [
+            "PG",
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3136193.png",
+          "proTeamAbbrev": "PHO"
+        },
+        {
+          "playerId": 5037871,
+          "name": "Dylan Harper",
+          "positions": [
+            "PG",
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5037871.png",
+          "proTeamAbbrev": "SAS"
+        },
+        {
+          "playerId": 4065648,
+          "name": "Jayson Tatum",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4065648.png",
+          "proTeamAbbrev": "BOS"
+        },
+        {
+          "playerId": 4395723,
+          "name": "Keldon Johnson",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4395723.png",
+          "proTeamAbbrev": "SAS"
+        },
+        {
+          "playerId": 3102531,
+          "name": "Kristaps Porzingis",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3102531.png",
+          "proTeamAbbrev": "GSW"
+        },
+        {
+          "playerId": 4278039,
+          "name": "Nickeil Alexander-Walker",
+          "positions": [
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4278039.png",
+          "proTeamAbbrev": "ATL"
+        },
+        {
+          "playerId": 6478,
+          "name": "Nikola Vucevic",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/6478.png",
+          "proTeamAbbrev": "ORL"
+        },
+        {
+          "playerId": 4601023,
+          "name": "Oso Ighodaro",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4601023.png",
+          "proTeamAbbrev": "PHO"
+        },
+        {
+          "playerId": 4395725,
+          "name": "Tyler Herro",
+          "positions": [
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4395725.png",
+          "proTeamAbbrev": "MIL"
+        },
+        {
+          "playerId": 4395628,
+          "name": "Zion Williamson",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4395628.png",
+          "proTeamAbbrev": "NOP"
+        }
+      ],
+      "draftedRoster": [
+        {
+          "playerId": 4065648,
+          "name": "Jayson Tatum",
+          "positions": [
+            "PF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4065648.png",
+          "proTeamAbbrev": "BOS"
+        },
+        {
+          "playerId": 3136193,
+          "name": "Devin Booker",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3136193.png",
+          "proTeamAbbrev": "PHO"
+        },
+        {
+          "playerId": 4683021,
+          "name": "Deni Avdija",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4683021.png",
+          "proTeamAbbrev": "POR"
+        },
+        {
+          "playerId": 4278039,
+          "name": "Nickeil Alexander-Walker",
+          "positions": [
+            "SG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4278039.png",
+          "proTeamAbbrev": "ATL"
+        },
+        {
+          "playerId": 4395725,
+          "name": "Tyler Herro",
+          "positions": [
+            "SG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4395725.png",
+          "proTeamAbbrev": "MIL"
+        },
+        {
+          "playerId": 4395628,
+          "name": "Zion Williamson",
+          "positions": [
+            "PF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4395628.png",
+          "proTeamAbbrev": "NOP"
+        },
+        {
+          "playerId": 5037871,
+          "name": "Dylan Harper",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5037871.png",
+          "proTeamAbbrev": "SAS"
+        },
+        {
+          "playerId": 4395651,
+          "name": "Coby White",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4395651.png",
+          "proTeamAbbrev": "CHA"
+        },
+        {
+          "playerId": 3102531,
+          "name": "Kristaps Porzingis",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3102531.png",
+          "proTeamAbbrev": "GSW"
+        },
+        {
+          "playerId": 6478,
+          "name": "Nikola Vucevic",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/6478.png",
+          "proTeamAbbrev": "ORL"
+        },
+        {
+          "playerId": 4277811,
+          "name": "Collin Sexton",
+          "positions": [
+            "SG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4277811.png",
+          "proTeamAbbrev": "LAL"
+        },
+        {
+          "playerId": 4601023,
+          "name": "Oso Ighodaro",
+          "positions": [
+            "PF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4601023.png",
+          "proTeamAbbrev": "PHO"
+        },
+        {
+          "playerId": 4395723,
+          "name": "Keldon Johnson",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4395723.png",
+          "proTeamAbbrev": "SAS"
+        }
+      ],
+      "draftPicks": [
+        {
+          "playerId": 4065648,
+          "round": 1,
+          "pick": 7
+        },
+        {
+          "playerId": 3136193,
+          "round": 2,
+          "pick": 6
+        },
+        {
+          "playerId": 4683021,
+          "round": 3,
+          "pick": 7
+        },
+        {
+          "playerId": 4278039,
+          "round": 4,
+          "pick": 6
+        },
+        {
+          "playerId": 4395725,
+          "round": 5,
+          "pick": 7
+        },
+        {
+          "playerId": 4395628,
+          "round": 6,
+          "pick": 6
+        },
+        {
+          "playerId": 5037871,
+          "round": 7,
+          "pick": 7
+        },
+        {
+          "playerId": 4395651,
+          "round": 8,
+          "pick": 6
+        },
+        {
+          "playerId": 3102531,
+          "round": 9,
+          "pick": 7
+        },
+        {
+          "playerId": 6478,
+          "round": 10,
+          "pick": 6
+        },
+        {
+          "playerId": 4277811,
+          "round": 11,
+          "pick": 7
+        },
+        {
+          "playerId": 4601023,
+          "round": 12,
+          "pick": 6
+        },
+        {
+          "playerId": 4395723,
+          "round": 13,
+          "pick": 7
+        }
+      ]
+    },
+    {
+      "id": "beijing-ducks",
+      "currentRoster": [
+        {
+          "playerId": 5160992,
+          "name": "Alex Sarr",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5160992.png",
+          "proTeamAbbrev": "WAS"
+        },
+        {
+          "playerId": 4594268,
+          "name": "Anthony Edwards",
+          "positions": [
+            "SG",
+            "SF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4594268.png",
+          "proTeamAbbrev": "MIN"
+        },
+        {
+          "playerId": 4222252,
+          "name": "Isaiah Hartenstein",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4222252.png",
+          "proTeamAbbrev": "OKC"
+        },
+        {
+          "playerId": 3934672,
+          "name": "Jalen Brunson",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3934672.png",
+          "proTeamAbbrev": "NYK"
+        },
+        {
+          "playerId": 4432165,
+          "name": "Jalen Suggs",
+          "positions": [
+            "PG",
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4432165.png",
+          "proTeamAbbrev": "ORL"
+        },
+        {
+          "playerId": 3917376,
+          "name": "Jaylen Brown",
+          "positions": [
+            "SG",
+            "SF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3917376.png",
+          "proTeamAbbrev": "PHL"
+        },
+        {
+          "playerId": 3059318,
+          "name": "Joel Embiid",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3059318.png",
+          "proTeamAbbrev": "PHL"
+        },
+        {
+          "playerId": 6450,
+          "name": "Kawhi Leonard",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/6450.png",
+          "proTeamAbbrev": "TOR"
+        },
+        {
+          "playerId": 5254165,
+          "name": "Keaton Wagler",
+          "positions": [
+            "PG",
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5254165.png",
+          "proTeamAbbrev": "LAC"
+        },
+        {
+          "playerId": 4433627,
+          "name": "Keyonte George",
+          "positions": [
+            "PG",
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4433627.png",
+          "proTeamAbbrev": "UTA"
+        },
+        {
+          "playerId": 4395625,
+          "name": "RJ Barrett",
+          "positions": [
+            "SG",
+            "SF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4395625.png",
+          "proTeamAbbrev": "TOR"
+        },
+        {
+          "playerId": 4591725,
+          "name": "Ryan Rollins",
+          "positions": [
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4591725.png",
+          "proTeamAbbrev": "MIL"
+        },
+        {
+          "playerId": 6440,
+          "name": "Tobias Harris",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/6440.png",
+          "proTeamAbbrev": "SAS"
+        }
+      ],
+      "draftedRoster": [
+        {
+          "playerId": 4594268,
+          "name": "Anthony Edwards",
+          "positions": [
+            "SG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4594268.png",
+          "proTeamAbbrev": "MIN"
+        },
+        {
+          "playerId": 3934672,
+          "name": "Jalen Brunson",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3934672.png",
+          "proTeamAbbrev": "NYK"
+        },
+        {
+          "playerId": 6450,
+          "name": "Kawhi Leonard",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/6450.png",
+          "proTeamAbbrev": "TOR"
+        },
+        {
+          "playerId": 3917376,
+          "name": "Jaylen Brown",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3917376.png",
+          "proTeamAbbrev": "PHL"
+        },
+        {
+          "playerId": 4433627,
+          "name": "Keyonte George",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4433627.png",
+          "proTeamAbbrev": "UTA"
+        },
+        {
+          "playerId": 5160992,
+          "name": "Alex Sarr",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5160992.png",
+          "proTeamAbbrev": "WAS"
+        },
+        {
+          "playerId": 4591725,
+          "name": "Ryan Rollins",
+          "positions": [
+            "SG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4591725.png",
+          "proTeamAbbrev": "MIL"
+        },
+        {
+          "playerId": 3059318,
+          "name": "Joel Embiid",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3059318.png",
+          "proTeamAbbrev": "PHL"
+        },
+        {
+          "playerId": 4395625,
+          "name": "RJ Barrett",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4395625.png",
+          "proTeamAbbrev": "TOR"
+        },
+        {
+          "playerId": 6440,
+          "name": "Tobias Harris",
+          "positions": [
+            "PF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/6440.png",
+          "proTeamAbbrev": "SAS"
+        },
+        {
+          "playerId": 4222252,
+          "name": "Isaiah Hartenstein",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4222252.png",
+          "proTeamAbbrev": "OKC"
+        },
+        {
+          "playerId": 4432165,
+          "name": "Jalen Suggs",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4432165.png",
+          "proTeamAbbrev": "ORL"
+        },
+        {
+          "playerId": 5254165,
+          "name": "Keaton Wagler",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5254165.png",
+          "proTeamAbbrev": "LAC"
+        }
+      ],
+      "draftPicks": [
+        {
+          "playerId": 4594268,
+          "round": 1,
+          "pick": 9
+        },
+        {
+          "playerId": 3934672,
+          "round": 2,
+          "pick": 4
+        },
+        {
+          "playerId": 6450,
+          "round": 3,
+          "pick": 9
+        },
+        {
+          "playerId": 3917376,
+          "round": 4,
+          "pick": 4
+        },
+        {
+          "playerId": 4433627,
+          "round": 5,
+          "pick": 9
+        },
+        {
+          "playerId": 5160992,
+          "round": 6,
+          "pick": 4
+        },
+        {
+          "playerId": 4591725,
+          "round": 7,
+          "pick": 9
+        },
+        {
+          "playerId": 3059318,
+          "round": 8,
+          "pick": 4
+        },
+        {
+          "playerId": 4395625,
+          "round": 9,
+          "pick": 9
+        },
+        {
+          "playerId": 6440,
+          "round": 10,
+          "pick": 4
+        },
+        {
+          "playerId": 4222252,
+          "round": 11,
+          "pick": 9
+        },
+        {
+          "playerId": 4432165,
+          "round": 12,
+          "pick": 4
+        },
+        {
+          "playerId": 5254165,
+          "round": 13,
+          "pick": 9
+        }
+      ]
+    },
+    {
+      "id": "glizzy-goblers",
+      "currentRoster": [
+        {
+          "playerId": 3064290,
+          "name": "Aaron Gordon",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3064290.png",
+          "proTeamAbbrev": "DEN"
+        },
+        {
+          "playerId": 5142718,
+          "name": "AJ Dybantsa",
+          "positions": [
+            "SG",
+            "SF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5142718.png",
+          "proTeamAbbrev": "WAS"
+        },
+        {
+          "playerId": 5095151,
+          "name": "Caleb Wilson",
+          "positions": [
+            "SG",
+            "SF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5095151.png",
+          "proTeamAbbrev": "CHI"
+        },
+        {
+          "playerId": 4683692,
+          "name": "Cason Wallace",
+          "positions": [
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4683692.png",
+          "proTeamAbbrev": "OKC"
+        },
+        {
+          "playerId": 2991230,
+          "name": "Fred VanVleet",
+          "positions": [
+            "PG",
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/2991230.png",
+          "proTeamAbbrev": "HOU"
+        },
+        {
+          "playerId": 4433621,
+          "name": "Jalen Duren",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4433621.png",
+          "proTeamAbbrev": "DET"
+        },
+        {
+          "playerId": 3202,
+          "name": "Kevin Durant",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3202.png",
+          "proTeamAbbrev": "HOU"
+        },
+        {
+          "playerId": 4278594,
+          "name": "Naji Marshall",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4278594.png",
+          "proTeamAbbrev": "DAL"
+        },
+        {
+          "playerId": 3112335,
+          "name": "Nikola Jokic",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3112335.png",
+          "proTeamAbbrev": "DEN"
+        },
+        {
+          "playerId": 3934719,
+          "name": "OG Anunoby",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3934719.png",
+          "proTeamAbbrev": "NYK"
+        },
+        {
+          "playerId": 4251,
+          "name": "Paul George",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4251.png",
+          "proTeamAbbrev": "BOS"
+        },
+        {
+          "playerId": 4845367,
+          "name": "Stephon Castle",
+          "positions": [
+            "PG",
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4845367.png",
+          "proTeamAbbrev": "SAS"
+        },
+        {
+          "playerId": 3064440,
+          "name": "Zach LaVine",
+          "positions": [
+            "SG",
+            "SF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3064440.png",
+          "proTeamAbbrev": "SAC"
+        }
+      ],
+      "draftedRoster": [
+        {
+          "playerId": 3112335,
+          "name": "Nikola Jokic",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3112335.png",
+          "proTeamAbbrev": "DEN"
+        },
+        {
+          "playerId": 3202,
+          "name": "Kevin Durant",
+          "positions": [
+            "PF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3202.png",
+          "proTeamAbbrev": "HOU"
+        },
+        {
+          "playerId": 4433621,
+          "name": "Jalen Duren",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4433621.png",
+          "proTeamAbbrev": "DET"
+        },
+        {
+          "playerId": 5142718,
+          "name": "AJ Dybantsa",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5142718.png",
+          "proTeamAbbrev": "WAS"
+        },
+        {
+          "playerId": 4845367,
+          "name": "Stephon Castle",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4845367.png",
+          "proTeamAbbrev": "SAS"
+        },
+        {
+          "playerId": 5095151,
+          "name": "Caleb Wilson",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5095151.png",
+          "proTeamAbbrev": "CHI"
+        },
+        {
+          "playerId": 3934719,
+          "name": "OG Anunoby",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3934719.png",
+          "proTeamAbbrev": "NYK"
+        },
+        {
+          "playerId": 4251,
+          "name": "Paul George",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4251.png",
+          "proTeamAbbrev": "BOS"
+        },
+        {
+          "playerId": 2991230,
+          "name": "Fred VanVleet",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/2991230.png",
+          "proTeamAbbrev": "HOU"
+        },
+        {
+          "playerId": 3064440,
+          "name": "Zach LaVine",
+          "positions": [
+            "SG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3064440.png",
+          "proTeamAbbrev": "SAC"
+        },
+        {
+          "playerId": 3064290,
+          "name": "Aaron Gordon",
+          "positions": [
+            "PF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3064290.png",
+          "proTeamAbbrev": "DEN"
+        },
+        {
+          "playerId": 4278594,
+          "name": "Naji Marshall",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4278594.png",
+          "proTeamAbbrev": "DAL"
+        },
+        {
+          "playerId": 4683692,
+          "name": "Cason Wallace",
+          "positions": [
+            "SG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4683692.png",
+          "proTeamAbbrev": "OKC"
+        }
+      ],
+      "draftPicks": [
+        {
+          "playerId": 3112335,
+          "round": 1,
+          "pick": 1
+        },
+        {
+          "playerId": 3202,
+          "round": 2,
+          "pick": 12
+        },
+        {
+          "playerId": 4433621,
+          "round": 3,
+          "pick": 1
+        },
+        {
+          "playerId": 5142718,
+          "round": 4,
+          "pick": 12
+        },
+        {
+          "playerId": 4845367,
+          "round": 5,
+          "pick": 1
+        },
+        {
+          "playerId": 5095151,
+          "round": 6,
+          "pick": 12
+        },
+        {
+          "playerId": 3934719,
+          "round": 7,
+          "pick": 1
+        },
+        {
+          "playerId": 4251,
+          "round": 8,
+          "pick": 12
+        },
+        {
+          "playerId": 2991230,
+          "round": 9,
+          "pick": 1
+        },
+        {
+          "playerId": 3064440,
+          "round": 10,
+          "pick": 12
+        },
+        {
+          "playerId": 3064290,
+          "round": 11,
+          "pick": 1
+        },
+        {
+          "playerId": 4278594,
+          "round": 12,
+          "pick": 12
+        },
+        {
+          "playerId": 4683692,
+          "round": 13,
+          "pick": 1
+        }
+      ]
+    },
+    {
+      "id": "lalocomotora",
+      "currentRoster": [
+        {
+          "playerId": 4712849,
+          "name": "Anthony Black",
+          "positions": [
+            "PG",
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4712849.png",
+          "proTeamAbbrev": "ORL"
+        },
+        {
+          "playerId": 3913176,
+          "name": "Brandon Ingram",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3913176.png",
+          "proTeamAbbrev": "LAC"
+        },
+        {
+          "playerId": 4433287,
+          "name": "Brandon Miller",
+          "positions": [
+            "SG",
+            "SF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4433287.png",
+          "proTeamAbbrev": "CHA"
+        },
+        {
+          "playerId": 3978,
+          "name": "DeMar DeRozan",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3978.png",
+          "proTeamAbbrev": "DEN"
+        },
+        {
+          "playerId": 4395630,
+          "name": "Devin Vassell",
+          "positions": [
+            "SG",
+            "SF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4395630.png",
+          "proTeamAbbrev": "SAS"
+        },
+        {
+          "playerId": 5105565,
+          "name": "Donovan Clingan",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5105565.png",
+          "proTeamAbbrev": "POR"
+        },
+        {
+          "playerId": 3062679,
+          "name": "Josh Hart",
+          "positions": [
+            "SG",
+            "SF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3062679.png",
+          "proTeamAbbrev": "NYK"
+        },
+        {
+          "playerId": 3064514,
+          "name": "Julius Randle",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3064514.png",
+          "proTeamAbbrev": "BKN"
+        },
+        {
+          "playerId": 4432816,
+          "name": "LaMelo Ball",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4432816.png",
+          "proTeamAbbrev": "MIN"
+        },
+        {
+          "playerId": 1966,
+          "name": "LeBron James",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/1966.png",
+          "proTeamAbbrev": "PHL"
+        },
+        {
+          "playerId": 3945274,
+          "name": "Luka Doncic",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3945274.png",
+          "proTeamAbbrev": "LAL"
+        },
+        {
+          "playerId": 3149673,
+          "name": "Pascal Siakam",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3149673.png",
+          "proTeamAbbrev": "IND"
+        },
+        {
+          "playerId": 4397014,
+          "name": "Quentin Grimes",
+          "positions": [
+            "SG",
+            "SF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4397014.png",
+          "proTeamAbbrev": "LAL"
+        }
+      ],
+      "draftedRoster": [
+        {
+          "playerId": 3945274,
+          "name": "Luka Doncic",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3945274.png",
+          "proTeamAbbrev": "LAL"
+        },
+        {
+          "playerId": 4432816,
+          "name": "LaMelo Ball",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4432816.png",
+          "proTeamAbbrev": "MIN"
+        },
+        {
+          "playerId": 3149673,
+          "name": "Pascal Siakam",
+          "positions": [
+            "PF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3149673.png",
+          "proTeamAbbrev": "IND"
+        },
+        {
+          "playerId": 1966,
+          "name": "LeBron James",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/1966.png",
+          "proTeamAbbrev": "PHL"
+        },
+        {
+          "playerId": 3064514,
+          "name": "Julius Randle",
+          "positions": [
+            "PF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3064514.png",
+          "proTeamAbbrev": "BKN"
+        },
+        {
+          "playerId": 4433287,
+          "name": "Brandon Miller",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4433287.png",
+          "proTeamAbbrev": "CHA"
+        },
+        {
+          "playerId": 5105565,
+          "name": "Donovan Clingan",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5105565.png",
+          "proTeamAbbrev": "POR"
+        },
+        {
+          "playerId": 3978,
+          "name": "DeMar DeRozan",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3978.png",
+          "proTeamAbbrev": "DEN"
+        },
+        {
+          "playerId": 3062679,
+          "name": "Josh Hart",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3062679.png",
+          "proTeamAbbrev": "NYK"
+        },
+        {
+          "playerId": 3913176,
+          "name": "Brandon Ingram",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3913176.png",
+          "proTeamAbbrev": "LAC"
+        },
+        {
+          "playerId": 4397014,
+          "name": "Quentin Grimes",
+          "positions": [
+            "SG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4397014.png",
+          "proTeamAbbrev": "LAL"
+        },
+        {
+          "playerId": 4712849,
+          "name": "Anthony Black",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4712849.png",
+          "proTeamAbbrev": "ORL"
+        },
+        {
+          "playerId": 4395630,
+          "name": "Devin Vassell",
+          "positions": [
+            "SG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4395630.png",
+          "proTeamAbbrev": "SAS"
+        }
+      ],
+      "draftPicks": [
+        {
+          "playerId": 3945274,
+          "round": 1,
+          "pick": 4
+        },
+        {
+          "playerId": 4432816,
+          "round": 2,
+          "pick": 9
+        },
+        {
+          "playerId": 3149673,
+          "round": 3,
+          "pick": 4
+        },
+        {
+          "playerId": 1966,
+          "round": 4,
+          "pick": 9
+        },
+        {
+          "playerId": 3064514,
+          "round": 5,
+          "pick": 4
+        },
+        {
+          "playerId": 4433287,
+          "round": 6,
+          "pick": 9
+        },
+        {
+          "playerId": 5105565,
+          "round": 7,
+          "pick": 4
+        },
+        {
+          "playerId": 3978,
+          "round": 8,
+          "pick": 9
+        },
+        {
+          "playerId": 3062679,
+          "round": 9,
+          "pick": 4
+        },
+        {
+          "playerId": 3913176,
+          "round": 10,
+          "pick": 9
+        },
+        {
+          "playerId": 4397014,
+          "round": 11,
+          "pick": 4
+        },
+        {
+          "playerId": 4712849,
+          "round": 12,
+          "pick": 9
+        },
+        {
+          "playerId": 4395630,
+          "round": 13,
+          "pick": 4
+        }
+      ]
+    },
+    {
+      "id": "claudia-sheinballers",
+      "currentRoster": [
+        {
+          "playerId": 6585,
+          "name": "Andre Drummond",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/6585.png",
+          "proTeamAbbrev": "NYK"
+        },
+        {
+          "playerId": 4684742,
+          "name": "Ausar Thompson",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4684742.png",
+          "proTeamAbbrev": "DET"
+        },
+        {
+          "playerId": 4066261,
+          "name": "Bam Adebayo",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4066261.png",
+          "proTeamAbbrev": "MIA"
+        },
+        {
+          "playerId": 4709138,
+          "name": "Brandin Podziemski",
+          "positions": [
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4709138.png",
+          "proTeamAbbrev": "GSW"
+        },
+        {
+          "playerId": 3908809,
+          "name": "Donovan Mitchell",
+          "positions": [
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3908809.png",
+          "proTeamAbbrev": "CLE"
+        },
+        {
+          "playerId": 6589,
+          "name": "Draymond Green",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/6589.png",
+          "proTeamAbbrev": "GSW"
+        },
+        {
+          "playerId": 4431671,
+          "name": "Jaden McDaniels",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4431671.png",
+          "proTeamAbbrev": "MIN"
+        },
+        {
+          "playerId": 4871145,
+          "name": "Josh Giddey",
+          "positions": [
+            "PG",
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4871145.png",
+          "proTeamAbbrev": "CHI"
+        },
+        {
+          "playerId": 4432573,
+          "name": "Paolo Banchero",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4432573.png",
+          "proTeamAbbrev": "ORL"
+        },
+        {
+          "playerId": 3032976,
+          "name": "Rudy Gobert",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3032976.png",
+          "proTeamAbbrev": "MIN"
+        },
+        {
+          "playerId": 4066648,
+          "name": "Rui Hachimura",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4066648.png",
+          "proTeamAbbrev": "LAC"
+        },
+        {
+          "playerId": 4431785,
+          "name": "Scotty Pippen Jr.",
+          "positions": [
+            "PG",
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4431785.png",
+          "proTeamAbbrev": "MEM"
+        },
+        {
+          "playerId": 5175737,
+          "name": "Yaxel Lendeborg",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5175737.png",
+          "proTeamAbbrev": "GSW"
+        }
+      ],
+      "draftedRoster": [
+        {
+          "playerId": 3908809,
+          "name": "Donovan Mitchell",
+          "positions": [
+            "SG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3908809.png",
+          "proTeamAbbrev": "CLE"
+        },
+        {
+          "playerId": 4871145,
+          "name": "Josh Giddey",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4871145.png",
+          "proTeamAbbrev": "CHI"
+        },
+        {
+          "playerId": 4066261,
+          "name": "Bam Adebayo",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4066261.png",
+          "proTeamAbbrev": "MIA"
+        },
+        {
+          "playerId": 4432573,
+          "name": "Paolo Banchero",
+          "positions": [
+            "PF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4432573.png",
+          "proTeamAbbrev": "ORL"
+        },
+        {
+          "playerId": 3032976,
+          "name": "Rudy Gobert",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3032976.png",
+          "proTeamAbbrev": "MIN"
+        },
+        {
+          "playerId": 4431671,
+          "name": "Jaden McDaniels",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4431671.png",
+          "proTeamAbbrev": "MIN"
+        },
+        {
+          "playerId": 4709138,
+          "name": "Brandin Podziemski",
+          "positions": [
+            "SG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4709138.png",
+          "proTeamAbbrev": "GSW"
+        },
+        {
+          "playerId": 4684742,
+          "name": "Ausar Thompson",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4684742.png",
+          "proTeamAbbrev": "DET"
+        },
+        {
+          "playerId": 5175737,
+          "name": "Yaxel Lendeborg",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5175737.png",
+          "proTeamAbbrev": "GSW"
+        },
+        {
+          "playerId": 4431785,
+          "name": "Scotty Pippen Jr.",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4431785.png",
+          "proTeamAbbrev": "MEM"
+        },
+        {
+          "playerId": 4066648,
+          "name": "Rui Hachimura",
+          "positions": [
+            "PF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4066648.png",
+          "proTeamAbbrev": "LAC"
+        },
+        {
+          "playerId": 6589,
+          "name": "Draymond Green",
+          "positions": [
+            "PF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/6589.png",
+          "proTeamAbbrev": "GSW"
+        },
+        {
+          "playerId": 6585,
+          "name": "Andre Drummond",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/6585.png",
+          "proTeamAbbrev": "NYK"
+        }
+      ],
+      "draftPicks": [
+        {
+          "playerId": 3908809,
+          "round": 1,
+          "pick": 11
+        },
+        {
+          "playerId": 4871145,
+          "round": 2,
+          "pick": 2
+        },
+        {
+          "playerId": 4066261,
+          "round": 3,
+          "pick": 11
+        },
+        {
+          "playerId": 4432573,
+          "round": 4,
+          "pick": 2
+        },
+        {
+          "playerId": 3032976,
+          "round": 5,
+          "pick": 11
+        },
+        {
+          "playerId": 4431671,
+          "round": 6,
+          "pick": 2
+        },
+        {
+          "playerId": 4709138,
+          "round": 7,
+          "pick": 11
+        },
+        {
+          "playerId": 4684742,
+          "round": 8,
+          "pick": 2
+        },
+        {
+          "playerId": 5175737,
+          "round": 9,
+          "pick": 11
+        },
+        {
+          "playerId": 4431785,
+          "round": 10,
+          "pick": 2
+        },
+        {
+          "playerId": 4066648,
+          "round": 11,
+          "pick": 11
+        },
+        {
+          "playerId": 6589,
+          "round": 12,
+          "pick": 2
+        },
+        {
+          "playerId": 6585,
+          "round": 13,
+          "pick": 11
+        }
+      ]
+    },
+    {
+      "id": "mclovers",
+      "currentRoster": [
+        {
+          "playerId": 4873138,
+          "name": "Ace Bailey",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4873138.png",
+          "proTeamAbbrev": "UTA"
+        },
+        {
+          "playerId": 4871144,
+          "name": "Alperen Sengun",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4871144.png",
+          "proTeamAbbrev": "HOU"
+        },
+        {
+          "playerId": 4395712,
+          "name": "Andrew Nembhard",
+          "positions": [
+            "PG",
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4395712.png",
+          "proTeamAbbrev": "IND"
+        },
+        {
+          "playerId": 4433255,
+          "name": "Chet Holmgren",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4433255.png",
+          "proTeamAbbrev": "OKC"
+        },
+        {
+          "playerId": 3907497,
+          "name": "Dejounte Murray",
+          "positions": [
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3907497.png",
+          "proTeamAbbrev": "NOP"
+        },
+        {
+          "playerId": 5175643,
+          "name": "Egor Demin",
+          "positions": [
+            "PG",
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5175643.png",
+          "proTeamAbbrev": "BKN"
+        },
+        {
+          "playerId": 4279888,
+          "name": "Ja Morant",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4279888.png",
+          "proTeamAbbrev": "POR"
+        },
+        {
+          "playerId": 4593803,
+          "name": "Jalen Williams",
+          "positions": [
+            "SG",
+            "SF",
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4593803.png",
+          "proTeamAbbrev": "OKC"
+        },
+        {
+          "playerId": 2991070,
+          "name": "Jerami Grant",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/2991070.png",
+          "proTeamAbbrev": "MEM"
+        },
+        {
+          "playerId": 4433134,
+          "name": "Scottie Barnes",
+          "positions": [
+            "SG",
+            "SF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4433134.png",
+          "proTeamAbbrev": "TOR"
+        },
+        {
+          "playerId": 3975,
+          "name": "Stephen Curry",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3975.png",
+          "proTeamAbbrev": "GSW"
+        },
+        {
+          "playerId": 5124612,
+          "name": "VJ Edgecombe",
+          "positions": [
+            "SG",
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5124612.png",
+          "proTeamAbbrev": "PHL"
+        },
+        {
+          "playerId": 4600663,
+          "name": "Zach Edey",
+          "positions": [
+            "PF",
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4600663.png",
+          "proTeamAbbrev": "MEM"
+        }
+      ],
+      "draftedRoster": [
+        {
+          "playerId": 4433134,
+          "name": "Scottie Barnes",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4433134.png",
+          "proTeamAbbrev": "TOR"
+        },
+        {
+          "playerId": 4871144,
+          "name": "Alperen Sengun",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4871144.png",
+          "proTeamAbbrev": "HOU"
+        },
+        {
+          "playerId": 3975,
+          "name": "Stephen Curry",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3975.png",
+          "proTeamAbbrev": "GSW"
+        },
+        {
+          "playerId": 4593803,
+          "name": "Jalen Williams",
+          "positions": [
+            "PF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4593803.png",
+          "proTeamAbbrev": "OKC"
+        },
+        {
+          "playerId": 3907497,
+          "name": "Dejounte Murray",
+          "positions": [
+            "SG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/3907497.png",
+          "proTeamAbbrev": "NOP"
+        },
+        {
+          "playerId": 4433255,
+          "name": "Chet Holmgren",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4433255.png",
+          "proTeamAbbrev": "OKC"
+        },
+        {
+          "playerId": 4279888,
+          "name": "Ja Morant",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4279888.png",
+          "proTeamAbbrev": "POR"
+        },
+        {
+          "playerId": 5124612,
+          "name": "VJ Edgecombe",
+          "positions": [
+            "SG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5124612.png",
+          "proTeamAbbrev": "PHL"
+        },
+        {
+          "playerId": 4600663,
+          "name": "Zach Edey",
+          "positions": [
+            "C"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4600663.png",
+          "proTeamAbbrev": "MEM"
+        },
+        {
+          "playerId": 5175643,
+          "name": "Egor Demin",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/5175643.png",
+          "proTeamAbbrev": "BKN"
+        },
+        {
+          "playerId": 4395712,
+          "name": "Andrew Nembhard",
+          "positions": [
+            "PG"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4395712.png",
+          "proTeamAbbrev": "IND"
+        },
+        {
+          "playerId": 4873138,
+          "name": "Ace Bailey",
+          "positions": [
+            "SF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/4873138.png",
+          "proTeamAbbrev": "UTA"
+        },
+        {
+          "playerId": 2991070,
+          "name": "Jerami Grant",
+          "positions": [
+            "PF"
+          ],
+          "headshotUrl": "https://a.espncdn.com/i/headshots/nba/players/full/2991070.png",
+          "proTeamAbbrev": "MEM"
+        }
+      ],
+      "draftPicks": [
+        {
+          "playerId": 4433134,
+          "round": 1,
+          "pick": 12
+        },
+        {
+          "playerId": 4871144,
+          "round": 2,
+          "pick": 1
+        },
+        {
+          "playerId": 3975,
+          "round": 3,
+          "pick": 12
+        },
+        {
+          "playerId": 4593803,
+          "round": 4,
+          "pick": 1
+        },
+        {
+          "playerId": 3907497,
+          "round": 5,
+          "pick": 12
+        },
+        {
+          "playerId": 4433255,
+          "round": 6,
+          "pick": 1
+        },
+        {
+          "playerId": 4279888,
+          "round": 7,
+          "pick": 12
+        },
+        {
+          "playerId": 5124612,
+          "round": 8,
+          "pick": 1
+        },
+        {
+          "playerId": 4600663,
+          "round": 9,
+          "pick": 12
+        },
+        {
+          "playerId": 5175643,
+          "round": 10,
+          "pick": 1
+        },
+        {
+          "playerId": 4395712,
+          "round": 11,
+          "pick": 12
+        },
+        {
+          "playerId": 4873138,
+          "round": 12,
+          "pick": 1
+        },
+        {
+          "playerId": 2991070,
+          "round": 13,
+          "pick": 12
+        }
+      ]
+    }
+  ]
+}

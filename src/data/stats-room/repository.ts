@@ -180,8 +180,16 @@ export function createEmptyStatsRoomData(seasonId: string): StatsRoomData {
     seasonStatsLeague: [],
     playoffBracket: {
       format: '6_team_top2_bye',
-      round1: [],
-      round2: [],
+      round1: [
+        { type: 'bye', seed: 1, teamId: null },
+        { type: 'matchup', seeds: [5, 4], teamIds: [null, null], scores: null },
+        { type: 'bye', seed: 2, teamId: null },
+        { type: 'matchup', seeds: [6, 3], teamIds: [null, null], scores: null },
+      ],
+      round2: [
+        { type: 'matchup', slotIndex: 0, seedsInvolved: [1, 5], teamIds: [null, null], scores: null, feedsFromR1: 0 },
+        { type: 'matchup', slotIndex: 1, seedsInvolved: [2, 6], teamIds: [null, null], scores: null, feedsFromR1: 1 },
+      ],
       championship: {
         type: 'matchup',
         teamIds: [null, null],

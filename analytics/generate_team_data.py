@@ -11,6 +11,8 @@ import os
 import json
 import re
 import sys
+import hashlib
+from functools import lru_cache
 from pathlib import Path
 from typing import Dict, Optional
 from urllib.request import Request, urlopen
@@ -62,29 +64,6 @@ THEME_COLORS = [
     {"background": "linear-gradient(135deg, #78350f 0%, #92400e 50%, #78350f 100%)", "accent": "#fbbf24"},
     {"background": "linear-gradient(135deg, #422006 0%, #713f12 50%, #422006 100%)", "accent": "#facc15"},
 ]
-
-# Penúltima slide del rewind (2025-26); highlightTeamId se añade por equipo al generar.
-DEBT_TABLE_SLIDE_2026 = {
-    "type": "debtTable",
-    "title": "Tabla de Deuda 2025-2026",
-    "subtitle": "Compensación económica por equipo",
-    "rows": [
-        {"teamId": "glizzy-goblers", "teamName": "Glizzy Goblers", "amount": "$100 MXN"},
-        {"teamId": "lalocomotora", "teamName": "Lalocomotora", "amount": "$550 MXN"},
-        {"teamId": "diegos-daring-team", "teamName": "Diego's Daring Team", "amount": "$100 MXN"},
-        {"teamId": "huecox-y-un-dobel", "teamName": "Huecox y un dobel", "amount": "$200 MXN"},
-        {"teamId": "metefierros", "teamName": "Metefierros", "amount": "$200 MXN"},
-        {"teamId": "lububumatcha", "teamName": "LububuMatcha", "amount": "$200 MXN"},
-        {"teamId": "beijing-ducks", "teamName": "Beijing Ducks", "amount": "$100 MXN"},
-        {"teamId": "tochetaos", "teamName": "Tochetaos", "amount": "$100 MXN"},
-        {"teamId": "fiestas-fantastic-team", "teamName": "Fiesta's Fantastic Team", "amount": "$100 MXN"},
-    ],
-    "total": "$1,650 MXN",
-    "footer": (
-        "Cena de la liga: el campeón no paga; el sobrante reduce costos para los demás miembros."
-    ),
-}
-
 
 def escape_for_ts(s: str) -> str:
     """Escape single quotes for use inside a TS string literal."""
@@ -298,12 +277,27 @@ TEAM_LOGO_OVERRIDES: Dict[str, str] = {
 }
 
 
+@lru_cache(maxsize=1)
+def known_team_ids() -> Dict[int, str]:
+    """ESPN's numeric identity survives display-name changes."""
+    known = {}
+    for path in sorted((DATA_ROOT / 'seasons').glob('*/teams-catalog.json'), reverse=True):
+        payload = json.loads(path.read_text(encoding='utf-8'))
+        for entry in payload.get('teams', []):
+            if entry.get('espnTeamId') is not None:
+                known.setdefault(int(entry['espnTeamId']), entry['id'])
+    return known
+
+
 def get_team_slug(team) -> str:
     """
     ID/slug del equipo: solo ASCII, para archivos .ts, URL y dynamic import.
     Si el nombre tiene caracteres no ASCII (ej. chino), usa TEAM_SLUG_OVERRIDES
     o fallback team-{team_id}. displayName sigue siendo el nombre original.
     """
+    stable_id = known_team_ids().get(getattr(team, 'team_id', None))
+    if stable_id:
+        return stable_id
     name = getattr(team, "team_name", "") or ""
     if name in TEAM_SLUG_OVERRIDES:
         return TEAM_SLUG_OVERRIDES[name]
@@ -336,6 +330,14 @@ def get_local_logo_path(team_slug: str) -> Optional[str]:
     """
     if not team_slug:
         return None
+    season = os.environ.get('YEAR', '')
+    catalog_path = DATA_ROOT / 'seasons' / season / 'teams-catalog.json'
+    if re.fullmatch(r'\d{4}', season) and catalog_path.exists():
+        catalog = json.loads(catalog_path.read_text(encoding='utf-8'))
+        entry = next((row for row in catalog['teams'] if row['id'] == team_slug), {})
+        logo = entry.get('logoUrl') or ''
+        if logo.startswith('/team-logos/') and (PROJECT_ROOT / 'public' / logo.lstrip('/')).is_file():
+            return logo
     safe_slug = re.sub(r"[^\w\-]", "", team_slug) or "logo"
     for ext in ("png", "jpg", "jpeg", "gif", "webp"):
         for name in (f"{safe_slug}.{ext}", f"{safe_slug}-logo.{ext}"):
@@ -385,8 +387,13 @@ def download_team_logo(logo_url: str, team_slug: str) -> Optional[str]:
             else:
                 ext = "png"
             safe_slug = re.sub(r"[^\w\-]", "", team_slug) or "logo"
-            filename = f"{safe_slug}.{ext}"
+            season = os.environ.get('YEAR', '')
+            if not re.fullmatch(r'\d{4}', season):
+                raise ValueError('YEAR debe indicar la temporada para guardar su logo.')
+            digest = hashlib.sha256(data).hexdigest()[:12]
+            filename = f"{season}/{safe_slug}-{digest}.{ext}"
             out_path = LOGOS_DIR / filename
+            out_path.parent.mkdir(parents=True, exist_ok=True)
             out_path.write_bytes(data)
             return f"/team-logos/{filename}"
     except (URLError, HTTPError, OSError) as e:
@@ -418,9 +425,9 @@ def generate_team_ts(
         "footer": "Fantasy Rewind",
     }
     if logo_url:
-        # Override explícito para logos con nombre distinto al slug
-        if tid in TEAM_LOGO_OVERRIDES:
-            hero_slide["image"] = TEAM_LOGO_OVERRIDES[tid]
+        # Use this season's archived logo, including when the team was renamed.
+        if get_local_logo_path(tid):
+            hero_slide['image'] = get_local_logo_path(tid)
         # Imágenes subidas por usuario (mystique-api): usar ruta local si ya existe en public/team-logos/
         elif _is_mystique_logo_url(logo_url):
             local_path = get_local_logo_path(tid)
@@ -1082,7 +1089,7 @@ def generate_team_ts(
         record_val = f"{w}-{l}-{t}"
         standing_val = summary.get("standing") or summary.get("final_standing")
 
-    # Orden final: playoff → season summary → tabla de deuda (2026) → hero despedida
+    # Orden final: playoff → season summary → hero despedida
     po = team_data.get("playoff_outcome") or {}
     slides.append({
         "type": "playoffOutcome",
@@ -1118,9 +1125,6 @@ def generate_team_ts(
         "summaryInsights": summary_insights,
         "footer": "Fantasy Rewind",
     })
-
-    if season == "2026":
-        slides.append({**DEBT_TABLE_SLIDE_2026, "highlightTeamId": tid})
 
     slides.append({
         "type": "hero",
@@ -1798,22 +1802,26 @@ def generate_all_teams(season: str = "2026"):
     """Genera archivos TypeScript para todos los equipos."""
     print(f"Generating team data for season {season}...")
     
+    os.environ['YEAR'] = season
     league = nv.get_league()
+    from export_league_teams import export_teams
+    export_teams(season, refresh_logos=True, league=league)
     teams = league.teams
     team_by_id = {t.team_id: t for t in teams}
     
     weeks_all = nv.get_available_weeks(league)
     if not weeks_all:
-        raise RuntimeError(
-            "La temporada todavía no tiene matchups. Usa 'Sincronizar equipos' "
-            "en /admin/stats y genera las estadísticas cuando inicie la temporada."
+        print(
+            "Catálogo, draft y rosters actualizados. La temporada todavía no tiene matchups; "
+            "las estadísticas y Rewinds se generarán cuando haya puntuaciones."
         )
+        return
     if not nv.has_scored_matchups(league, weeks_all):
-        raise RuntimeError(
-            "ESPN ya publicó el calendario, pero los matchups todavía no tienen puntuación. "
-            "Usa 'Sincronizar equipos' en /admin/stats y genera las estadísticas cuando "
-            "comience la temporada."
+        print(
+            "Catálogo, draft y rosters actualizados. ESPN ya publicó el calendario, "
+            "pero los matchups todavía no tienen puntuación; estadísticas y Rewinds pendientes."
         )
+        return
 
     # Split entre temporada regular vs playoffs para que premios "semana" no se mezclen.
     # En ESPN Fantasy, reg_season_count indica cuántos matchup periods son de temporada regular.

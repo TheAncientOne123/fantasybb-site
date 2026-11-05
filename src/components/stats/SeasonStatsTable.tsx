@@ -7,7 +7,8 @@ import clsx from 'clsx'
 import { ChevronDown, ChevronUp, Search } from 'lucide-react'
 import type { StatsStandingRow } from '@/data/stats-room-types'
 import { SEASON_STATS_VOLUME_KEYS } from '@/data/stats-room-types'
-import { getTeamLogoPath } from '@/data/team-profiles/team-logos'
+import { useTeamLogo } from '@/components/team/TeamIdentityProvider'
+import { Section } from '@/components/ui'
 
 /** Si no hay `seasonStatsLeague` (archivo antiguo), mismas categorías 9CAT como columnas (sin FGM/FGA…). */
 const FALLBACK_STAT_KEYS = ['REB', 'AST', 'STL', 'BLK', '3PM', 'FG%', 'FT%', 'PTS'] as const
@@ -58,7 +59,8 @@ export default function SeasonStatsTable({
   nineByTeam,
   teamFilter,
 }: Props) {
-  const useVolume = Boolean(seasonStatsLeague && seasonStatsLeague.length > 0)
+  const getTeamLogoPath = useTeamLogo()
+  const useVolume = seasonStatsLeague !== undefined
   const columns = useVolume ? [...SEASON_STATS_VOLUME_KEYS] : [...FALLBACK_STAT_KEYS]
 
   const [sortKey, setSortKey] = useState<SortKey | null>(null)
@@ -167,12 +169,11 @@ export default function SeasonStatsTable({
     'border-b border-r border-white/10 bg-slate-950 px-2 py-3 text-left text-xs font-bold uppercase tracking-wide text-slate-400'
 
   return (
-    <section className="space-y-3" id="ninecat">
-      <h2 className="font-heading text-xl font-semibold text-white">Season stats</h2>
-      <p className="text-xs text-slate-500">
-        Ordena con un clic en el encabezado de una columna (otro clic invierte asc/desc). Busca por nombre o id de
-        equipo. El rango 9CAT sigue en el tooltip al pasar el cursor sobre cada celda.
-      </p>
+    <Section
+      id="ninecat"
+      title="Season stats"
+      description="Ordena con un clic en el encabezado de una columna (otro clic invierte asc/desc). Busca por nombre o id de equipo. El rango 9CAT sigue en el tooltip al pasar el cursor sobre cada celda."
+    >
 
       <div className="relative">
         <Search
@@ -184,7 +185,7 @@ export default function SeasonStatsTable({
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Filtrar equipos…"
-          className="w-full rounded-xl border border-white/10 bg-slate-900/80 py-2.5 pl-10 pr-3 text-sm text-white placeholder:text-slate-600 focus:border-sky-500/40 focus:outline-none focus:ring-2 focus:ring-sky-500/30"
+          className="w-full rounded-xl border border-white/10 bg-slate-900/80 py-2.5 pl-10 pr-3 text-sm text-white placeholder:text-slate-600 focus:border-amber-500/40 focus:outline-none focus:ring-1 focus:ring-amber-500/30"
           aria-label="Filtrar equipos en la tabla"
         />
       </div>
@@ -235,7 +236,7 @@ export default function SeasonStatsTable({
                 colSpan={columns.length}
                 className="border-b border-white/10 px-2 py-2 text-center text-xs font-bold uppercase tracking-wider text-slate-500"
               >
-                {useVolume ? 'All categories' : '9CAT (sin intentos de tiro — regenera stats-room para FGM/FGA…)'}
+                {useVolume ? 'All categories' : '9CAT'}
               </th>
             </tr>
             <tr className="border-b border-white/10 bg-white/[0.04] text-xs font-semibold uppercase text-slate-400">
@@ -271,7 +272,7 @@ export default function SeasonStatsTable({
                         colActive('rk') && 'bg-sky-500/10'
                       )}
                     >
-                      {row.rank}
+                      {row.rank > 0 ? row.rank : '—'}
                     </td>
                     <td
                       className={clsx(
@@ -326,6 +327,6 @@ export default function SeasonStatsTable({
           </tbody>
         </table>
       </div>
-    </section>
+    </Section>
   )
 }

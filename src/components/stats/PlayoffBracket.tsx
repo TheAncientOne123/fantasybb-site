@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import clsx from 'clsx'
 import type { PlayoffBracket as PlayoffBracketType, StatsStandingRow } from '@/data/stats-room-types'
-import { getTeamLogoPath } from '@/data/team-profiles/team-logos'
+import { useTeamLogo } from '@/components/team/TeamIdentityProvider'
 
 function ordinalRank(n: number): string {
   const j = n % 10
@@ -51,6 +51,7 @@ type RowProps = {
 }
 
 function BracketRow({ seed, teamId, score, standingsById, dimmed, isBye, isWinner }: RowProps) {
+  const getTeamLogoPath = useTeamLogo()
   const row = teamId ? standingsById.get(teamId) : undefined
   const name = row?.displayName ?? (isBye ? 'BYE' : 'TBD')
   const logo = teamId ? getTeamLogoPath(teamId) : undefined

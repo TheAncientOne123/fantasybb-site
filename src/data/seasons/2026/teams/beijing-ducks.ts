@@ -750,61 +750,6 @@ const data: TeamRewindData = {
       footer: 'Fantasy Rewind'
     },
     {
-      type: 'debtTable',
-      title: 'Tabla de Deuda 2025-2026',
-      subtitle: 'Compensación económica por equipo',
-      rows: [
-        {
-          teamId: 'glizzy-goblers',
-          teamName: 'Glizzy Goblers',
-          amount: '$100 MXN'
-        },
-        {
-          teamId: 'lalocomotora',
-          teamName: 'Lalocomotora',
-          amount: '$550 MXN'
-        },
-        {
-          teamId: 'diegos-daring-team',
-          teamName: 'Diego\'s Daring Team',
-          amount: '$100 MXN'
-        },
-        {
-          teamId: 'huecox-y-un-dobel',
-          teamName: 'Huecox y un dobel',
-          amount: '$200 MXN'
-        },
-        {
-          teamId: 'metefierros',
-          teamName: 'Metefierros',
-          amount: '$200 MXN'
-        },
-        {
-          teamId: 'lububumatcha',
-          teamName: 'LububuMatcha',
-          amount: '$200 MXN'
-        },
-        {
-          teamId: 'beijing-ducks',
-          teamName: 'Beijing Ducks',
-          amount: '$100 MXN'
-        },
-        {
-          teamId: 'tochetaos',
-          teamName: 'Tochetaos',
-          amount: '$100 MXN'
-        },
-        {
-          teamId: 'fiestas-fantastic-team',
-          teamName: 'Fiesta\'s Fantastic Team',
-          amount: '$100 MXN'
-        }
-      ],
-      total: '$1,650 MXN',
-      footer: 'Cena de la liga: el campeón no paga; el sobrante reduce costos para los demás miembros.',
-      highlightTeamId: 'beijing-ducks'
-    },
-    {
       type: 'hero',
       title: 'See you next season',
       subtitle: '北京首钢霹雳鸭',

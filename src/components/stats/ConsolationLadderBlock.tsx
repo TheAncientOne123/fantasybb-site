@@ -5,7 +5,7 @@ import Image from 'next/image'
 import clsx from 'clsx'
 import { filterLadderRoundsByMinPeriod } from '@/data/draftOrderFromLadders'
 import type { ConsolationLadder, StatsStandingRow } from '@/data/stats-room-types'
-import { getTeamLogoPath } from '@/data/team-profiles/team-logos'
+import { useTeamLogo } from '@/components/team/TeamIdentityProvider'
 
 function recordForTeam(teamId: string | null | undefined, byId: Map<string, StatsStandingRow>): string {
   if (!teamId) return '—'
@@ -36,6 +36,7 @@ type RowProps = {
 }
 
 function ConsolationRow({ seed, teamId, score, standingsById, dimmed, isWinner }: RowProps) {
+  const getTeamLogoPath = useTeamLogo()
   const row = teamId ? standingsById.get(teamId) : undefined
   const name = row?.displayName ?? 'TBD'
   const logo = teamId ? getTeamLogoPath(teamId) : undefined

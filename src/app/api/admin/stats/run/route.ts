@@ -1,55 +1,13 @@
-import { spawn } from 'node:child_process'
-import { resolve } from 'node:path'
 import { getLeagueCatalog } from '@/data/catalog/repository'
-import { readGeneratedStatsRoom } from '@/lib/generated-stats-room'
 import { isLocalAdminHost } from '@/lib/local-admin'
+import { isSeasonId, isStatsAction, readGeneratedStatsRoom, runStatsAction } from '@/lib/stats-pipeline'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
-type Action = 'sync-teams' | 'generate' | 'publish'
 type RunnerGlobal = typeof globalThis & { __fantasyStatsAdminRunning?: boolean }
 
 const runnerGlobal = globalThis as RunnerGlobal
-
-function runCommand(
-  command: string,
-  args: string[],
-  environment: NodeJS.ProcessEnv,
-  write: (message: string) => void
-): Promise<void> {
-  return new Promise((resolveCommand, rejectCommand) => {
-    write(`\n> ${command} ${args.join(' ')}\n`)
-    const child = spawn(command, args, {
-      cwd: process.cwd(),
-      env: environment,
-      shell: false,
-      windowsHide: true,
-    })
-
-    child.stdout.on('data', (chunk) => write(String(chunk)))
-    child.stderr.on('data', (chunk) => write(String(chunk)))
-    child.on('error', rejectCommand)
-    child.on('close', (code) => {
-      if (code === 0) resolveCommand()
-      else rejectCommand(new Error(`${command} terminó con código ${code ?? 'desconocido'}.`))
-    })
-  })
-}
-
-async function runPython(
-  args: string[],
-  environment: NodeJS.ProcessEnv,
-  write: (message: string) => void
-) {
-  try {
-    await runCommand('python', args, environment, write)
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error
-    write('No se encontró python; intentando con el launcher py de Windows.\n')
-    await runCommand('py', ['-3', ...args], environment, write)
-  }
-}
 
 export async function POST(request: Request) {
   if (!isLocalAdminHost(request.headers.get('host'))) {
@@ -63,16 +21,13 @@ export async function POST(request: Request) {
     seasonId?: unknown
     action?: unknown
   } | null
-  const seasonId = typeof body?.seasonId === 'string' ? body.seasonId : ''
-  const action: Action | null =
-    body?.action === 'sync-teams' || body?.action === 'generate' || body?.action === 'publish'
-      ? body.action
-      : null
+  const seasonId = body?.seasonId
+  const action = body?.action
 
-  if (!/^\d{4}$/.test(seasonId)) {
+  if (!isSeasonId(seasonId)) {
     return Response.json({ error: 'Temporada inválida.' }, { status: 400 })
   }
-  if (!action) {
+  if (!isStatsAction(action) || action === 'daily') {
     return Response.json({ error: 'Acción inválida.' }, { status: 400 })
   }
 
@@ -92,64 +47,16 @@ export async function POST(request: Request) {
   const stream = new ReadableStream<Uint8Array>({
     start(controller) {
       const write = (message: string) => controller.enqueue(encoder.encode(message))
-      const environment = {
-        ...process.env,
-        YEAR: seasonId,
-        PYTHONUNBUFFERED: '1',
-        PYTHONUTF8: '1',
-        PYTHONIOENCODING: 'utf-8',
-      }
-      const pythonScript = resolve(process.cwd(), 'analytics', 'generate_team_data.py')
-      const teamsScript = resolve(process.cwd(), 'analytics', 'export_league_teams.py')
-      const tsxRunner = resolve(process.cwd(), 'scripts', 'run-tsx.cjs')
 
-      void (async () => {
-        try {
-          if (action === 'sync-teams') {
-            write(`Sincronizando equipos de la temporada ${seasonId}.\n`)
-            write('Paso 1/2: leyendo el catálogo de ESPN sin consultar matchups...\n')
-            await runPython([teamsScript, '--season', seasonId], environment, write)
-
-            write('\nPaso 2/2: actualizando equipos y membresías en Neon...\n')
-            await runCommand(
-              process.execPath,
-              [tsxRunner, 'scripts/import-season-teams.ts', '--season', seasonId],
-              environment,
-              write
-            )
-            write('\n[DONE] Equipos sincronizados sin generar estadísticas.\n')
-          } else if (action === 'generate') {
-            write(`Generando borrador local de Stats Room ${seasonId}.\n`)
-            write('Consultando ESPN y generando archivos locales...\n')
-            await runPython([pythonScript, '--season', seasonId], environment, write)
-            write('\n[DONE] Borrador generado. Revísalo antes de publicarlo.\n')
-          } else {
-            write(`Publicando Stats Room ${seasonId} en Neon.\n`)
-            write('Paso 1/2: importando el borrador generado...\n')
-            await runCommand(
-              process.execPath,
-              [tsxRunner, 'scripts/import-stats-room.ts', '--season', seasonId],
-              environment,
-              write
-            )
-
-            write('\nPaso 2/2: verificando la importación...\n')
-            await runCommand(
-              process.execPath,
-              [tsxRunner, 'scripts/verify-stats-room-import.ts', '--season', seasonId],
-              environment,
-              write
-            )
-            write('\n[DONE] Estadísticas publicadas y verificadas correctamente.\n')
-          }
-        } catch (error) {
+      void runStatsAction(action, seasonId, write)
+        .catch((error) => {
           const message = error instanceof Error ? error.message : String(error)
           write(`\n[ERROR] ${message}\n`)
-        } finally {
+        })
+        .finally(() => {
           runnerGlobal.__fantasyStatsAdminRunning = false
           controller.close()
-        }
-      })()
+        })
     },
   })
 

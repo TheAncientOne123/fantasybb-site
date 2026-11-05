@@ -30,10 +30,6 @@ async function main() {
         continue
       }
 
-      if (actual.displayName.trim() !== expected.displayName.trim()) {
-        failures.push(`${teamId}: nombre distinto`)
-      }
-
       for (const expectedSeason of expected.seasons) {
         comparedSeasons += 1
         const actualSeason = actual.seasons.find(
@@ -45,6 +41,7 @@ async function main() {
         }
 
         const comparisons: Array<[string, string | number, string | number]> = [
+          ['nombre', expectedSeason.displayName ?? expected.displayName, actualSeason.displayName ?? actual.displayName],
           ['récord', expectedSeason.record, actualSeason.record],
           ['standing', expectedSeason.regularSeasonRank, actualSeason.regularSeasonRank],
           ['logros', expectedSeason.achievements.length, actualSeason.achievements.length],

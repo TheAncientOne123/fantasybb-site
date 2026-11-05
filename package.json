@@ -17,7 +17,8 @@
     "database:verify:stats": "node scripts/run-tsx.cjs scripts/verify-stats-room-import.ts",
     "database:verify": "npm run database:verify:profiles && npm run database:verify:stats",
     "database:status": "node scripts/run-tsx.cjs scripts/database-status.ts",
-    "database:setup": "npm run database:migrate && npm run database:import && npm run database:verify"
+    "database:setup": "npm run database:migrate && npm run database:import && npm run database:verify",
+    "sync:espn": "node scripts/run-tsx.cjs scripts/sync-espn.ts"
   },
   "dependencies": {
     "@types/canvas-confetti": "^1.9.0",

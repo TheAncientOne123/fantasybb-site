@@ -6,11 +6,11 @@
 export type PlayoffBracketFormat = '6_team_top2_bye'
 
 export type BracketR1Slot =
-  | { type: 'bye'; seed: number; teamId: string }
+  | { type: 'bye'; seed: number; teamId: string | null }
   | {
       type: 'matchup'
       seeds: [number, number]
-      teamIds: [string, string]
+      teamIds: [string | null, string | null]
       scores: [number, number] | null
     }
 

@@ -1,7 +1,6 @@
 import type { TeamRewindData, Slide } from '../rewind-types'
 import type { ProfileAchievement, ProfileRosterPlayer, TeamProfile, TeamProfileSeason } from './types'
 import { achievementImageOrFallback } from './achievement-images'
-import { getSeasonDebtAmount } from './season-debt'
 import { getTeamRewindData, teamExists } from '../getTeamRewind'
 import { SEASONS } from '../seasons'
 import { getTeamLogoPath } from './team-logos'
@@ -222,6 +221,7 @@ export function rewindDataToProfileSeason(
   teamId: string
 ): TeamProfileSeason {
   const slides = data.slides
+  const hero = slides.find((slide) => slide.type === 'hero' && slide.image)
   const po = findLastSlide(slides, 'playoffOutcome')
   const rosterSlide = findLastSlide(slides, 'rosterDiff')
   const mvpList = slides.find((s) => s.type === 'list' && s.title === 'Season MVPs')
@@ -340,6 +340,11 @@ export function rewindDataToProfileSeason(
   return {
     seasonId,
     seasonLabel,
+    displayName: data.displayName.trim(),
+    logoUrl: hero?.type === 'hero' ? hero.image : getTeamLogoPath(teamId),
+    owner: data.owner,
+    description: data.description,
+    hasStats: true,
     record,
     regularSeasonRank,
     madePlayoffs: pMeta.madePlayoffs,
@@ -357,7 +362,6 @@ export function rewindDataToProfileSeason(
     nineCatFull: nineCatFull?.length ? nineCatFull : undefined,
     longestStreaks: extractLongestStreaks(slides),
     highestScoringWeek: extractHighestScoringWeek(slides, teamId),
-    debtPaid: getSeasonDebtAmount(seasonId, teamId),
   }
 }
 

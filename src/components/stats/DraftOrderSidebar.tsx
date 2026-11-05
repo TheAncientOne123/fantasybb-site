@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import clsx from 'clsx'
 import type { NextDraftOrderRow, StatsStandingRow } from '@/data/stats-room-types'
-import { getTeamLogoPath } from '@/data/team-profiles/team-logos'
+import { useTeamLogo } from '@/components/team/TeamIdentityProvider'
 
 const TABLE_COL_COUNT = 2
 
@@ -52,6 +52,7 @@ function DraftPickRow({
   pickClassName,
   rowHighlightClass,
 }: PickRowProps) {
+  const getTeamLogoPath = useTeamLogo()
   return (
     <tr
       className={clsx(
@@ -159,9 +160,7 @@ export default function DraftOrderSidebar({
       </div>
       {showRegenerateHint && (
         <p className="mt-3 text-[11px] text-slate-500">
-          Regenera con{' '}
-          <code className="text-slate-400">python analytics/generate_team_data.py</code> para rellenar equipos desde
-          ESPN.
+          El orden de draft se completará cuando haya resultados de playoffs.
         </p>
       )}
     </aside>

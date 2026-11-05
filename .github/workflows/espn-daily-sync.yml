@@ -1,0 +1,113 @@
+# Sincronización diaria ESPN → Neon en la nube (no requiere la PC encendida).
+#
+# Corre todos los días a las 3:00 AM de Ciudad de México (09:00 UTC; CDMX ya no
+# usa horario de verano) dentro de la ventana de la temporada. También se puede
+# lanzar a mano desde la pestaña Actions → "ESPN daily sync" → Run workflow.
+#
+# Secrets necesarios (Settings → Secrets and variables → Actions):
+#   DATABASE_URL  cadena de conexión de Neon
+#   LEAGUE_ID     id de la liga de ESPN
+#   ESPN_S2       cookie espn_s2 (liga privada)
+#   SWID          cookie SWID (liga privada)
+name: ESPN daily sync
+
+on:
+  schedule:
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+    inputs:
+      season:
+        description: 'Temporada (vacío = la activa en Neon)'
+        required: false
+        default: ''
+
+# Nunca dos sincronizaciones a la vez.
+concurrency:
+  group: espn-daily-sync
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+env:
+  # Ventana de la temporada (inclusive). Las ejecuciones programadas fuera de ella se omiten.
+  SYNC_START: '2026-11-06'
+  SYNC_END: '2027-04-05'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Comprobar ventana de la temporada
+        id: window
+        run: |
+          today=$(TZ=America/Mexico_City date +%F)
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || \
+             { [[ ! "$today" < "$SYNC_START" ]] && [[ ! "$today" > "$SYNC_END" ]]; }; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Hoy ($today) está fuera de $SYNC_START – $SYNC_END; nada que hacer."
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.window.outputs.run == 'true'
+
+      - uses: actions/setup-node@v4
+        if: steps.window.outputs.run == 'true'
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: actions/setup-python@v5
+        if: steps.window.outputs.run == 'true'
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: analytics/requirements.txt
+
+      - name: Instalar dependencias
+        if: steps.window.outputs.run == 'true'
+        run: |
+          npm ci
+          pip install -r analytics/requirements.txt
+
+      - name: Sincronizar ESPN → Neon
+        if: steps.window.outputs.run == 'true'
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          LEAGUE_ID: ${{ secrets.LEAGUE_ID }}
+          ESPN_S2: ${{ secrets.ESPN_S2 }}
+          SWID: ${{ secrets.SWID }}
+        run: |
+          if [ -n "${{ inputs.season }}" ]; then
+            npm run --silent sync:espn -- --season "${{ inputs.season }}"
+          else
+            npm run --silent sync:espn
+          fi
+
+      # Neon sólo guarda la ruta de cada logo; la imagen vive en public/team-logos y debe
+      # estar en el sitio desplegado. El Rewind (src/data/seasons) no se sube: se publica
+      # a mano al terminar la temporada.
+      - name: Guardar logos nuevos
+        if: steps.window.outputs.run == 'true'
+        run: |
+          git add -A public/team-logos
+          if git diff --cached --quiet; then
+            echo "Sin logos nuevos."
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m "chore: logos ESPN $(TZ=America/Mexico_City date +%F)"
+          git push
+
+      - name: Subir registro
+        if: always() && steps.window.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: espn-sync-log-${{ github.run_id }}
+          path: .logs/espn-sync/
+          retention-days: 14
+          if-no-files-found: ignore

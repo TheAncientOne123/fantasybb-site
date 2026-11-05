@@ -1,5 +1,6 @@
 import StatsRoomView from '@/components/stats/StatsRoomView'
 import { getLeagueCatalog } from '@/data/catalog/repository'
+import { TeamIdentityProvider } from '@/components/team/TeamIdentityProvider'
 import {
   createEmptyStatsRoomData,
   getStatsRoomData,
@@ -26,11 +27,12 @@ export default async function StatsPage({ searchParams }: Props) {
   const storedData = await getStatsRoomData(seasonId)
 
   return (
+    <TeamIdentityProvider teams={catalog.teamsBySeason[seasonId] ?? []}>
     <StatsRoomView
       data={storedData ?? createEmptyStatsRoomData(seasonId)}
       seasons={catalog.seasons}
       teams={catalog.teamsBySeason[seasonId] ?? []}
-      hasData={Boolean(storedData)}
     />
+    </TeamIdentityProvider>
   )
 }

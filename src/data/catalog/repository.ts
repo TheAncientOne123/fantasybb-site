@@ -1,7 +1,7 @@
 import type { TeamIndexEntry } from '@/data/rewind-types'
 import { SEASONS, type Season } from '@/data/seasons'
 import { getTeamsForSeason } from '@/data/teams'
-import teams2027 from '@/data/seasons/2027/teams-catalog.json'
+import { STATIC_TEAM_CATALOGS } from './static'
 import { getTeamLogoPath } from '@/data/team-profiles/team-logos'
 import {
   getDatabase,
@@ -31,7 +31,7 @@ type TeamRow = {
 
 function getStaticCatalog(): LeagueCatalog {
   return {
-    seasons: [...SEASONS],
+    seasons: SEASONS.filter((season) => getTeamsForSeason(season.id).length > 0),
     teamsBySeason: Object.fromEntries(
       SEASONS.map((season) => [
         season.id,
@@ -50,25 +50,15 @@ export function getStaticRewindCatalog(): LeagueCatalog {
 }
 
 function getStaticLeagueCatalog(): LeagueCatalog {
-  const historicalCatalog = getStaticCatalog()
-  const historicalTeamIds = new Set(
-    Object.values(historicalCatalog.teamsBySeason).flat().map((team) => team.id)
-  )
-
   return {
-    seasons: [
-      { id: teams2027.seasonId, year: '2027', label: '2026-27 Season', isActive: true },
-      ...historicalCatalog.seasons.map((season) => ({ ...season, isActive: false })),
-    ],
-    teamsBySeason: {
-      ...historicalCatalog.teamsBySeason,
-      [teams2027.seasonId]: teams2027.teams.map((team) => ({
-        id: team.id,
-        displayName: team.displayName.trim(),
-        logoUrl: team.logoUrl,
-        isExpansion: !historicalTeamIds.has(team.id),
+    seasons: [...SEASONS],
+    teamsBySeason: Object.fromEntries(SEASONS.map((season) => [season.id,
+      (STATIC_TEAM_CATALOGS[season.id]?.teams ?? getTeamsForSeason(season.id)).map((team) => ({
+        ...team, displayName: team.displayName.trim(),
+        isExpansion: SEASONS.some((previous) => previous.year < season.year) && !SEASONS.some((previous) => previous.year < season.year &&
+          STATIC_TEAM_CATALOGS[previous.id]?.teams.some((entry) => entry.id === team.id)),
       })),
-    },
+    ])),
   }
 }
 
@@ -84,13 +74,13 @@ async function getDatabaseCatalog(): Promise<LeagueCatalog | null> {
       select
         st.season_id,
         t.id,
-        t.display_name,
-        t.logo_url,
+        st.display_name,
+        st.logo_url,
         st.is_expansion
       from season_teams st
       join teams t on t.id = st.team_id
       join seasons s on s.id = st.season_id
-      order by s.year desc, st.is_expansion, t.display_name, t.id
+      order by s.is_active desc, s.year desc, st.is_expansion, st.display_name, t.id
     `,
   ])
 

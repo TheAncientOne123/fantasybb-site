@@ -132,8 +132,9 @@ export default function StatsAdminRunner({ seasons, defaultSeasonId }: Props) {
           </p>
           <h2 className="mt-1 font-heading text-xl text-white">Sincronizar equipos desde ESPN</h2>
           <p className="mt-2 text-sm leading-6 text-slate-400">
-            Obtiene nombres y logos sin buscar semanas ni matchups. Registra los equipos nuevos en
+            Obtiene nombres, logos, draft y rosters sin buscar semanas ni matchups. Registra los equipos nuevos en
             Neon y marca como expansión a quienes no participaron en temporadas anteriores.
+            También conserva la captura inicial de proyecciones para Calidad de Roster.
           </p>
           <label className="mt-3 flex items-start gap-2 text-xs leading-5 text-slate-400">
             <input

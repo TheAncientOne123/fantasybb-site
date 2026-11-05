@@ -1,0 +1,85 @@
+{
+  "seasonId": "2026",
+  "teams": [
+    {
+      "id": "novigrad-21ers",
+      "espnTeamId": 1,
+      "displayName": "Novigrad 21ers",
+      "logoUrl": "/team-logos/2026/novigrad-21ers-1e33c9fa84d6.png",
+      "owner": "Hector Sanchez",
+      "description": ""
+    },
+    {
+      "id": "diegos-daring-team",
+      "espnTeamId": 2,
+      "displayName": "Diego's Daring Team",
+      "logoUrl": "https://g.espncdn.com/lm-static/fba/images/default_logos/1.svg",
+      "owner": "Diego Vargas",
+      "description": ""
+    },
+    {
+      "id": "lububumatcha",
+      "espnTeamId": 3,
+      "displayName": "LububuMatcha",
+      "logoUrl": "/team-logos/2026/lububumatcha-5031a3bbce78.png",
+      "owner": "Juanjo Ortigoza",
+      "description": ""
+    },
+    {
+      "id": "metefierros",
+      "espnTeamId": 4,
+      "displayName": "METEFIERROS",
+      "logoUrl": "https://g.espncdn.com/lm-static/logo-packs/core/SimpleShields/shields-4.svg",
+      "owner": "Angel Lozano",
+      "description": ""
+    },
+    {
+      "id": "tochetaos",
+      "espnTeamId": 5,
+      "displayName": "Tochetaos",
+      "logoUrl": "/team-logos/2026/tochetaos-df2b600f9b75.png",
+      "owner": "Sebastian Aguilar",
+      "description": "Objetivo: Convertirnos en Bucks FC, drafteando a pura gema oculta y desarrollandolos para llegar hasta el campeonatonnVisión: Ser los underdogs, caminando despacio sin rushear nadanMisión: Cogerme a Peru FC"
+    },
+    {
+      "id": "huecox-y-un-dobel",
+      "espnTeamId": 6,
+      "displayName": "huecox y un Dobel",
+      "logoUrl": "/team-logos/2026/huecox-y-un-dobel-aa553ba50f25.png",
+      "owner": "Emilio \"Keko\" Martinez",
+      "description": ""
+    },
+    {
+      "id": "fiestas-fantastic-team",
+      "espnTeamId": 7,
+      "displayName": "Fiesta's Fantastic Team",
+      "logoUrl": "https://g.espncdn.com/lm-static/fba/images/default_logos/3.svg",
+      "owner": "Jorge Rubio",
+      "description": "ssss"
+    },
+    {
+      "id": "beijing-ducks",
+      "espnTeamId": 8,
+      "displayName": "北京首钢霹雳鸭",
+      "logoUrl": "/team-logos/2026/beijing-ducks-5ce68ce2bdbc.png",
+      "owner": "Ulises Montiel",
+      "description": ""
+    },
+    {
+      "id": "glizzy-goblers",
+      "espnTeamId": 9,
+      "displayName": "Glizzy Goblers",
+      "logoUrl": "/team-logos/2026/glizzy-goblers-0156698af83a.jpg",
+      "owner": "Emilio Callejas",
+      "description": ""
+    },
+    {
+      "id": "lalocomotora",
+      "espnTeamId": 10,
+      "displayName": "LaloComotora",
+      "logoUrl": "https://g.espncdn.com/lm-static/fba/images/default_logos/5.svg",
+      "owner": "Mau",
+      "description": ""
+    }
+  ]
+}

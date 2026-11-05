@@ -30,17 +30,17 @@ async function main() {
           await transaction`
             insert into teams (id, display_name)
             values (${standing.teamId}, ${standing.displayName.trim()})
-            on conflict (id) do update set display_name = excluded.display_name
+            on conflict (id) do nothing
           `
           await transaction`
-            insert into season_teams (season_id, team_id, is_expansion)
+            insert into season_teams (season_id, team_id, is_expansion, display_name)
             values (
               ${seasonId},
               ${standing.teamId},
               not exists (
                 select 1 from season_teams existing where existing.team_id = ${standing.teamId}
               )
-            )
+            , ${standing.displayName.trim()})
             on conflict (season_id, team_id) do nothing
           `
         }

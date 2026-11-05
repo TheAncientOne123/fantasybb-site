@@ -13,27 +13,6 @@ import { getSeasonById } from '@/data/seasons'
 
 const DEFAULT_BG = 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)'
 const DEFAULT_ACCENT = '#f59e0b'
-const DEBT_SEASON_ID = '2026'
-
-const DEBT_SLIDE = {
-  type: 'debtTable' as const,
-  title: 'Tabla de Deuda 2025-2026',
-  subtitle: 'Compensación económica por equipo',
-  rows: [
-    { teamId: 'glizzy-goblers', teamName: 'Glizzy Goblers', amount: '$100 MXN' },
-    { teamId: 'lalocomotora', teamName: 'Lalocomotora', amount: '$550 MXN' },
-    { teamId: 'diegos-daring-team', teamName: "Diego's Daring Team", amount: '$100 MXN' },
-    { teamId: 'huecox-y-un-dobel', teamName: 'Huecox y un dobel', amount: '$200 MXN' },
-    { teamId: 'metefierros', teamName: 'Metefierros', amount: '$200 MXN' },
-    { teamId: 'lububumatcha', teamName: 'LububuMatcha', amount: '$200 MXN' },
-    { teamId: 'beijing-ducks', teamName: 'Beijing Ducks', amount: '$100 MXN' },
-    { teamId: 'tochetaos', teamName: 'Tochetaos', amount: '$100 MXN' },
-    { teamId: 'fiestas-fantastic-team', teamName: "Fiesta's Fantastic Team", amount: '$100 MXN' },
-  ],
-  total: '$1,650 MXN',
-  footer:
-    'Cena de la liga: el campeón no paga; el sobrante reduce costos para los demás miembros.',
-}
 
 type Props = {
   seasonId: string
@@ -111,12 +90,7 @@ export default function RewindPlayerClient({ seasonId, teamId }: Props) {
 
   const accent = data.theme?.accent ?? DEFAULT_ACCENT
   const background = data.theme?.background ?? DEFAULT_BG
-  /** Datos nuevos incluyen debtTable en el .ts; archivos viejos: inyectar tabla aquí. */
-  const hasDebtSlide = data.slides.some((s) => s.type === 'debtTable')
-  const slides =
-    !hasDebtSlide && seasonId === DEBT_SEASON_ID
-      ? [...data.slides, { ...DEBT_SLIDE, highlightTeamId: teamId }]
-      : data.slides
+  const slides = data.slides
   const slide = slides[index]
   const total = slides.length
 

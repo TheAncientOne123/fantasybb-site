@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Trophy } from 'lucide-react'
+import { Trophy } from 'lucide-react'
 import type {
   HallOfFameData,
   HofLarryRow,
@@ -15,7 +15,9 @@ import type {
 import { SEASONS } from '@/data/seasons'
 import type { Season } from '@/data/seasons'
 import type { TeamIndexEntry } from '@/data/rewind-types'
-import { getTeamLogoPath } from '@/data/team-profiles/team-logos'
+import { TeamIdentityProvider, useTeamLogo } from '@/components/team/TeamIdentityProvider'
+import { PageHeader, PageShell, ui } from '@/components/ui'
+import { cn } from '@/lib/utils'
 
 function recordTitle(kind: HofLeagueRecord['kind']): string {
   if (kind === 'ceiling_check') return 'Ceiling Check'
@@ -64,7 +66,7 @@ type ShowcaseCard = {
   season: HofSeasonShowcase
 }
 
-function buildShowcaseBySeason(data: HallOfFameData): { seasonId: string; seasonLabel: string; cards: ShowcaseCard[] }[] {
+function buildShowcaseBySeason(data: HallOfFameData, teamsBySeason: Record<string, TeamIndexEntry[]>): { seasonId: string; seasonLabel: string; cards: ShowcaseCard[] }[] {
   const seasonIds = [
     ...new Set(data.teams.flatMap((t) => t.seasons.map((s) => s.seasonId))),
   ].sort((a, b) => b.localeCompare(a))
@@ -83,7 +85,7 @@ function buildShowcaseBySeason(data: HallOfFameData): { seasonId: string; season
         cards.push({
           key: `${team.teamId}-${seasonId}`,
           teamId: team.teamId,
-          displayName: team.displayName,
+          displayName: teamsBySeason[seasonId]?.find((entry) => entry.id === team.teamId)?.displayName ?? team.displayName,
           season,
         })
       }
@@ -145,12 +147,15 @@ function TeamLogo({
   teamId,
   name,
   size = 'md',
+  logoUrl,
 }: {
   teamId: string
   name: string
   size?: 'md' | 'lg' | 'larry'
+  logoUrl?: string
 }) {
-  const src = getTeamLogoPath(teamId)
+  const getTeamLogoPath = useTeamLogo()
+  const src = logoUrl ?? getTeamLogoPath(teamId)
   const box =
     size === 'larry'
       ? 'h-[5.25rem] w-[5.25rem] sm:h-28 sm:w-28'
@@ -245,7 +250,7 @@ function TeamSeasonShowcaseCard({
               {displayName}
             </h3>
             <div className="mt-2 flex flex-wrap items-center gap-x-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-sky-400/95">
-              <Link href={`/team/${teamId}`} className="hover:text-sky-300">
+              <Link href={`/team/${teamId}?season=${season.seasonId}`} className="hover:text-sky-300">
                 Perfil
               </Link>
               <span className="text-slate-600" aria-hidden>
@@ -313,7 +318,7 @@ export default function HallOfFameView({ data, seasons, teamsBySeason }: {
   teamsBySeason: Record<string, TeamIndexEntry[]>
 }) {
   const { order, labels, bySeason } = groupRecordsBySeason(data.leagueRecords)
-  const showcaseSections = useMemo(() => buildShowcaseBySeason(data), [data])
+  const showcaseSections = useMemo(() => buildShowcaseBySeason(data, teamsBySeason), [data, teamsBySeason])
   const seasonOptions = useMemo(
     () => seasons.map((season) => ({
       seasonId: season.id,
@@ -331,22 +336,8 @@ export default function HallOfFameView({ data, seasons, teamsBySeason }: {
   const { buckets: larryBuckets, zeroWinTeams: larryZeroWin } = buildLarryShowcaseBuckets(data.larryTable)
 
   return (
-    <div className="min-h-screen bg-slate-950 pb-20 pt-10 text-slate-100">
-      <div className="mx-auto max-w-5xl space-y-16 px-4 sm:px-6">
-        <header className="space-y-5 border-b border-white/[0.06] pb-8">
-          <Link
-            href="/"
-            className="group inline-flex w-fit items-center gap-2.5 rounded-full border border-amber-500/20 bg-slate-900/60 py-2 pl-3 pr-4 text-sm font-medium text-slate-200 shadow-lg shadow-black/20 ring-1 ring-inset ring-white/[0.04] backdrop-blur-sm transition hover:border-amber-400/40 hover:bg-slate-800/90 hover:text-white"
-          >
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-500/10 text-amber-400/95 transition group-hover:bg-amber-500/20 group-hover:text-amber-300">
-              <ArrowLeft className="h-4 w-4 transition group-hover:-translate-x-px" aria-hidden />
-            </span>
-            <span>Volver al inicio</span>
-          </Link>
-          <h1 className="font-heading text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-[2.75rem] md:leading-tight">
-            Hall of Fame
-          </h1>
-        </header>
+    <PageShell className="space-y-16">
+        <PageHeader title="Hall of Fame" />
 
         <section className="space-y-8">
           <h2 className="text-center font-heading text-2xl font-bold tracking-tight text-white sm:text-3xl md:text-4xl">
@@ -472,7 +463,7 @@ export default function HallOfFameView({ data, seasons, teamsBySeason }: {
               Vitrina histórica
             </h2>
             <div className="mt-3 flex max-w-md flex-col gap-1.5">
-              <label htmlFor="hof-vitrina-season" className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+              <label htmlFor="hof-vitrina-season" className={ui.eyebrow}>
                 Temporada
               </label>
               <select
@@ -480,7 +471,7 @@ export default function HallOfFameView({ data, seasons, teamsBySeason }: {
                 value={activeVitrinaSeasonId ?? ''}
                 onChange={(e) => setVitrinaSeasonId(e.target.value || null)}
                 disabled={seasonOptions.length === 0}
-                className="w-full rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2.5 text-sm text-slate-100 shadow-inner shadow-black/20 outline-none transition hover:border-white/25 focus:border-amber-500/40 focus:ring-1 focus:ring-amber-500/30 disabled:cursor-not-allowed disabled:opacity-50"
+                className={cn(ui.select, 'w-full py-2.5')}
               >
                 {seasonOptions.length === 0 ? (
                   <option value="">Sin temporadas</option>
@@ -498,6 +489,7 @@ export default function HallOfFameView({ data, seasons, teamsBySeason }: {
             </p>
           </div>
           {vitrinaSection && vitrinaSection.cards.length > 0 ? (
+            <TeamIdentityProvider teams={teamsBySeason[activeVitrinaSeasonId ?? ''] ?? []}>
             <div className="flex flex-col gap-4">
               {vitrinaSection.cards.map((row) => (
                 <TeamSeasonShowcaseCard
@@ -508,14 +500,10 @@ export default function HallOfFameView({ data, seasons, teamsBySeason }: {
                 />
               ))}
             </div>
+            </TeamIdentityProvider>
           ) : (
             <div className="rounded-xl border border-white/10 bg-slate-900/30 px-4 py-6 text-sm text-slate-400">
               <p>Esta temporada todavía no tiene logros registrados.</p>
-              <ul className="mt-4 grid gap-2 sm:grid-cols-2">
-                {(teamsBySeason[activeVitrinaSeasonId ?? ''] ?? []).map((team) => (
-                  <li key={team.id}>{team.displayName}</li>
-                ))}
-              </ul>
             </div>
           )}
         </section>
@@ -545,7 +533,7 @@ export default function HallOfFameView({ data, seasons, teamsBySeason }: {
                           key={`${r.kind}-${r.seasonId}`}
                           className="flex gap-4 rounded-2xl border border-white/[0.08] bg-slate-900/40 p-5"
                         >
-                          <TeamLogo teamId={r.leaderTeamId} name={r.leaderDisplayName} />
+                          <TeamLogo teamId={r.leaderTeamId} name={r.leaderDisplayName} logoUrl={teamsBySeason[r.seasonId]?.find((team) => team.id === r.leaderTeamId)?.logoUrl} />
                           <div className="min-w-0 flex-1">
                             <p className="text-xs font-semibold uppercase tracking-wide text-amber-400/85">
                               {recordTitle(r.kind)}
@@ -554,7 +542,7 @@ export default function HallOfFameView({ data, seasons, teamsBySeason }: {
                             <p className="mt-2 truncate font-medium text-white">{r.leaderDisplayName}</p>
                             <p className="text-lg font-semibold tabular-nums text-slate-200">{r.value}</p>
                             <Link
-                              href={`/team/${r.leaderTeamId}`}
+                              href={`/team/${r.leaderTeamId}?season=${r.seasonId}`}
                               className="mt-2 inline-block text-xs text-sky-400/90 hover:text-sky-300"
                             >
                               Ver perfil
@@ -739,7 +727,6 @@ export default function HallOfFameView({ data, seasons, teamsBySeason }: {
             )}
           </div>
         </section>
-      </div>
-    </div>
+    </PageShell>
   )
 }

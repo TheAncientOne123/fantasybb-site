@@ -2,6 +2,8 @@
  * Team profile view model — built from `TeamRewindData` (same files as rewind) via `buildTeamProfile`.
  */
 
+import type { TeamRosterQuality } from './roster-quality'
+
 export type ProfileAchievement = {
   name: string
   label?: string
@@ -41,6 +43,12 @@ export type NineCatFullRow = {
 export type TeamProfileSeason = {
   seasonId: string
   seasonLabel: string
+  displayName?: string
+  logoUrl?: string
+  owner?: string
+  description?: string
+  hasStats?: boolean
+  rosterQuality?: TeamRosterQuality
   record: string
   regularSeasonRank: number
   madePlayoffs: boolean
@@ -72,8 +80,6 @@ export type TeamProfileSeason = {
   longestStreaks?: string
   /** Best single-week fantasy points (ceiling) when derivable from slides */
   highestScoringWeek?: string
-  /** Amount paid toward league debt for this season */
-  debtPaid: string
 }
 
 export type TeamProfile = {
@@ -82,6 +88,7 @@ export type TeamProfile = {
   owner?: string
   description?: string
   logoUrl?: string
+  activeSeasonId?: string
   /** Seasons in reverse chronological order (newest first) */
   seasons: TeamProfileSeason[]
 }

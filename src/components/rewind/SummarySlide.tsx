@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import type { SummaryInsightRow, SummarySlide as SummarySlideType } from '@/data/rewind-types'
-import { getTeamLogoPath } from '@/data/team-profiles/team-logos'
+import { useTeamLogo } from '@/components/team/TeamIdentityProvider'
 import { getRewindImageUrl } from '@/lib/rewind-image'
 import { RewindImage } from './RewindImage'
 
@@ -33,6 +33,7 @@ function normalizeInsight(raw: string | SummaryInsightRow | undefined): {
 }
 
 function OpponentLogo({ teamId }: { teamId?: string }) {
+  const getTeamLogoPath = useTeamLogo()
   const src = teamId ? getTeamLogoPath(teamId) : undefined
   if (!src) {
     return (

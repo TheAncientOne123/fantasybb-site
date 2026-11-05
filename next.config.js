@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Verification builds can run alongside a user's development server.
+  distDir: process.env.FANTASY_NEXT_DIST_DIR || '.next',
   images: {
     domains: [
       'a.espncdn.com',
