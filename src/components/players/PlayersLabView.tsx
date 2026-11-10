@@ -237,25 +237,27 @@ export default function PlayersLabView({
             title="Radar"
             description={
               tab === 'available'
-                ? 'Señales entre los jugadores libres y en waivers. Cada etiqueta explica por qué apareció.'
-                : 'Señales en todo el universo: incluye jugadores con dueño (útil para cambios).'
             }
           >
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+            <div className="space-y-4">
               {LABEL_ORDER.map((kind) => {
                 const meta = LABEL_META[kind]
                 const items = radar[kind]
                 return (
-                  <Card key={kind} padding="sm" className="flex flex-col">
-                    <div className="flex items-baseline justify-between gap-2">
-                      <h3 className={clsx('font-heading text-xl', meta.accent)}>{meta.title}</h3>
-                      <span className="text-xs tabular-nums text-slate-500">{items.length}</span>
+                  <Card key={kind} padding="sm" className="flex flex-col gap-4 lg:flex-row lg:gap-6">
+                    <div className="lg:w-60 lg:shrink-0 lg:border-r lg:border-white/[0.06] lg:pr-6">
+                      <div className="flex items-baseline justify-between gap-2">
+                        <h3 className={clsx('font-heading text-2xl', meta.accent)}>{meta.title}</h3>
+                        <span className="text-xs tabular-nums text-slate-500">
+                          {items.length} {items.length === 1 ? 'jugador' : 'jugadores'}
+                        </span>
+                      </div>
+                      <p className="mt-1 text-xs leading-5 text-slate-500">{meta.description}</p>
                     </div>
-                    <p className="mt-1 text-xs leading-5 text-slate-500">{meta.description}</p>
                     {items.length === 0 ? (
-                      <p className="mt-4 text-xs italic text-slate-600">Nadie cumple la regla ahora mismo.</p>
+                      <p className="self-center text-xs italic text-slate-600">Nadie cumple la regla ahora mismo.</p>
                     ) : (
-                      <ul className="mt-3 space-y-3">
+                      <ul className="grid flex-1 gap-x-4 gap-y-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
                         {items.slice(0, 5).map(({ player, reason }) => (
                           <li key={player.id} className="flex gap-2.5">
                             <PlayerHeadshot player={player} size={32} />
@@ -288,8 +290,6 @@ export default function PlayersLabView({
             title={tab === 'available' ? 'Jugadores disponibles' : 'Universo de jugadores'}
             description={
               tab === 'available'
-                ? 'Agentes libres (se fichan al instante) y jugadores en waivers (se reclaman por prioridad).'
-                : `Los ${players.length} jugadores con más % de propiedad en ESPN, tengan o no equipo en la liga.`
             }
           >
             <div className="flex flex-wrap items-end gap-3">
@@ -509,17 +509,17 @@ export default function PlayersLabView({
 const GLOSSARY: Array<{ term: string; text: string }> = [
   {
     term: 'Usage Rate (tasa de uso)',
-    text: 'Porcentaje de jugadas de un equipo que terminan en las manos de un jugador (tiros, tiros libres o pérdidas) mientras está en pista. A mayor uso, más oportunidades de sumar. Aquí se aproxima como (FGA + 0.44·FTA + TO) por 36 minutos, porque ESPN no publica el USG% oficial.',
+    text: 'Porcentaje de jugadas de un equipo que terminan en las manos de un jugador (tiros, tiros libres o pérdidas) mientras está en pista. A mayor uso, más oportunidades de sumar.'
   },
   {
     term: 'Counting stats',
-    text: 'Puntos, rebotes, asistencias, robos y tapones: estadísticas que simplemente se suman partido a partido.',
+    text: 'Puntos, rebotes, asistencias, robos y tapones.',
   },
   {
     term: 'Porcentajes (FG%, FT%, 3PT%)',
-    text: 'Eficiencia de tiro. Un mal partido con mucho volumen puede hundir tus porcentajes de la semana.',
+    text: 'Eficiencia de tiro.',
   },
-  { term: 'Stocks', text: 'Robos + tapones: las estadísticas defensivas más escasas y valiosas del juego.' },
+  { term: 'Stocks', text: 'Robos + tapones' },
   {
     term: 'Regresión a la media',
     text: 'Con el paso de los partidos, la buena o mala suerte se acaba y el jugador vuelve a promediar lo que corresponde a su talento y rol. Es lo que equilibra un Fluke y un Slump.',

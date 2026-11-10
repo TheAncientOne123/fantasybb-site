@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Trophy, Clock, Award } from 'lucide-react'
+import { Trophy, Clock, Award, FlaskConical } from 'lucide-react'
 import { ui } from '@/components/ui/styles'
 
 const navItems = [
@@ -23,6 +23,12 @@ const navItems = [
     href: '/stats',
     icon: Award,
     description: 'Estadísticas detalladas'
+  },
+  {
+    name: 'Players Lab',
+    href: '/players',
+    icon: FlaskConical,
+    description: 'Jugadores en tendencia'
   }
 ]
 
@@ -39,7 +45,7 @@ export default function LeagueNav() {
         >
           Explora la Liga
         </motion.h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {navItems.map((item, index) => (
             <motion.div
               key={item.name}
