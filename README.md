@@ -97,6 +97,14 @@ Antes de usarla, configura las credenciales de ESPN (`LEAGUE_ID`, `SWID` y `ESPN
 
 Alternativa local con n8n (requiere la PC encendida): [`automation/n8n/README.md`](automation/n8n/README.md).
 
+### Players Lab (`/players`)
+
+`analytics/players_lab.py` hace una sola consulta a ESPN (`kona_player_info`) con los 400 jugadores con más % de propiedad: libres (FA), en waivers o en algún equipo de la liga. Para cada uno guarda estado, lesión (GTD/OUT/IL), % de propiedad, partidos de su equipo NBA en los próximos 7 días y promedios por partido en cinco ventanas (temporada, últimos 7/15/30 días y proyección): FPTS, minutos, uso aproximado `(FGA + 0.44·FTA + TO) / MIN × 36`, counting stats, stocks y porcentajes.
+
+Las etiquetas usan FPTS por partido y la proyección de ESPN como base. Los umbrales están al inicio de `players_lab.py` y las reglas tienen pruebas en `analytics/test_players_lab.py` (`cd analytics && python -m unittest test_players_lab`).
+
+Flujo diario: `generate_team_data.py` escribe `src/data/seasons/<id>/players-lab.json` (ignorado por git) → `scripts/import-players-lab.ts` lo guarda en `players_lab_snapshots` (migración `006_players_lab.sql`). Se importa aunque todavía no haya partidos con puntuación, porque las proyecciones ya sirven.
+
 ### Participantes y equipos de expansión
 
 Los nombres y logos se guardan en `season_teams` por temporada. El ID numérico de ESPN mantiene la identidad del equipo aunque cambie de nombre. Las imágenes descargadas usan una ruta por temporada y una huella del contenido, por lo que una foto nueva no reemplaza la anterior. El perfil abre primero la temporada activa y cambia de nombre, foto y roster al elegir otro año.
@@ -145,6 +153,7 @@ where season_id = '2027' and team_id = 'slug-del-equipo';
 | `/rewind` | Selector / hub hacia rewinds por temporada |
 | `/rewind/[seasonId]/[teamId]` | Experiencia fullscreen de slides por equipo |
 | `/stats` | Stats Room (datos agregados por temporada) |
+| `/players` | Players Lab: métricas de FA, waivers y universo de jugadores, con Streamers/Sleepers/Bust/Fluke/Slump |
 | `/admin/stats` | Generar, previsualizar y publicar Stats Room; sólo en localhost y desarrollo |
 | `/awards` | Hall of Fame / premios y badges |
 | `/rules` | Reglas de la liga (lee `src/content/rules/league-rules.md`) |

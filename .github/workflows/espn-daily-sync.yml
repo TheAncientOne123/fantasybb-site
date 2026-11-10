@@ -73,6 +73,32 @@ jobs:
           npm ci
           pip install -r analytics/requirements.txt
 
+      - name: Comprobar secrets
+        if: steps.window.outputs.run == 'true'
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          LEAGUE_ID: ${{ secrets.LEAGUE_ID }}
+          ESPN_S2: ${{ secrets.ESPN_S2 }}
+          SWID: ${{ secrets.SWID }}
+        run: |
+          missing=0
+          for name in DATABASE_URL LEAGUE_ID ESPN_S2 SWID; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Falta el secret $name (Settings → Secrets and variables → Actions → pestaña Secrets → Repository secrets)."
+              missing=1
+            else
+              echo "✓ $name"
+            fi
+          done
+          exit $missing
+
+      # Aplica migraciones nuevas (p. ej. tablas del Players Lab). Las ya aplicadas se omiten.
+      - name: Migrar base de datos
+        if: steps.window.outputs.run == 'true'
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: npm run --silent database:migrate
+
       - name: Sincronizar ESPN → Neon
         if: steps.window.outputs.run == 'true'
         env:

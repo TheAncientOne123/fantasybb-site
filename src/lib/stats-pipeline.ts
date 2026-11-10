@@ -81,7 +81,8 @@ export type StatsActionResult = {
  * - `sync-teams`: catálogo, logos, draft y rosters → Neon (sin estadísticas).
  * - `generate`: consulta ESPN y escribe sólo archivos locales (borrador).
  * - `publish`: importa el borrador existente en Neon y lo verifica.
- * - `daily`: generate + sincronizar equipos/rosters + publish (si hay partidos).
+ * - `daily`: generate + sincronizar equipos/rosters + publish (si hay partidos;
+ *   si no, sólo el Players Lab).
  */
 export async function runStatsAction(
   action: StatsAction,
@@ -129,10 +130,16 @@ export async function runStatsAction(
     return (await readGeneratedStatsRoom(seasonId, cwd)) !== null
   }
 
+  const importPlayersLab = async () => {
+    write('\nActualizando el Players Lab en Neon...\n')
+    await tsx('import-players-lab.ts')
+  }
+
   const publish = async () => {
     write('Importando el borrador generado en Neon...\n')
     await tsx('import-stats-room.ts')
     await tsx('import-roster-quality.ts')
+    await importPlayersLab()
     write('\nVerificando la importación...\n')
     await tsx('verify-stats-room-import.ts')
   }
@@ -172,6 +179,8 @@ export async function runStatsAction(
       write('\nPaso 2/3: equipos y rosters → Neon\n')
       await syncTeams(false)
       if (!hasStats) {
+        // Las proyecciones del Players Lab sirven aun sin partidos jugados.
+        await importPlayersLab()
         write('\nPaso 3/3: omitido, todavía no hay partidos con puntuación.\n')
         write('\n[DONE] Rosters actualizados; sin estadísticas que publicar.\n')
         return { statsPublished: false }

@@ -9,6 +9,7 @@ import type { StatsStandingRow } from '@/data/stats-room-types'
 import { SEASON_STATS_VOLUME_KEYS } from '@/data/stats-room-types'
 import { useTeamLogo } from '@/components/team/TeamIdentityProvider'
 import { Section } from '@/components/ui'
+import { compareWithNaNLast, parseStatForSort } from '@/lib/table-sort'
 
 /** Si no hay `seasonStatsLeague` (archivo antiguo), mismas categorías 9CAT como columnas (sin FGM/FGA…). */
 const FALLBACK_STAT_KEYS = ['REB', 'AST', 'STL', 'BLK', '3PM', 'FG%', 'FT%', 'PTS'] as const
@@ -23,27 +24,6 @@ type Props = {
   seasonStatsLeague?: { teamId: string; stats: Record<string, string> }[]
   nineByTeam: NineLookup
   teamFilter: string
-}
-
-function parseStatForSort(_key: string, raw: string): number {
-  const s = raw.trim()
-  if (!s || s === '—' || s === '-') return Number.NaN
-  if (s.includes('%')) {
-    const n = parseFloat(s.replace(/%/g, '').replace(',', '.'))
-    return Number.isFinite(n) ? n : Number.NaN
-  }
-  const n = parseFloat(s.replace(/,/g, ''))
-  return Number.isFinite(n) ? n : Number.NaN
-}
-
-function compareWithNaNLast(a: number, b: number, dir: 'asc' | 'desc'): number {
-  const aNaN = Number.isNaN(a)
-  const bNaN = Number.isNaN(b)
-  if (aNaN && bNaN) return 0
-  if (aNaN) return 1
-  if (bNaN) return -1
-  const cmp = a < b ? -1 : a > b ? 1 : 0
-  return dir === 'asc' ? cmp : -cmp
 }
 
 function defaultSortDirForKey(key: SortKey): 'asc' | 'desc' {
@@ -115,8 +95,8 @@ export default function SeasonStatsTable({
             ? ra.displayName.localeCompare(rb.displayName, undefined, { sensitivity: 'base' })
             : rb.displayName.localeCompare(ra.displayName, undefined, { sensitivity: 'base' })
       } else {
-        const va = parseStatForSort(sortKey, cellValue(ra.teamId, sortKey))
-        const vb = parseStatForSort(sortKey, cellValue(rb.teamId, sortKey))
+        const va = parseStatForSort(cellValue(ra.teamId, sortKey))
+        const vb = parseStatForSort(cellValue(rb.teamId, sortKey))
         cmp = compareWithNaNLast(va, vb, sortDir)
       }
       if (cmp !== 0) return cmp

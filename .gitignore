@@ -47,3 +47,6 @@ next-env.d.ts
 
 # Logs locales (sincronización ESPN / n8n)
 /.logs/
+
+# Players Lab: se publica en Neon, no en el repo (~0.5 MB que cambia a diario)
+/src/data/seasons/*/players-lab.json

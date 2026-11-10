@@ -1806,6 +1806,11 @@ def generate_all_teams(season: str = "2026"):
     league = nv.get_league()
     from export_league_teams import export_teams
     export_teams(season, refresh_logos=True, league=league)
+    from players_lab import export_players_lab
+    try:
+        export_players_lab(league, season)
+    except Exception as error:  # el resto de la sincronización no depende del Players Lab
+        print(f"[WARN] Players Lab no se pudo generar: {error}")
     teams = league.teams
     team_by_id = {t.team_id: t for t in teams}
     
